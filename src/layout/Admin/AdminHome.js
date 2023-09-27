@@ -31,6 +31,9 @@ import StoreIcon from "@mui/icons-material/Store";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import BookIcon from "@mui/icons-material/Book";
 import UsersView from "./UsersView";
+import VehicleView from "./VehicleView";
+import AutoStoreView from "./AutoStoreView";
+import AddProductForm from "./AddProductForm";
 
 const drawerWidth = 300;
 
@@ -121,31 +124,26 @@ const AdminHome = () => {
         </div>
         <Divider />
         <List>
-          {[
-            "Dashboard",
-            "Users",
-            "Vehicles",
-            "AutoStore",
-            "Videos",
-            "Blogs",
-          ].map((text, index) => (
-            <ListItem
-              button
-              key={text}
-              selected={selectedMenuItem === text}
-              onClick={() => handleMenuItemClick(text)}
-            >
-              <ListItemIcon>
-                {index === 0 && <DashboardIcon />}
-                {index === 1 && <PeopleAltIcon />}
-                {index === 2 && <DriveEtaIcon />}
-                {index === 3 && <StoreIcon />}
-                {index === 4 && <YouTubeIcon />}
-                {index === 5 && <BookIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {["Dashboard", "Users", "Cars", "Add Product", "Videos", "Blogs"].map(
+            (text, index) => (
+              <ListItem
+                button
+                key={text}
+                selected={selectedMenuItem === text}
+                onClick={() => handleMenuItemClick(text)}
+              >
+                <ListItemIcon>
+                  {index === 0 && <DashboardIcon />}
+                  {index === 1 && <PeopleAltIcon />}
+                  {index === 2 && <DriveEtaIcon />}
+                  {index === 3 && <StoreIcon />}
+                  {index === 4 && <YouTubeIcon />}
+                  {index === 5 && <BookIcon />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            )
+          )}
         </List>
         <Divider />
         <List style={{ position: "absolute", bottom: 0, width: "100%" }}>
@@ -165,9 +163,8 @@ const AdminHome = () => {
         <div className="drawerHeader" />
         {selectedMenuItem === "Dashboard" && <DashboardContent />}
         {selectedMenuItem === "Users" && <UsersView />}
-        {selectedMenuItem === "Vehicles" && (
-          <Typography paragraph>Vehicles Content</Typography>
-        )}
+        {selectedMenuItem === "Cars" && <VehicleView />}
+        {selectedMenuItem === "Add Product" && <AddProductForm />}
       </main>
     </div>
   );

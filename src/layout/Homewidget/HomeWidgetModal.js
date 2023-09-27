@@ -60,6 +60,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         return setRegistrationError("Invalid password");
       }
     }
+
     try {
       setIsLoading(true);
 
@@ -76,9 +77,11 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
           },
         }
       );
+
       console.log("Login response:", response.data); // Log the response data
       setRegistrationError("");
       console.log("Login successful");
+
       const jwtToken = response.data.token;
       const user = response.data.user;
       console.log("before Login Data:", { user: user, token: jwtToken });
@@ -97,18 +100,23 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     } catch (error) {
       console.error("Login error:", error);
 
-      if (error.response && error.response.status === 400) {
-        if (error.response.data.error === "Email not found") {
-          // setRegistrationError("Email not found");
-          setRegistrationError("Email not found");
-
-          console.log("email not found");
-        } else if (error.response.data.error === "Invalid password") {
-          setRegistrationError("Invalid password");
-          console.log("password not found");
+      if (error.response) {
+        if (error.response.status === 400) {
+          if (error.response.data.error === "Email not found") {
+            setRegistrationError("Email not found");
+            console.log("email not found");
+          } else if (error.response.data.error === "Invalid password") {
+            setRegistrationError("Invalid password");
+            console.log("password not found");
+          } else if (error.response.data.error === "User is banned") {
+            setRegistrationError("You are banned ❌");
+            console.log("user is banned");
+          }
+        } else if (error.response.status === 500) {
+          setRegistrationError("An error occurred during login.");
+        } else {
+          setRegistrationError("An unexpected error occurred.");
         }
-      } else if (error.response && error.response.status === 500) {
-        setRegistrationError("An error occurred during login.");
       } else {
         setRegistrationError("An unexpected error occurred.");
       }

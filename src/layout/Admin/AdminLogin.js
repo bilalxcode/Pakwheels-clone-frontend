@@ -36,7 +36,7 @@ function AdminLogin() {
   const navigate = useNavigate();
   const loginHandler = async (e) => {
     e.preventDefault();
-    if (email !== "admin@gmail.com") {
+    if (email !== "admin@pakwheels.com") {
       return setShowError(true);
     }
     if (password !== "admin") {

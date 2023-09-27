@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TableContainer,
   Table,
@@ -10,27 +10,18 @@ import {
   TablePagination,
   Button,
   Typography,
+  CircularProgress,
 } from "@mui/material";
-
-const dummyUserData = [
-  { id: 1, name: "bilal Doe", email: "john@example.com" },
-  { id: 2, name: "ali Smith", email: "jane@example.com" },
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 1, name: "hassan Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 1, name: "abdullah Doe", email: "john@example.com" },
-  { id: 2, name: "a Smith", email: "jane@example.com" },
-  // Add more dummy users here
-];
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 function UsersView() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
+  const [showToast, setShowToast] = useState(false);
+  const [loadingUsers, setLoadingUsers] = useState({});
+  const [userBanned, setUserBanned] = useState(false);
+  const [usersData, setUsersData] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -41,6 +32,98 @@ function UsersView() {
     setPage(0);
   };
 
+  useEffect(() => {
+    // Load users when the component mounts
+    getUsersData();
+  }, []); // Empty dependency array to run the effect once on mount
+
+  const getUsersData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/admin/getEveryAd"
+      );
+
+      if (response.status === 200) {
+        const users = response.data.users;
+        setUsersData(users);
+      } else {
+        toast.error("Failed to load users: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Loading users error: " + error);
+      toast.error("Failed to load users: " + error.toString());
+    }
+  };
+  const handleBanUser = async (userId) => {
+    setLoadingUsers({ ...loadingUsers, [userId]: true });
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/admin/BanUser",
+        {
+          userId: userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Show the toast on success
+        setUserBanned(true);
+        setTimeout(() => {
+          setLoadingUsers({ ...loadingUsers, [userId]: false });
+          toast.success("User Banned Successfully");
+
+          // Fetch data again after a successful ban
+          getUsersData();
+        }, 2000);
+      } else {
+        toast.error("Failed to Ban User: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Banning error: " + error);
+      toast.error("Failed to Ban User: " + error.toString());
+    }
+  };
+
+  const handleUnBanUser = async (userId) => {
+    setLoadingUsers({ ...loadingUsers, [userId]: true });
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/admin/UnBanUser",
+        {
+          userId: userId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Show the toast on success
+        setUserBanned(true);
+        setTimeout(() => {
+          setLoadingUsers({ ...loadingUsers, [userId]: false });
+          toast.success("User UnBanned Successfully");
+
+          // Fetch data again after a successful ban
+          getUsersData();
+        }, 2000);
+      } else {
+        toast.error("Failed to UnBan User: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Banning error: " + error);
+      toast.error("Failed to UnBan User: " + error.toString());
+    }
+  };
+
   return (
     <>
       <div
@@ -49,7 +132,7 @@ function UsersView() {
           flexDirection: "column",
           alignItems: "flex-start",
           minHeight: "80vh",
-          width: "100%",
+          width: "115%",
         }}
       >
         <div
@@ -62,70 +145,199 @@ function UsersView() {
             padding: "0em 2em",
           }}
         >
+          <ToastContainer />
           <TableContainer
             component={Paper}
-            style={{ minWidth: "70em", background: "#F2F3F3" }} // Set minWidth to 100%
+            style={{ minWidth: "70em", background: "#F2F3F3", padding: "10px" }}
           >
             <Table style={{ width: "100%" }}>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "2em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    ID
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    Name
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    Email
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    City
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    Phone Number
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                      borderRight: "1px solid #ddd",
+                    }}
+                  >
+                    Created On
+                  </TableCell>
+                  <TableCell
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "1.5em",
+                    }}
+                  >
+                    Actions
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dummyUserData
+                {usersData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell>{user.id}</TableCell>
-                      <TableCell>{user.name}</TableCell>
-                      <TableCell>{user.email}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          style={{ margin: "1em" }}
+                  .map((user, index) => {
+                    const registrationDate = new Date(user.createdAt);
+                    const formattedDate = registrationDate.toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    );
+                    const id = index + 1 + page * rowsPerPage;
+                    return (
+                      <TableRow key={user._id}>
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
                         >
-                          Action 1
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          style={{ margin: "1em" }}
+                          {id}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
                         >
-                          Action 2
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          color="info"
-                          style={{ margin: "1em" }}
+                          {user.name}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
                         >
-                          Action 3
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                          {user.email}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
+                          {user.city ? user.city : "Not Provided"}
+                        </TableCell>
+
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
+                          {user.phoneNumber ? user.phoneNumber : "Not Provided"}
+                        </TableCell>
+                        <TableCell
+                          style={{
+                            fontSize: "1em",
+                            borderRight: "1px solid #ddd",
+                          }}
+                        >
+                          {formattedDate}
+                        </TableCell>
+                        <TableCell>
+                          {loadingUsers[user._id] ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <CircularProgress size={24} />
+                            </div>
+                          ) : user.isBanned ? (
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                margin: "1em",
+                              }}
+                              onClick={() => handleUnBanUser(user._id)}
+                            >
+                              Unban User
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              style={{
+                                margin: "1em",
+                              }}
+                              onClick={() => handleBanUser(user._id)}
+                            >
+                              Ban User
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
           </TableContainer>
           <TablePagination
             rowsPerPageOptions={[4, 8, 20]}
             component="div"
-            count={dummyUserData.length}
+            count={usersData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
-            style={{ marginBottom: "5em" }}
+            style={{ marginBottom: "1em" }}
           />
         </div>
         <footer
           style={{
             position: "fixed",
-            bottom: -1,
+            bottom: 0,
             width: "100%",
             background: "#E7232D",
             textAlign: "center",

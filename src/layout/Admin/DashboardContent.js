@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { Skeleton } from "@mui/material";
 
 import { AdsData, UsersData } from "../../store/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,10 +21,17 @@ const notClickableButtonStyle = {
 };
 function DashboardContent() {
   const adsData = useSelector((state) => state.admin.AllAds);
-  const usersData = useSelector((state) => state.admin.AllUsers); // Access AllUsers from the Redux store
-  // Access AllAds from the Redux store
+  const usersData = useSelector((state) => state.admin.AllUsers);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
+  useEffect(() => {
+    // Simulate loading for 2 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
 
+    return () => clearTimeout(timer);
+  }, []);
   useEffect(() => {
     // Load ads when the component mounts
     getAllAds();
@@ -43,7 +51,7 @@ function DashboardContent() {
         dispatch(AdsData({ AllAds: ads }));
         dispatch(UsersData({ AllUsers: users }));
 
-        toast.success("Ads loaded successfully");
+        // toast.success("Ads loaded successfully");
       } else {
         toast.error("Failed to load ads: " + response.data.message);
       }
@@ -62,7 +70,44 @@ function DashboardContent() {
         background: "#F2F3F3",
       }}
     >
-      {adsData && adsData.length > 0 ? (
+      <ToastContainer />
+      {isLoading ? (
+        // Display skeleton cards in two rows of three cards each using flex
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "5em",
+            padding: "3em",
+          }}
+        >
+          {[1, 2, 3].map((index) => (
+            <div
+              style={{ padding: "20px", margin: "10px", marginTop: "-20px" }}
+              key={index}
+            >
+              <Skeleton
+                variant="rect"
+                style={{ width: "20em", padding: "3em" }}
+                height={150}
+              />
+            </div>
+          ))}
+
+          {[4, 5, 6].map((index) => (
+            <div
+              style={{ padding: "20px", margin: "10px", marginTop: "-20px" }}
+              key={index}
+            >
+              <Skeleton
+                variant="rect"
+                style={{ width: "20em", padding: "3em" }}
+                height={150}
+              />
+            </div>
+          ))}
+        </div>
+      ) : adsData && adsData.length > 0 ? (
         <div style={{ justifyContent: "center" }}>
           <Grid container spacing={4} style={{ marginTop: "35px" }}>
             <Grid item xs={12} sm={6} md={4}>

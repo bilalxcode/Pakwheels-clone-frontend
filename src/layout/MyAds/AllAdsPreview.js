@@ -44,7 +44,7 @@ function AllAdsPreview() {
         setIsLoading(false);
         const ads = response.data.ads;
         setAdsData(ads);
-        toast.success("Ads loaded successfully");
+        toast.success("Data loaded successfully");
       } else {
         setIsLoading(false);
         toast.error(response.data.message);
