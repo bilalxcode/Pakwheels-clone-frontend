@@ -1,0 +1,103 @@
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: grey;
+  border: 2px solid grey;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin-top: -15px; /* Adjust the vertical position to center the button */
+  cursor: pointer; /* Add a cursor pointer for better UX */
+}
+
+.carousel-control-prev-icon {
+  margin-left: -30px; /* Adjust the horizontal position for the left button */
+}
+
+.carousel-control-next-icon {
+  margin-right: -30px; /* Adjust the horizontal position for the right button */
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: blue;
+}
+
+.carousel-control-prev-icon {
+  margin-left: -200px; /* Adjust the horizontal position for the left button */
+}
+
+.carousel-control-next-icon {
+  margin-right: -200px; /* Adjust the horizontal position for the right button */
+}
+/* Rest of your existing CSS for cards */
+.card {
+  width: 100px; /* Adjust the card width */
+  height: 120px; /* Adjust the card height */
+  margin: 5px; /* Add margin to create spacing between cards */
+}
+
+/* Center the card content */
+.card-body {
+  text-align: center;
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: grey;
+  border: 2px solid grey;
+  border-radius: 80%;
+  width: 40px; /* Increase the width to make them wider */
+  height: 40px; /* Increase the height to make them wider */
+}
+
+/* Add a hover effect to the carousel controls */
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: blue;
+}
+
+/* external-styles.css */
+
+/* Center the card content both horizontally and vertically */
+.card-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 10px;
+}
+
+/* Style for the card itself */
+.card {
+  width: 135px; /* Adjust the card width */
+  height: 120px; /* Adjust the card height */
+  text-align: center; /* Center the text horizontally */
+}
+
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 buttons per row */
+  gap: 10px; /* Adjust the gap as needed */
+  margin: 30px 20px;
+}
+
+/* Style for the buttons (you can customize this further) */
+.btn {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: font-weight 0.2s; /* Add a transition for smooth font-weight change */
+}
+
+.nav-link {
+  text-decoration: none; /* Remove default underline */
+  color: black; /* Set default text color */
+}
+
+.nav-link:active {
+  text-decoration: underline; /* Add underline on click */
+  color: blue; /* Change text color to blue when clicked */
+}
+
+.focus:focus {
+  color: blue;
+}
