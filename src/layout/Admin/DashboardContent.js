@@ -370,13 +370,13 @@ function DashboardContent() {
                   >
                     <div style={{ flex: 1 }}>
                       <Typography variant="h5" component="div">
-                        Total Blogs
+                        Total Products
                       </Typography>
                       <Typography variant="h3">{usersData.length}</Typography>
                     </div>
                     <Avatar
                       alt="Car Avatar"
-                      src="https://img.freepik.com/free-vector/blogging-fun-content-creation-online-streaming-video-blog-young-girl-making-selfie-social-network-sharing-feedback-self-promotion-strategy_335657-2386.jpg?w=740&t=st=1695728533~exp=1695729133~hmac=2ef379abeb6c7b2b158e271696b409d5825cf7e1adc73a33e546b79968258ec0"
+                      src="https://img.freepik.com/premium-vector/engine-oil-filters-isolated-white-background_258836-181.jpg?w=740"
                       sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
                     />
                   </CardContent>
@@ -416,19 +416,6 @@ function DashboardContent() {
       ) : (
         <Typography variant="body2">No data available</Typography>
       )}
-      <footer
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          background: "#E7232D",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="caption" color="textSecondary">
-          &copy; 2023 PAKWHEELS
-        </Typography>
-      </footer>
     </div>
   );
 }

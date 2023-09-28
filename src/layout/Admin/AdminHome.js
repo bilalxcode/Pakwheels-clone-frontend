@@ -30,10 +30,13 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import StoreIcon from "@mui/icons-material/Store";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import BookIcon from "@mui/icons-material/Book";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import UsersView from "./UsersView";
 import VehicleView from "./VehicleView";
-import AutoStoreView from "./AutoStoreView";
 import AddProductForm from "./AddProductForm";
+import ProductsView from "./ProductsView";
+import VideosView from "./VideosView";
 
 const drawerWidth = 300;
 
@@ -124,26 +127,34 @@ const AdminHome = () => {
         </div>
         <Divider />
         <List>
-          {["Dashboard", "Users", "Cars", "Add Product", "Videos", "Blogs"].map(
-            (text, index) => (
-              <ListItem
-                button
-                key={text}
-                selected={selectedMenuItem === text}
-                onClick={() => handleMenuItemClick(text)}
-              >
-                <ListItemIcon>
-                  {index === 0 && <DashboardIcon />}
-                  {index === 1 && <PeopleAltIcon />}
-                  {index === 2 && <DriveEtaIcon />}
-                  {index === 3 && <StoreIcon />}
-                  {index === 4 && <YouTubeIcon />}
-                  {index === 5 && <BookIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          )}
+          {[
+            "Dashboard",
+            "Users",
+            "Cars",
+            "Bikes",
+            "Add Product",
+            "View Products",
+            "Videos",
+          ].map((text, index) => (
+            <ListItem
+              button
+              key={text}
+              selected={selectedMenuItem === text}
+              onClick={() => handleMenuItemClick(text)}
+            >
+              <ListItemIcon>
+                {index === 0 && <DashboardIcon />}
+                {index === 1 && <PeopleAltIcon />}
+                {index === 2 && <DriveEtaIcon />}
+                {index === 3 && <DirectionsBikeIcon />}
+
+                {index === 4 && <PostAddIcon />}
+                {index === 5 && <StoreIcon />}
+                {index === 6 && <YouTubeIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
         </List>
         <Divider />
         <List style={{ position: "absolute", bottom: 0, width: "100%" }}>
@@ -165,7 +176,22 @@ const AdminHome = () => {
         {selectedMenuItem === "Users" && <UsersView />}
         {selectedMenuItem === "Cars" && <VehicleView />}
         {selectedMenuItem === "Add Product" && <AddProductForm />}
+        {selectedMenuItem === "View Products" && <ProductsView />}
+        {selectedMenuItem === "Videos" && <VideosView />}
       </main>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          background: "#E7232D",
+          textAlign: "center",
+        }}
+      >
+        <Typography variant="caption" color="textSecondary">
+          &copy; 2023 PAKWHEELS
+        </Typography>
+      </footer>
     </div>
   );
 };

@@ -107,6 +107,52 @@ const AddProductForm = () => {
     });
   };
 
+  //   const handleImageChange = (event) => {
+  //     const imageFiles = event.target.files;
+  //     const newImages = Array.from(imageFiles);
+  //     const newPreviews = newImages.map((file) => URL.createObjectURL(file));
+
+  //     setFormData((prevState) => ({
+  //       ...prevState,
+  //       images: [...prevState.images, ...newImages], // Append new images to the existing array
+  //       imagePreviews: [...prevState.imagePreviews, ...newPreviews], // Append new previews to the existing array
+  //     }));
+  //   };
+  //   const handleSubmit = async (event) => {
+  //     event.preventDefault();
+
+  //     try {
+  //       const form = new FormData();
+  //       form.append("title", formData.title);
+  //       form.append("category", formData.category);
+  //       form.append("price", formData.price);
+  //       form.append("quantity", formData.quantity);
+  //       form.append("description", formData.description);
+
+  //       formData.images.forEach((image, index) => {
+  //         form.append("images[]", image); // Use "images[]" to indicate an array of images
+  //       });
+  //       console.log(formData);
+  //       const response = await axios.post(
+  //         "http://localhost:8080/admin/addProduct",
+  //         formData,
+  //         {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         }
+  //       );
+
+  //       if (response.status === 200) {
+  //         toast.success("Product Added");
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     } catch (error) {
+  //       toast.error(error.toString());
+  //     }
+  //   };
+
   const handleImageChange = (event) => {
     const imageFiles = event.target.files;
     const newImages = Array.from(imageFiles);
@@ -114,8 +160,8 @@ const AddProductForm = () => {
 
     setFormData((prevState) => ({
       ...prevState,
-      images: [...prevState.images, ...newImages], // Append new images to the existing array
-      imagePreviews: [...prevState.imagePreviews, ...newPreviews], // Append new previews to the existing array
+      images: [...prevState.images, ...newImages],
+      imagePreviews: [...prevState.imagePreviews, ...newPreviews],
     }));
   };
 
@@ -130,13 +176,16 @@ const AddProductForm = () => {
       form.append("quantity", formData.quantity);
       form.append("description", formData.description);
 
-      // Append each image to the form data
       formData.images.forEach((image, index) => {
-        form.append(`images`, image, `image_${index}.jpg`);
+        form.append("images[]", image); // Use "images[]" to indicate an array of images
       });
 
+      if (formData.images.length < 1) {
+        return toast.error("Select minimum 1 images");
+      }
+
       const response = await axios.post(
-        "http://localhost:8080/admin/addProduct",
+        "http://localhost:8080/admin/addProduct", // New endpoint for image upload
         form,
         {
           headers: {
@@ -146,6 +195,16 @@ const AddProductForm = () => {
       );
 
       if (response.status === 200) {
+        setFormData({
+          title: "",
+          category: "",
+          price: "",
+          quantity: "",
+          description: "",
+          images: [], // Store multiple images in an array
+          imagePreviews: [], // Store image previews in an array
+        });
+
         toast.success("Product Added");
       } else {
         toast.error(response.data.message);
@@ -159,7 +218,10 @@ const AddProductForm = () => {
       <Grid container spacing={3} style={{ padding: "5em" }}>
         <Grid item xs={6}>
           <ToastContainer />
-          <Paper elevation={3} style={{ padding: "20px" }}>
+          <Paper
+            elevation={3}
+            style={{ padding: "20px", background: "#F2F3F3" }}
+          >
             <Typography variant="h6">Add Product</Typography>
             <form onSubmit={handleSubmit}>
               <TextField
@@ -233,7 +295,10 @@ const AddProductForm = () => {
 
         {/* Right side - Image preview */}
         <Grid item xs={6}>
-          <Paper elevation={3} style={{ padding: "20px" }}>
+          <Paper
+            elevation={3}
+            style={{ padding: "20px", background: "#F2F3F3" }}
+          >
             <Typography variant="h6">Image Preview</Typography>
             <div
               style={{
@@ -267,11 +332,11 @@ const AddProductForm = () => {
                   </div>
                 ))}
             </div>
-
             <input
               multiple
               type="file"
               accept="image/*"
+              name="images" // Add the name attribute here
               onChange={handleImageChange}
               style={{ marginTop: "20px" }}
             />
@@ -309,19 +374,6 @@ const AddProductForm = () => {
           </Button>
         </DialogActions>
       </Dialog>
-      <footer
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          background: "#E7232D",
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="caption" color="textSecondary">
-          &copy; 2023 PAKWHEELS
-        </Typography>
-      </footer>
     </>
   );
 };
