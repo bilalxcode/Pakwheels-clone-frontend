@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DashboardContent from "./DashboardContent";
+import { AdminLoggedIn, AdminLoggedOut } from "../../store/adminSlice";
+
 import clsx from "clsx";
 import {
   AppBar,
@@ -37,6 +39,8 @@ import VehicleView from "./VehicleView";
 import AddProductForm from "./AddProductForm";
 import ProductsView from "./ProductsView";
 import VideosView from "./VideosView";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const drawerWidth = 300;
 
@@ -46,6 +50,40 @@ const AdminHome = () => {
   const [selectedMenuItem, setSelectedMenuItem] = useState(
     localStorage.getItem("selectedMenuItem") || "Dashboard"
   );
+  const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // const isUserLoggedIn = () => {
+  //   // Get the value from localStorage and convert it to a boolean
+  //   return adminLoggedIn;
+  // };
+  // useEffect(() => {
+  //   console.log("admin login 212", adminLoggedIn);
+  //   if (!isUserLoggedIn()) {
+  //     dispatch(AdminLoggedOut());
+  //     navigate("/admin");
+  //   }
+  // // }, []);
+  // useEffect(() => {
+  //   const isAdminLoggedIn = localStorage.getItem("AdminLoggedIn") === "true";
+  //   console.log("checking admin ", isAdminLoggedIn);
+
+  //   if (isAdminLoggedIn) {
+  //     const token = localStorage.getItem("jwtToken");
+
+  //     if (token) {
+  //       dispatch(AdminLoggedIn({ token: token }));
+  //     } else {
+  //       dispatch(AdminLoggedOut());
+  //       navigate("/admin");
+  //     }
+  //   } else {
+  //     dispatch(AdminLoggedOut());
+  //     navigate("/admin");
+  //   }
+  // }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -57,11 +95,10 @@ const AdminHome = () => {
 
   const handleMenuItemClick = (text) => {
     setSelectedMenuItem(text);
-    localStorage.setItem("selectedMenuItem", text); // Store the selected menu item in local storage
+    localStorage.setItem("selectedMenuItem", text);
   };
 
   useEffect(() => {
-    // Add event listener to close the drawer on outside click
     const handleOutsideClick = (e) => {
       if (open && e.target.closest(".appBar") === null) {
         setOpen(false);
@@ -75,6 +112,22 @@ const AdminHome = () => {
     };
   }, [open]);
 
+  // const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  const LogOutHandler = () => {
+    console.log("logout");
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("AdminLoggedIn");
+    localStorage.removeItem("selectedMenuItem");
+    document.cookie =
+      "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Dispatch action to log out
+    dispatch(AdminLoggedOut());
+
+    // Navigate to the login page
+    navigate("/admin");
+  };
   return (
     <div style={{ display: "flex" }}>
       <CssBaseline />
@@ -158,12 +211,12 @@ const AdminHome = () => {
         </List>
         <Divider />
         <List style={{ position: "absolute", bottom: 0, width: "100%" }}>
-          {["Log Out"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index === 0 && <MeetingRoomIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          <ListItem button key="Log Out" onClick={LogOutHandler}>
+            <ListItemIcon>
+              <MeetingRoomIcon />
+            </ListItemIcon>
+            <ListItemText primary="Log Out" />
+          </ListItem>
         </List>
       </Drawer>
       <main
@@ -178,6 +231,7 @@ const AdminHome = () => {
         {selectedMenuItem === "Add Product" && <AddProductForm />}
         {selectedMenuItem === "View Products" && <ProductsView />}
         {selectedMenuItem === "Videos" && <VideosView />}
+        {selectedMenuItem === "Log Out" && LogOutHandler}
       </main>
       <footer
         style={{

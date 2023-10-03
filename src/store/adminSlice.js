@@ -1,43 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  isLoggedIn: false,
-  AllAds: [],
-  AllUsers: [], // Initialize AllAds as an empty array
-};
-
 const adminSlice = createSlice({
   name: "admin",
-  initialState,
+  initialState: {
+    isLoggedIn: false,
+    token: null,
+  },
   reducers: {
     AdminLoggedIn: (state, action) => {
-      return {
-        ...state,
-        isLoggedIn: action.payload.user,
-      };
+      state.isLoggedIn = true;
+      state.token = action.payload.token; // Update the 'token' property
     },
-    AdminLoggedOut: (state, action) => {
-      return {
-        ...state,
-        isLoggedIn: false,
-      };
-    },
-    AdsData: (state, action) => {
-      return {
-        ...state,
-        AllAds: action.payload.AllAds, // Update AllAds with the provided ads array
-      };
-    },
-    UsersData: (state, action) => {
-      return {
-        ...state,
-        AllUsers: action.payload.AllUsers, // Update AllAds with the provided ads array
-      };
+    AdminLoggedOut: (state) => {
+      state.isLoggedIn = false;
+      state.token = null; // Clear the 'token' when logging out
     },
   },
 });
 
-export const { AdminLoggedIn, AdminLoggedOut, AdsData, UsersData } =
-  adminSlice.actions;
+export const { AdminLoggedIn, AdminLoggedOut } = adminSlice.actions;
 
 export default adminSlice.reducer;

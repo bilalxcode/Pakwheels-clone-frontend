@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert, Avatar, Card, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { AdminLoggedIn } from "../../store/adminSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const cardStyles = {
@@ -34,6 +34,14 @@ function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
+  useEffect(() => {
+    if (adminLoggedIn) {
+      console.log("admin logged in", adminLoggedIn);
+      toast.success("Welcome Back Admin!");
+      navigate("/admin/home");
+    }
+  }, [adminLoggedIn]);
   const loginHandler = async (e) => {
     e.preventDefault();
     if (email !== "admin@pakwheels.com") {
@@ -44,6 +52,7 @@ function AdminLogin() {
     }
 
     setIsLoading(true);
+
     try {
       const response = await axios.post(
         "http://localhost:8080/admin/logIn",
@@ -57,11 +66,24 @@ function AdminLogin() {
           },
         }
       );
+
       if (response.status === 200) {
-        dispatch(AdminLoggedIn({ isLoggedIn: true }));
-        console.log(AdminLoggedIn);
-        navigate("/admin/home");
         toast.success("Welcome Back Admin!");
+        const token = response.data.token;
+
+        console.log("Response Data:", token);
+
+        // Store the JWT token in local storage
+        localStorage.setItem("jwtToken", token);
+
+        // Set the admin login state in local storage
+        localStorage.setItem("AdminLoggedIn", "true");
+
+        // Dispatch action to log in
+        // dispatch(AdminLoggedIn({ token }));
+        dispatch(AdminLoggedIn({ token: token }));
+
+        navigate("/admin/home");
       } else {
         toast.error(response.data.message);
       }
@@ -102,8 +124,6 @@ function AdminLogin() {
       )}
       <div className="container">
         <div className="row justify-content-center">
-          <ToastContainer />
-
           <div className="col-md-12 p-4">
             <form onSubmit={loginHandler}>
               <div className="form-group">
@@ -117,6 +137,8 @@ function AdminLogin() {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
+              <ToastContainer />
+
               <div className="form-group">
                 <label htmlFor="loginPassword">Password</label>
                 <input

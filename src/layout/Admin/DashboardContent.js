@@ -20,9 +20,16 @@ const notClickableButtonStyle = {
   opacity: 1,
 };
 function DashboardContent() {
-  const adsData = useSelector((state) => state.admin.AllAds);
-  const usersData = useSelector((state) => state.admin.AllUsers);
+  // const adsData = useSelector((state) => state.admin.AllAds);
+  // const usersData = useSelector((state) => state.admin.AllUsers);
+  const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
+
   const [isLoading, setIsLoading] = useState(true);
+  const [usersData, setUsersData] = useState([]);
+  const [videos, setVideos] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [adsData, setaAdsData] = useState([]);
+
   const dispatch = useDispatch();
   useEffect(() => {
     // Simulate loading for 2 seconds
@@ -35,8 +42,65 @@ function DashboardContent() {
   useEffect(() => {
     // Load ads when the component mounts
     getAllAds();
+    getUsersData();
+    getVideos();
+    getAllProducts();
   }, []); // Empty dependency array to run the effect once on mount
 
+  const getAllProducts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/admin/getProducts"
+      );
+
+      if (response.status === 200) {
+        const productsData = response.data.products;
+        setProducts(productsData);
+      } else {
+        toast.error("Failed to load products: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Loading products error: " + error);
+      toast.error("Failed to load products: " + error.toString());
+    }
+  };
+
+  const getVideos = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/admin/getVideo", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        const videos = response.data.videos;
+        setVideos(videos);
+      } else {
+        toast.error("Failed to get Videos: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Video fetch error: " + error);
+      toast.error("Failed to Get videos: " + error.toString());
+    }
+  };
+  const getUsersData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/admin/getEveryAd"
+      );
+
+      if (response.status === 200) {
+        const users = response.data.users;
+        setUsersData(users);
+      } else {
+        toast.error("Failed to load users: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Loading users error: " + error);
+      toast.error("Failed to load users: " + error.toString());
+    }
+  };
   const getAllAds = async () => {
     try {
       const response = await axios.get(
@@ -48,8 +112,9 @@ function DashboardContent() {
         const users = response.data.users;
 
         console.log(ads, users);
-        dispatch(AdsData({ AllAds: ads }));
-        dispatch(UsersData({ AllUsers: users }));
+        setaAdsData(ads);
+        // dispatch(AdsData({ AllAds: ads }));
+        // dispatch(UsersData({ AllUsers: users }));
 
         // toast.success("Ads loaded successfully");
       } else {
@@ -72,7 +137,6 @@ function DashboardContent() {
     >
       <ToastContainer />
       {isLoading ? (
-        // Display skeleton cards in two rows of three cards each using flex
         <div
           style={{
             display: "flex",
@@ -274,6 +338,38 @@ function DashboardContent() {
                   >
                     <div style={{ flex: 1 }}>
                       <Typography variant="h5" component="div">
+                        Total Videos
+                      </Typography>
+                      <Typography variant="h3">{videos.length}</Typography>
+                    </div>
+                    <Avatar
+                      alt="Car Avatar"
+                      src="https://static.thenounproject.com/png/897669-200.png"
+                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                    />
+                  </CardContent>
+                  <CardActions
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Button
+                      style={notClickableButtonStyle}
+                      size="small"
+                      color="primary"
+                    >
+                      Currently Live ({videos.length})
+                    </Button>
+                  </CardActions>
+                </Paper>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Card style={{ width: "20em" }}>
+                <Paper elevation={3}>
+                  <CardContent
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <Typography variant="h5" component="div">
                         Total Users
                       </Typography>
                       <Typography variant="h3">{usersData.length}</Typography>
@@ -292,71 +388,17 @@ function DashboardContent() {
                       size="small"
                       color="primary"
                     >
-                      Pending Approval (
-                      {adsData.filter((ad) => ad.isApproved === null).length})
+                      Verified (
+                      {usersData.filter((user) => user.isVerified).length})
                     </Button>
+
                     <Button
                       style={notClickableButtonStyle}
                       size="small"
                       color="primary"
                     >
-                      Approved ({adsData.filter((ad) => ad.isApproved).length})
-                    </Button>
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Removed (
-                      {adsData.filter((ad) => ad.isApproved === false).length})
-                    </Button>
-                  </CardActions>
-                </Paper>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card style={{ width: "20em" }}>
-                <Paper elevation={3}>
-                  <CardContent
-                    style={{ display: "flex", alignItems: "center" }}
-                  >
-                    <div style={{ flex: 1 }}>
-                      <Typography variant="h5" component="div">
-                        Total Videos
-                      </Typography>
-                      <Typography variant="h3">{adsData.length}</Typography>
-                    </div>
-                    <Avatar
-                      alt="Car Avatar"
-                      src="https://static.thenounproject.com/png/897669-200.png"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
-                    />
-                  </CardContent>
-                  <CardActions
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Pending Approval (
-                      {adsData.filter((ad) => ad.isApproved === null).length})
-                    </Button>
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Approved ({adsData.filter((ad) => ad.isApproved).length})
-                    </Button>
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Removed (
-                      {adsData.filter((ad) => ad.isApproved === false).length})
+                      Banned ({usersData.filter((user) => user.isBanned).length}
+                      )
                     </Button>
                   </CardActions>
                 </Paper>
@@ -372,7 +414,7 @@ function DashboardContent() {
                       <Typography variant="h5" component="div">
                         Total Products
                       </Typography>
-                      <Typography variant="h3">{usersData.length}</Typography>
+                      <Typography variant="h3">{products.length}</Typography>
                     </div>
                     <Avatar
                       alt="Car Avatar"
@@ -389,23 +431,7 @@ function DashboardContent() {
                       size="small"
                       color="primary"
                     >
-                      Pending Approval (
-                      {adsData.filter((ad) => ad.isApproved === null).length})
-                    </Button>
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Approved ({adsData.filter((ad) => ad.isApproved).length})
-                    </Button>
-                    <Button
-                      style={notClickableButtonStyle}
-                      size="small"
-                      color="primary"
-                    >
-                      Removed (
-                      {adsData.filter((ad) => ad.isApproved === false).length})
+                      Currently Live ({products.length})
                     </Button>
                   </CardActions>
                 </Paper>

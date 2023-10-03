@@ -132,7 +132,7 @@ function UsersView() {
           flexDirection: "column",
           alignItems: "flex-start",
           minHeight: "80vh",
-          width: "115%",
+          width: "114%",
         }}
       >
         <div
@@ -156,7 +156,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "2em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -165,7 +165,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -174,7 +174,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -183,7 +183,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -192,7 +192,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -201,7 +201,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                       borderRight: "1px solid #ddd",
                     }}
                   >
@@ -210,7 +210,7 @@ function UsersView() {
                   <TableCell
                     style={{
                       fontWeight: "bold",
-                      fontSize: "1.5em",
+                      fontSize: "1.3em",
                     }}
                   >
                     Actions

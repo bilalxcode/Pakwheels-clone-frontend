@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Paper,
   Tabs,
@@ -27,6 +27,11 @@ function VideosView() {
   const [videoUrl, setVideoUrl] = useState("");
   const [videos, setVideos] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+
+  useEffect(() => {
+    // Load videos when the component mounts
+    getVideos();
+  }, []);
 
   const isUrlValid = (url) => {
     return url.startsWith("http://") || url.startsWith("https://");
@@ -57,6 +62,8 @@ function VideosView() {
 
         if (response.status === 200) {
           toast.success("Video Uploaded Successfully");
+          getVideos();
+          setVideoUrl("");
         } else {
           toast.error("Failed to Upload Video: " + response.data.message);
         }
@@ -71,6 +78,7 @@ function VideosView() {
       );
     }
   };
+
   const getVideos = async () => {
     try {
       const response = await axios.get("http://localhost:8080/admin/getVideo", {
@@ -81,7 +89,7 @@ function VideosView() {
 
       if (response.status === 200) {
         const videos = response.data.videos;
-        setVideos(videos); // Remove the extra array wrapping
+        setVideos(videos);
       } else {
         toast.error("Failed to get Videos: " + response.data.message);
       }
@@ -98,10 +106,32 @@ function VideosView() {
   const closeAddVideoDialog = () => {
     setOpenDialog(false);
   };
+  const handleDeleteVideo = async (videoId) => {
+    console.log(videoId);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/admin/DeleteVideo",
+        {
+          videoId: videoId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  const handleDeleteVideo = (url) => {
-    const updatedVideos = videos.filter((video) => video !== url);
-    setVideos(updatedVideos);
+      if (response.status === 200) {
+        toast.success("Video Deleted Successfully");
+        // Reload videos after delete
+        getVideos();
+      } else {
+        toast.error("Failed to Delete Video: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Video delete error: " + error);
+      toast.error("Failed to delete video: " + error.toString());
+    }
   };
 
   return (
@@ -145,20 +175,18 @@ function VideosView() {
                   <TableRow>
                     <TableCell>Video</TableCell>
                     <TableCell>Actions</TableCell>
-                    <TableCell>Video</TableCell>
-                    <TableCell>Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <ToastContainer />
                 <TableBody>
                   {videos.map((video) => (
-                    <TableRow key={video}>
+                    <TableRow key={video._id}>
                       <TableCell>
                         <iframe
-                          title={`Video ${video}`}
+                          title={`Video ${video._id}`}
                           width="360"
                           height="215"
-                          src={video}
+                          src={`https://www.youtube.com/embed/${video.link}`}
                           frameBorder="0"
                           allowFullScreen
                         ></iframe>
@@ -167,42 +195,11 @@ function VideosView() {
                         <Button
                           variant="outlined"
                           color="secondary"
-                          onClick={() => handleDeleteVideo(video)}
+                          onClick={() => handleDeleteVideo(video._id)}
                         >
                           Delete
                         </Button>
                       </TableCell>
-                      {videos.indexOf(video) + 1 < videos.length ? (
-                        <React.Fragment>
-                          <TableCell>
-                            <iframe
-                              title={`Video ${
-                                videos[videos.indexOf(video) + 1]
-                              }`}
-                              width="360"
-                              height="215"
-                              src={videos[videos.indexOf(video) + 1]}
-                              frameBorder="0"
-                              allowFullScreen
-                            ></iframe>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="outlined"
-                              color="secondary"
-                              onClick={() =>
-                                handleDeleteVideo(
-                                  videos[videos.indexOf(video) + 1]
-                                )
-                              }
-                            >
-                              Delete
-                            </Button>
-                          </TableCell>
-                        </React.Fragment>
-                      ) : (
-                        <TableCell></TableCell>
-                      )}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -211,7 +208,6 @@ function VideosView() {
           </div>
         </Grid>
       </Grid>
-
       <Dialog
         open={openDialog}
         onClose={closeAddVideoDialog}

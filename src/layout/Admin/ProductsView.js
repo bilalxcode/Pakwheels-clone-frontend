@@ -191,7 +191,7 @@ function ProductsView() {
               <Tab
                 key={category._id}
                 style={{
-                  fontSize: "1.5em",
+                  fontSize: "1em",
                   outline: "none", // Remove outline border
                 }}
                 label={category.name}
