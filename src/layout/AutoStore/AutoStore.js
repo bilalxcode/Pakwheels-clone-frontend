@@ -1,32 +1,33 @@
 import React from "react";
 import AutoStoreElements from "./AutoStoreElements";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 function AutoStore() {
   return (
-    <div>
-      <div
-        className="container-fluid"
-        style={{
-          background: "#F2F3F3",
-          padding: "40px 40px",
-          height: "70vh",
-          marginTop: "10px",
-        }}
+    <Box
+      sx={{
+        background: "#F2F3F3",
+        padding: "40px 40px",
+        marginTop: "10em",
+      }}
+    >
+      <Typography
+        variant="h4"
+        component="h1"
+        align="center"
+        fontWeight="bold"
+        padding="20px 0px"
       >
-        <div className="row">
-          <div className="col-md-12">
-            <h3 style={{ fontWeight: "bold", padding: "20px" }}>
-              Auto Store Car Parts & Accessories
-            </h3>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-12">
-            <AutoStoreElements />
-          </div>
-        </div>
-      </div>
-    </div>
+        AutoStore
+      </Typography>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <AutoStoreElements />
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

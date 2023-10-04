@@ -1,38 +1,33 @@
+import React from "react";
+import { Grid, Typography, Link } from "@mui/material";
 import FeaturedNew from "./FeaturedNew";
 
 function FeaturedNewOverlay() {
   return (
-    <>
-      <div
-        className="container-fluid"
-        style={{
-          background: "#F2F3F3",
-          padding: "40px 40px",
-          height: "90vh",
-          marginTop: "10px",
-        }}
-      >
-        <div className="row">
-          <div className="col-md-6">
-            <h3 style={{ fontWeight: "bold", padding: "20px" }}>
-              Featured New Cars
-            </h3>
-          </div>
-          <div className="col-md-6 text-right">
-            <a
-              href="#"
-              style={{
-                textDecoration: "underline",
-                marginTop: "20px !important",
-              }}
-            >
-              View All New Cars
-            </a>
-          </div>
+    <div
+      style={{
+        background: "#F2F3F3",
+        padding: "40px",
+        marginTop: "10em",
+      }}
+    >
+      <Grid item xs={12} sm={6}>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          fontWeight="bold"
+          padding="20px 0px"
+        >
+          Featured Cars
+        </Typography>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <FeaturedNew />
-        </div>
-      </div>
-    </>
+        </Grid>
+      </Grid>
+    </div>
   );
 }
 

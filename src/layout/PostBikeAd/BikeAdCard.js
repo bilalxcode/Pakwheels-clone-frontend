@@ -5,6 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useNavigate } from "react-router-dom";
 
 function BikeAdCard() {
   const listItemStyle = {
@@ -18,6 +19,11 @@ function BikeAdCard() {
     justifyContent: "center",
   };
 
+  const navigate = useNavigate();
+  const BikeInfoPageOpener = (e) => {
+    e.preventDefault();
+    navigate("/sell-vehicle/post-ad/bike");
+  };
   return (
     <Card sx={{ maxWidth: 250, maxHeight: 420 }}>
       <CardMedia
@@ -39,7 +45,12 @@ function BikeAdCard() {
         </Typography>
       </CardContent>
       <CardActions style={centerButtonStyle}>
-        <Button variant="contained" color="success" size="small">
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          onClick={BikeInfoPageOpener}
+        >
           Post Ad
         </Button>
       </CardActions>

@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import HomeWidgetModal from "./HomeWidgetModal";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { Grid, Typography, Button } from "@mui/material";
+import HomeWidgetModal from "./HomeWidgetModal";
 
 function Homewidget() {
   const user = useSelector((state) => state.authentication.user);
@@ -15,84 +15,107 @@ function Homewidget() {
   const closeModal = () => {
     setModalIsOpen(false);
   };
+
   return (
-    <div className="container mt-4">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
-          <div className="border border-light rounded p-4">
-            <h3 className="font-weight-bold text-center mb-4">
-              Sell Your Car on PakWheels and Get the Best Price
-            </h3>
-            <div className="row mt-4">
-              <div className="col-md-5 mb-4">
-                <h5 className="text-primary font-weight-bold">
-                  Post your Ad on PakWheels
-                </h5>
-                <p style={{ fontSize: "15px" }}>
-                  ✔ Post your Ad for Free in 3 Easy Steps
-                </p>
-                <p style={{ fontSize: "14px" }}>
-                  ✔ Get Genuine offers from Verified Buyers
-                </p>
-                <p style={{ fontSize: "15px" }}>
-                  ✔ Sell your car Fast at the Best Price
-                </p>
-                {user ? (
-                  <button
-                    className="btn btn-primary"
-                    style={{ borderRadius: "4px" }}
-                  >
-                    Coming soon
-                  </button>
-                ) : (
-                  <button
-                    onClick={openModal}
-                    className="btn btn-primary"
-                    style={{ borderRadius: "4px" }}
-                  >
-                    Post Your Ad
-                  </button>
-                )}
-              </div>
-              <div className="col-md-2 text-center">
-                <h5 className="my-4">OR</h5>
-              </div>
-              <div className="col-md-5 mb-4">
-                <h5 className="text-primary font-weight-bold">
-                  Try PakWheels Sell It For Me
-                </h5>
-                <p style={{ fontSize: "14px" }}>
-                  ✔ Dedicated Sales Expert to Sell your Car
-                </p>
-                <p style={{ fontSize: "13px" }}>
-                  ✔ We Bargain for you and share the Best Offer
-                </p>
-                <p style={{ fontSize: "15px" }}>
-                  ✔ We ensure Safe & Secure Transaction
-                </p>
-                {user ? (
-                  <button
-                    className="btn btn-primary"
-                    style={{ borderRadius: "4px" }}
-                  >
-                    Coming Soon
-                  </button>
-                ) : (
-                  <button
-                    onClick={openModal}
-                    className="btn btn-danger"
-                    style={{ borderRadius: "4px" }}
-                  >
-                    Register Your Car
-                  </button>
-                )}
-                <HomeWidgetModal isOpen={modalIsOpen} closeModal={closeModal} />
-              </div>
-            </div>
-          </div>
+    <Grid container justifyContent="center" mt={4}>
+      <Grid item xs={12} sm={8}>
+        <div
+          style={{
+            border: "1px solid #ccc",
+            borderRadius: "14px",
+            padding: "3em",
+          }}
+        >
+          <Typography variant="h5" component="h2" align="center" gutterBottom>
+            Sell Your Car on PakWheels and Get the Best Price
+          </Typography>
+          <Grid container spacing={2} mt={4}>
+            <Grid item xs={12} sm={5}>
+              <Typography
+                variant="h6"
+                component="h3"
+                color="primary"
+                gutterBottom
+              >
+                Post your Ad on PakWheels
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                ✔ Post your Ad for Free in 3 Easy Steps
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "14px" }}>
+                ✔ Get Genuine offers from Verified Buyers
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                ✔ Sell your car Fast at the Best Price
+              </Typography>
+              {user ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled
+                  style={{ margin: "1em" }}
+                >
+                  Coming soon
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={openModal}
+                  style={{ margin: "1em" }}
+                >
+                  Post Your Ad
+                </Button>
+              )}
+            </Grid>
+            <Grid item xs={12} sm={2} align="center">
+              <Typography variant="h6" gutterBottom>
+                OR
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={5}>
+              <Typography
+                variant="h6"
+                component="h3"
+                color="primary"
+                gutterBottom
+              >
+                Try PakWheels Sell It For Me
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "14px" }}>
+                ✔ Dedicated Sales Expert to Sell your Car
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "13px" }}>
+                ✔ We Bargain for you and share the Best Offer
+              </Typography>
+              <Typography variant="body1" style={{ fontSize: "15px" }}>
+                ✔ We ensure Safe & Secure Transaction
+              </Typography>
+              {user ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled
+                  style={{ margin: "1em" }}
+                >
+                  Coming Soon
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={openModal}
+                  style={{ margin: "1em" }}
+                >
+                  Register Your Car
+                </Button>
+              )}
+              <HomeWidgetModal isOpen={modalIsOpen} closeModal={closeModal} />
+            </Grid>
+          </Grid>
         </div>
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 

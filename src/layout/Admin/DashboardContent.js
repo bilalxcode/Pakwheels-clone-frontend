@@ -29,6 +29,7 @@ function DashboardContent() {
   const [videos, setVideos] = useState([]);
   const [products, setProducts] = useState([]);
   const [adsData, setaAdsData] = useState([]);
+  const [bikeAdsData, setBikeAdsData] = useState([]);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -110,9 +111,11 @@ function DashboardContent() {
       if (response.status === 200) {
         const ads = response.data.cars;
         const users = response.data.users;
+        const bikes = response.data.bikes;
 
         console.log(ads, users);
         setaAdsData(ads);
+        setBikeAdsData(bikes);
         // dispatch(AdsData({ AllAds: ads }));
         // dispatch(UsersData({ AllUsers: users }));
 
@@ -187,7 +190,9 @@ function DashboardContent() {
                       <Typography variant="h5" component="div">
                         Total Vehicles
                       </Typography>
-                      <Typography variant="h3">{adsData.length}</Typography>
+                      <Typography variant="h3">
+                        {adsData.length + bikeAdsData.length}
+                      </Typography>
                     </div>
                     <Avatar
                       alt="Car Avatar"
@@ -204,14 +209,20 @@ function DashboardContent() {
                       color="primary"
                     >
                       Pending Approval (
-                      {adsData.filter((ad) => ad.isApproved === null).length})
+                      {adsData.filter((ad) => ad.isApproved === null).length +
+                        bikeAdsData.filter((ad) => ad.isApproved === null)
+                          .length}
+                      )
                     </Button>
                     <Button
                       style={notClickableButtonStyle}
                       size="small"
                       color="primary"
                     >
-                      Approved ({adsData.filter((ad) => ad.isApproved).length})
+                      Approved (
+                      {adsData.filter((ad) => ad.isApproved).length +
+                        bikeAdsData.filter((ad) => ad.isApproved).length}
+                      )
                     </Button>
                     <Button
                       style={notClickableButtonStyle}
@@ -219,7 +230,10 @@ function DashboardContent() {
                       color="primary"
                     >
                       Removed (
-                      {adsData.filter((ad) => ad.isApproved === false).length})
+                      {adsData.filter((ad) => ad.isApproved === false).length +
+                        bikeAdsData.filter((ad) => ad.isApproved === false)
+                          .length}
+                      )
                     </Button>
                   </CardActions>
                 </Paper>
@@ -291,7 +305,7 @@ function DashboardContent() {
                       <Typography variant="h5" component="div">
                         Total Bikes
                       </Typography>
-                      <Typography variant="h3">{adsData.length}</Typography>
+                      <Typography variant="h3">{bikeAdsData.length}</Typography>
                     </div>
                     <Avatar
                       alt="Car Avatar"
@@ -308,14 +322,19 @@ function DashboardContent() {
                       color="primary"
                     >
                       Pending Approval (
-                      {adsData.filter((ad) => ad.isApproved === null).length})
+                      {
+                        bikeAdsData.filter((ad) => ad.isApproved === null)
+                          .length
+                      }
+                      )
                     </Button>
                     <Button
                       style={notClickableButtonStyle}
                       size="small"
                       color="primary"
                     >
-                      Approved ({adsData.filter((ad) => ad.isApproved).length})
+                      Approved (
+                      {bikeAdsData.filter((ad) => ad.isApproved).length})
                     </Button>
                     <Button
                       style={notClickableButtonStyle}
@@ -323,7 +342,11 @@ function DashboardContent() {
                       color="primary"
                     >
                       Removed (
-                      {adsData.filter((ad) => ad.isApproved === false).length})
+                      {
+                        bikeAdsData.filter((ad) => ad.isApproved === false)
+                          .length
+                      }
+                      )
                     </Button>
                   </CardActions>
                 </Paper>

@@ -6,21 +6,15 @@ import ProfileCard from "../layout/ProfilePage/ProfileCard";
 function Profile() {
   return (
     <>
-      <div
-        style={{
-          background: "linear-gradient( #000,#01336F)",
-          padding: "0px 40px",
-          height: "25vh",
-        }}
-      >
+      <div>
         <Navbar />
       </div>
       <div>
         <ProfileCard />
       </div>
-      {/* <div>
+      <div>
         <Footer />
-      </div> */}
+      </div>
     </>
   );
 }

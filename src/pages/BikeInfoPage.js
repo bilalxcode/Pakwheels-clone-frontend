@@ -5,9 +5,13 @@ import CarInfoForm from "../layout/CarInfo/CarInfoForm";
 import CarImageForm from "../layout/CarInfo/CarImageForm";
 import CarContactForm from "../layout/CarInfo/CarContactForm";
 import Footer from "../layout/Footer/Footer";
-function CarInfoPage() {
-  const [carCreated, setCarCreated] = useState(false);
-  const [car, setCar] = useState({});
+import BikeAdSteps from "../layout/BikeInfo/BikeAdSteps";
+import BikeInfoForm from "../layout/BikeInfo/BikeInfoForm";
+import BikeImageForm from "../layout/BikeInfo/BikeImageForm";
+import BikeContactForm from "../layout/BikeInfo/BikeContactForm";
+function BikeInfoPage() {
+  const [bikeCreated, setBikeCreated] = useState(false);
+  const [bike, setBike] = useState({});
 
   return (
     <div
@@ -28,22 +32,20 @@ function CarInfoPage() {
           margin: "20px 0",
         }}
       >
-        <CarAdSteps />
-        {/* <CarInfoForm /> */}
-        <CarInfoForm
-          carCreated={carCreated}
-          setCar={setCar}
-          setCarCreated={setCarCreated}
+        <BikeAdSteps />
+        <BikeInfoForm
+          bikeCreated={bikeCreated}
+          setBike={setBike}
+          setBikeCreated={setBikeCreated}
         />
 
-        {/* <CarImageForm /> */}
-        <CarImageForm carCreated={carCreated} car={car} />
+        <BikeImageForm bikeCreated={bikeCreated} bike={bike} />
 
-        <CarContactForm carCreated={carCreated} car={car} />
+        <BikeContactForm bikeCreated={bikeCreated} bike={bike} />
         <Footer />
       </div>
     </div>
   );
 }
 
-export default CarInfoPage;
+export default BikeInfoPage;

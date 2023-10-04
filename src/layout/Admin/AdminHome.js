@@ -41,6 +41,7 @@ import ProductsView from "./ProductsView";
 import VideosView from "./VideosView";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import BikesView from "./BikesView";
 
 const drawerWidth = 300;
 
@@ -200,7 +201,6 @@ const AdminHome = () => {
                 {index === 1 && <PeopleAltIcon />}
                 {index === 2 && <DriveEtaIcon />}
                 {index === 3 && <DirectionsBikeIcon />}
-
                 {index === 4 && <PostAddIcon />}
                 {index === 5 && <StoreIcon />}
                 {index === 6 && <YouTubeIcon />}
@@ -228,6 +228,8 @@ const AdminHome = () => {
         {selectedMenuItem === "Dashboard" && <DashboardContent />}
         {selectedMenuItem === "Users" && <UsersView />}
         {selectedMenuItem === "Cars" && <VehicleView />}
+        {selectedMenuItem === "Bikes" && <BikesView />}
+
         {selectedMenuItem === "Add Product" && <AddProductForm />}
         {selectedMenuItem === "View Products" && <ProductsView />}
         {selectedMenuItem === "Videos" && <VideosView />}

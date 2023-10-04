@@ -2,37 +2,29 @@ import React from "react";
 import Navbar from "../layout/Navbar/Navbar";
 import CarAdCard from "../layout/PostCarAd/CarAdCard";
 import BikeAdCard from "../layout/PostBikeAd/BikeAdCard";
+import Grid from "@mui/material/Grid";
 
-function SellCarPage() {
+function SellVehiclePage() {
   return (
     <>
-      <div
-        style={{
-          background: "linear-gradient( #000,#01336F)",
-          padding: "0px 40px",
-          height: "25vh",
-        }}
-      >
+      <div>
         <Navbar />
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row", // Set the direction to row
-          justifyContent: "center",
-          alignItems: "center",
-          height: "80vh", // Adjust the height as needed
-        }}
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{ minHeight: "80vh" }}
       >
-        <div style={{ marginRight: "20px" }}>
+        <Grid item style={{ marginRight: "20px" }}>
           <CarAdCard />
-        </div>
-        <div style={{ marginLeft: "20px" }}>
+        </Grid>
+        <Grid item style={{ marginLeft: "20px" }}>
           <BikeAdCard />
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </>
   );
 }
 
-export default SellCarPage;
+export default SellVehiclePage;

@@ -1,26 +1,31 @@
+import React from "react";
+import { Grid, Typography, Box } from "@mui/material";
 import SearchInput from "./SearchInput";
 
 function Searchbox() {
   return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "80vh",
-        }}
-      >
-        <h1 style={{ fontSize: "50px", color: "#fff" }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      minHeight="80vh"
+    >
+      <Grid item xs={12} sm={10} md={10} lg={10}>
+        <Typography variant="h3" align="center" style={{ color: "#fff" }}>
           Find Used Cars in Pakistan
-        </h1>
-        <p style={{ color: "#fff" }}>
+        </Typography>
+        <Typography
+          variant="body1"
+          align="center"
+          style={{ color: "#fff", padding: "1em" }}
+        >
           With thousands of cars, we have just the right one for you
-        </p>
-        <SearchInput />
-      </div>
-    </>
+        </Typography>
+        <Box mt={2}>
+          <SearchInput />
+        </Box>
+      </Grid>
+    </Grid>
   );
 }
 

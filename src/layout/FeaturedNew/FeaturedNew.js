@@ -1,15 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/themes/splide-default.min.css";
-// import "./FeaturedNew.css"; // You can create a CSS file for styling
+import axios from "axios";
 
 function FeaturedNew() {
-  const [activeTab, setActiveTab] = useState("popular");
-  const [dropdownVisible, setDropdownVisible] = useState(true);
+  const [carAds, setCarAds] = useState([]);
 
-  const toggleDropdown = () => {
-    setDropdownVisible(true);
-  };
+  useEffect(() => {
+    async function fetchCarAds() {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/admin/getEveryAd"
+        );
+        if (response.status === 200) {
+          const ads = response.data.cars;
+          console.log(ads);
+
+          // Filter out newly launched and upcoming cars
+          const filteredCarAds = ads.filter(
+            (ad) => !ad.isNewlyLaunched && !ad.isUpcoming
+          );
+          // Sort by date (assuming you have a date property in your ad data)
+          filteredCarAds.sort((a, b) => new Date(b.date) - new Date(a.date));
+          // Take the latest 3 car ads
+          const latestCarAds = filteredCarAds.slice(0, 3);
+          setCarAds(latestCarAds);
+        } else {
+          console.error("Failed to fetch car ads: " + response.data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching car ads: " + error);
+      }
+    }
+
+    fetchCarAds();
+  }, []);
 
   const splideOptions = {
     type: "loop",
@@ -17,6 +42,7 @@ function FeaturedNew() {
     perMove: 1,
   };
 
+  // Rest of your code remains the same
   const slideStyle = {
     display: "flex",
     flexDirection: "column",
@@ -31,6 +57,7 @@ function FeaturedNew() {
 
   const textStyle = {
     color: "blue",
+    marginTop: "0.5em",
   };
 
   const priceStyle = {
@@ -43,262 +70,47 @@ function FeaturedNew() {
   };
 
   const imageStyle = {
-    maxWidth: "100%", // Reduce the width of the image
-    height: "auto", // Maintain aspect ratio
+    width: "200px", // Set a fixed width
+    height: "150px", // Set a fixed height
+    objectFit: "cover", // Maintain aspect ratio and crop if needed
   };
 
   return (
     <div className="container">
       <div className="nav-tabs-main mb-4">
-        <ul className="nav nav-tabs">
-          <li className={`nav-item ${activeTab === "popular" ? "active" : ""}`}>
-            <button
-              style={{
-                border: "1px solid grey",
-                margin: "0px 10px",
-                borderRadius: "10px",
-              }}
-              className="nav-link focus"
-              onClick={() => {
-                setActiveTab("popular");
-                toggleDropdown();
-              }}
-            >
-              Popular
-            </button>
-          </li>
-          <li
-            className={`nav-item ${activeTab === "upcoming" ? "active" : ""}`}
-          >
-            <button
-              style={{
-                border: "1px solid grey",
-                margin: "0px 10px",
-                borderRadius: "10px",
-              }}
-              className="nav-link focus"
-              onClick={() => {
-                setActiveTab("upcoming");
-                toggleDropdown();
-              }}
-            >
-              Upcoming
-            </button>
-          </li>
-          <li
-            className={`nav-item ${
-              activeTab === "newlyLaunched" ? "active" : ""
-            }`}
-          >
-            <button
-              style={{
-                border: "1px solid grey",
-                margin: "0px 10px",
-                borderRadius: "10px",
-              }}
-              className="nav-link focus"
-              onClick={() => {
-                setActiveTab("newlyLaunched");
-                toggleDropdown();
-              }}
-            >
-              Newly Launched
-            </button>
-          </li>
-        </ul>
-
+        <ul className="nav nav-tabs">{/* ... (rest of your code) */}</ul>
         {/* Render the dropdown conditionally */}
-        {dropdownVisible && activeTab === "popular" && (
-          <div className="custom-dropdown" style={{ marginTop: "10px" }}>
-            <Splide options={splideOptions}>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
+        <div className="custom-dropdown" style={{ marginTop: "10px" }}>
+          <Splide options={splideOptions}>
+            {carAds.map((ad, index) => (
+              <SplideSlide key={index}>
                 <div style={slideStyle}>
                   <a
                     href="#"
                     style={{ textDecoration: "none", position: "relative" }}
                   >
                     <img
-                      src="https://cache4.pakwheels.com/ad_pictures/8588/Slide_toyota-corolla-gli-vvti-automatic-2014-85884015.webp"
-                      alt="Image 1"
+                      src={
+                        ad.images && ad.images.length > 0
+                          ? `http://localhost:8080/${ad.images[0].replace(
+                              /\\/g,
+                              "/"
+                            )}`
+                          : "" // Handle the case where ad.images is undefined or empty
+                      }
+                      alt={`Image ${index + 1}`}
                       style={imageStyle}
                     />
-                    <h5 style={textStyle}>Toyota Corolla</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache4.pakwheels.com/ad_pictures/8588/Slide_toyota-corolla-gli-vvti-automatic-2014-85884015.webp"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>Toyota Corolla</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache4.pakwheels.com/ad_pictures/8588/Slide_toyota-corolla-gli-vvti-automatic-2014-85884015.webp"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>Toyota Corolla</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-            </Splide>
-          </div>
-        )}
 
-        {dropdownVisible && activeTab === "upcoming" && (
-          <div className="custom-dropdown" style={{ marginTop: "10px" }}>
-            <Splide options={splideOptions}>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache3.pakwheels.com/system/car_generation_pictures/6067/medium/6_-_PNG.png?1637580605"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>MG</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
+                    <h5 style={textStyle}>{ad.modelName}</h5>
+                    <p style={priceStyle}>{ad.price}</p>
+                    <p style={locationStyle}>{ad.city}</p>
                   </a>
                 </div>
               </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache3.pakwheels.com/system/car_generation_pictures/6067/medium/6_-_PNG.png?1637580605"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>MG</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache3.pakwheels.com/system/car_generation_pictures/6067/medium/6_-_PNG.png?1637580605"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>MG</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-            </Splide>
-          </div>
-        )}
-
-        {dropdownVisible && activeTab === "newlyLaunched" && (
-          <div className="custom-dropdown" style={{ marginTop: "10px" }}>
-            <Splide options={splideOptions}>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache1.pakwheels.com/system/car_generation_pictures/7250/medium/f.jpg?1667212296"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>Vezel</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache1.pakwheels.com/system/car_generation_pictures/7250/medium/f.jpg?1667212296"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>Vezel</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-              <SplideSlide>
-                {/* Add your slide content */}
-                {/* Example slide content */}
-                <div style={slideStyle}>
-                  <a
-                    href="#"
-                    style={{ textDecoration: "none", position: "relative" }}
-                  >
-                    <img
-                      src="https://cache1.pakwheels.com/system/car_generation_pictures/7250/medium/f.jpg?1667212296"
-                      alt="Image 1"
-                      style={imageStyle}
-                    />
-                    <h5 style={textStyle}>Vezel</h5>
-                    <p style={priceStyle}>PKR 2,500,000</p>
-                    <p style={locationStyle}>Karachi</p>
-                  </a>
-                </div>
-              </SplideSlide>
-            </Splide>
-          </div>
-        )}
+            ))}
+          </Splide>
+        </div>
       </div>
     </div>
   );

@@ -1,140 +1,201 @@
+import React, { useState, useEffect } from "react";
+import {
+  Grid,
+  AppBar,
+  Toolbar,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Hidden,
+} from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
 import NavHeader from "./NavHeader";
-import "./Navbar.css";
-import NavbarDropdown from "./NavbarDropdown";
-import { useNavigate } from "react-router-dom";
+import MenuIcon from "@mui/icons-material/Menu";
+
 function Navbar() {
-  const dropdownOptions = [
-    {
-      heading: "Option 1",
-      description: "Description for Option 1",
-      icon: "icon-url-1",
-    },
-    {
-      heading: "Option 2",
-      description: "Description for Option 2",
-      icon: "icon-url-2",
-    },
-    // Add more options as needed
-  ];
   const navigate = useNavigate();
+  const location = useLocation();
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
+  const isHomePage = location.pathname === "/";
+
+  const handleMobileMenuOpen = (event) => {
+    setMobileMenuAnchor(event.currentTarget);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMenuAnchor(null);
+  };
+
   const sellCarOpener = (e) => {
     e.preventDefault();
     navigate("/sell-vehicle/post-ad");
   };
+
   return (
     <>
-      <NavHeader />
-      <hr
+      <div
         style={{
-          backgroundColor: "gray",
-          height: "1px",
-          border: "none",
-          margin: "0px",
-          marginBottom: "10px",
+          background: isHomePage
+            ? "transparent"
+            : "linear-gradient( #000,#01336F)",
+          padding: "0px 40px",
+          height: "25vh",
         }}
-      />
+      >
+        <NavHeader />
+        <hr
+          style={{
+            backgroundColor: "gray",
+            height: "1px",
+            border: "none",
+            margin: "0px",
+            marginBottom: "10px",
+          }}
+        />
 
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark transparent-background">
-        <a href="/">
-          <div className="navLogo">
-            <img
-              src="https://wsa1.pakwheels.com/assets/new-pw-logo-white-b8b4c00b25fde9cc8f514dc4947c266a.svg"
-              alt="logo"
-              width="150"
-              height="40"
-            />
-          </div>
-        </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+        <AppBar
+          position="static"
+          color="transparent"
+          style={{
+            borderRadius: "1em",
+            boxShadow: "none", // Remove shadow effect
+          }}
         >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <NavbarDropdown
-            name="Used Cars"
-            options={dropdownOptions}
-            hasDropdown={true}
-          />
-          <NavbarDropdown
-            name="New Cars"
-            options={dropdownOptions}
-            hasDropdown={true}
-          />
-          <NavbarDropdown
-            name="Bikes"
-            options={dropdownOptions}
-            hasDropdown={true}
-          />
-          <NavbarDropdown
-            name="Auto Store"
-            options={dropdownOptions}
-            hasDropdown={true}
-          />
-
-          <NavbarDropdown name="Videos" hasDropdown={false} />
-          <NavbarDropdown name="Forums" hasDropdown={false} />
-          <NavbarDropdown name="Blogs" hasDropdown={false} />
-          <NavbarDropdown
-            name="More"
-            options={dropdownOptions}
-            hasDropdown={true}
-          />
-          <div>
-            <a
-              href=""
-              className="nav-link dropdown-toggle"
-              id="navbarDropdown"
-              role="button"
-              style={{
-                backgroundColor: "#B73439",
-                borderRadius: "10px",
-                height: "40px",
-                listStyle: "none",
-                color: "white",
-                listStyle: "none", // Remove marker
-                fontWeight: "bold", // Set font-weight to bold
-                textAlign: "center", // Center the text
-              }}
-              onClick={sellCarOpener}
-            >
-              Post An Ad
-            </a>
-            {/* <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li className="dropdown-item">
-                  <div className="option-content">
-                    <div className="option-icon"></div>
-                    <div className="option-details">
-                      <a
-                        href="#"
-                        style={{
-                          color: "black",
-                          listStyle: "none", // Remove marker
-                          fontWeight: "bold", // Set font-weight to bold
-                          textAlign: "center", // Center the text
-                        }}
-                      >
-                        <h4
-                          style={{ fontSize: "15px", fontWeight: "bold" }}
-                          onClick={sellCarOpener}
-                        >
-                          Sell Vehicle
-                        </h4>
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              </ul> */}
-          </div>
-        </div>
-      </nav>
+          <Toolbar>
+            <Grid container alignItems="center" spacing={2}>
+              <Grid item xs>
+                <a href="/">
+                  <img
+                    src="https://wsa1.pakwheels.com/assets/new-pw-logo-white-b8b4c00b25fde9cc8f514dc4947c266a.svg"
+                    alt="logo"
+                    width="150"
+                    height="40"
+                  />
+                </a>
+              </Grid>
+              <Hidden smDown>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "transparent",
+                      borderRadius: "10px",
+                      height: "40px",
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    Used Cars
+                  </Button>
+                </Grid>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "transparent",
+                      borderRadius: "10px",
+                      height: "40px",
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    Used Bikes
+                  </Button>
+                </Grid>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "transparent",
+                      borderRadius: "10px",
+                      height: "40px",
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    AutoStore
+                  </Button>
+                </Grid>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "transparent",
+                      borderRadius: "10px",
+                      height: "40px",
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    Videos
+                  </Button>
+                </Grid>
+                <Grid item xs>
+                  <Button
+                    variant="contained"
+                    style={{
+                      background: "transparent",
+                      borderRadius: "10px",
+                      height: "40px",
+                      color: "white",
+                      textAlign: "center",
+                    }}
+                  >
+                    More
+                  </Button>
+                </Grid>
+              </Hidden>
+              <Grid item xs>
+                <Button
+                  variant="contained"
+                  style={{
+                    backgroundColor: "#B73439",
+                    borderRadius: "10px",
+                    height: "40px",
+                    color: "white",
+                    textAlign: "center",
+                    boxShadow: "none", // Remove shadow effect
+                  }}
+                  onClick={sellCarOpener}
+                >
+                  Post An Ad
+                </Button>
+              </Grid>
+              <Hidden mdUp>
+                <Grid item xs>
+                  <IconButton
+                    edge="end"
+                    color="inherit"
+                    aria-label="menu"
+                    onClick={handleMobileMenuOpen}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Menu
+                    anchorEl={mobileMenuAnchor}
+                    keepMounted
+                    open={Boolean(mobileMenuAnchor)}
+                    onClose={handleMobileMenuClose}
+                  >
+                    <MenuItem onClick={handleMobileMenuClose}>
+                      Used Cars
+                    </MenuItem>
+                    <MenuItem onClick={handleMobileMenuClose}>
+                      Used Bikes
+                    </MenuItem>
+                    <MenuItem onClick={handleMobileMenuClose}>
+                      AutoStore
+                    </MenuItem>
+                    <MenuItem onClick={handleMobileMenuClose}>Videos</MenuItem>
+                    <MenuItem onClick={handleMobileMenuClose}>More</MenuItem>
+                  </Menu>
+                </Grid>
+              </Hidden>
+            </Grid>
+          </Toolbar>
+        </AppBar>
+      </div>
     </>
   );
 }

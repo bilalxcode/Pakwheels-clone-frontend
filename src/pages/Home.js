@@ -17,10 +17,10 @@ function Home() {
       <Homewidget />
       <BrowseUsedCarsOverlay />
       <ExploreProducts />
-      <ManagedByPakwheelsOverlay />
-      <FeaturedCarsOverlay />
-      <FeaturedNewOverlay />
-      <Newcars />
+      {/* <ManagedByPakwheelsOverlay />
+      <FeaturedCarsOverlay /> */}
+      {/* <FeaturedNewOverlay /> */}
+      {/* <Newcars /> */}
       <AutoStore />
       <Browsevideos />
       <GetPakwheels />

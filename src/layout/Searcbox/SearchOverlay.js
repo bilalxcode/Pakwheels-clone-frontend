@@ -1,3 +1,5 @@
+import React from "react";
+import { Grid, Container } from "@mui/material";
 import Searchbox from "./Searchbox";
 import Navbar from "../Navbar/Navbar";
 
@@ -6,12 +8,19 @@ function SearchOverlay() {
     <div
       style={{
         background: "linear-gradient( #000,#01336F)",
-        padding: "0px 40px",
-        height: "90vh",
+        minHeight: "100vh",
       }}
     >
-      <Navbar />
-      <Searchbox />
+      <Container maxWidth="lg">
+        <Grid container direction="column">
+          <Grid item>
+            <Navbar />
+          </Grid>
+          <Grid item>
+            <Searchbox />
+          </Grid>
+        </Grid>
+      </Container>
     </div>
   );
 }

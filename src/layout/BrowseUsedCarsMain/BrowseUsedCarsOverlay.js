@@ -1,22 +1,32 @@
+import React from "react";
+import { Grid, Typography } from "@mui/material";
 import BrowseCarousel from "./BrowseCarousel";
 
 function BrowseUsedCarsOverlay() {
   return (
-    <div
+    <Grid
+      container
       style={{
         background: "#F2F3F3",
         padding: "0px 40px",
-        height: "90vh",
-        marginTop: "150px",
+        marginTop: "8em",
       }}
     >
-      <div>
-        <h3 style={{ fontWeight: "bold", padding: "20px" }}>
-          Browse Used Cars
-        </h3>
-      </div>
-      <BrowseCarousel />
-    </div>
+      <Grid item xs={12}>
+        <Typography
+          variant="h4"
+          component="h1"
+          align="center"
+          fontWeight="bold"
+          padding="20px"
+        >
+          Browse Used Vehicles
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <BrowseCarousel />
+      </Grid>
+    </Grid>
   );
 }
 

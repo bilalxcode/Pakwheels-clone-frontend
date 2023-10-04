@@ -20,6 +20,7 @@ import AdminHome from "./layout/Admin/AdminHome";
 import AdminAuthentication from "./layout/Admin/AdminAuthentication";
 import { useEffect } from "react";
 import { AdminLoggedIn } from "./store/adminSlice";
+import BikeInfoPage from "./pages/BikeInfoPage";
 function App() {
   const user = useSelector((state) => state.authentication.user);
   const adminTokenFromStorage = localStorage.getItem("jwtToken"); // Check for the admin token in local storage
@@ -54,6 +55,10 @@ function App() {
         <Route
           path="/sell-vehicle/post-ad/car"
           element={user ? <CarInfoPage /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/sell-vehicle/post-ad/bike"
+          element={user ? <BikeInfoPage /> : <Navigate to="/" />}
         />
         <Route
           path="/my-ads"
