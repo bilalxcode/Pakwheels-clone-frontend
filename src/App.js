@@ -21,12 +21,15 @@ import AdminAuthentication from "./layout/Admin/AdminAuthentication";
 import { useEffect } from "react";
 import { AdminLoggedIn } from "./store/adminSlice";
 import BikeInfoPage from "./pages/BikeInfoPage";
+import AllUsedCars from "./layout/UsedCars/AllUsedCars";
+import AllUsedBikes from "./layout/UsedBikes/AllUsedBikes";
+import AllProducts from "./layout/AutoStoreMain/AllProducts";
+import ShowAllVideos from "./layout/Videos/ShowAllVideos";
 function App() {
   const user = useSelector((state) => state.authentication.user);
-  const adminTokenFromStorage = localStorage.getItem("jwtToken"); // Check for the admin token in local storage
+  const adminTokenFromStorage = localStorage.getItem("jwtToken");
   const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
 
-  // Dispatch action to update Redux state based on local storage
   const dispatch = useDispatch();
   useEffect(() => {
     if (adminTokenFromStorage) {
@@ -64,10 +67,15 @@ function App() {
           path="/my-ads"
           element={user ? <Myads /> : <Navigate to="/" />}
         />
+        <Route path="/used-cars" element=<AllUsedCars /> />
+        <Route path="/used-bikes" element=<AllUsedBikes /> />
+        <Route path="/autostore" element=<AllProducts /> />
+        <Route path="/videos" element=<ShowAllVideos /> />
+
         <Route
           path="/admin/*"
           element={
-            adminLoggedIn ? ( // Check for adminLoggedIn instead of adminToken
+            adminLoggedIn ? (
               <>
                 <AdminHome />
               </>

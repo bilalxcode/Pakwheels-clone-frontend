@@ -39,13 +39,7 @@ const centerStyle = {
 function ErrorPage() {
   return (
     <>
-      <div
-        style={{
-          background: "linear-gradient( #000,#01336F)",
-          padding: "0px 40px",
-          height: "20vh",
-        }}
-      >
+      <div>
         <Navbar />
       </div>
       <div style={centerStyle}>

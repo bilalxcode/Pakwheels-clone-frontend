@@ -7,7 +7,7 @@ import NavbarDropdown from "./NavbarDropdown";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/authenticationSlice";
-
+import { Deactivate } from "../../store/navbarSlice";
 function NavHeader() {
   const [downloadModalIsOpen, setDownloadModalIsOpen] = useState(false);
   const [signupSigninModalIsOpen, setSignupSigninModalIsOpen] = useState(false);
@@ -63,6 +63,8 @@ function NavHeader() {
           "jwtToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
         dispatch(logout());
+        dispatch(Deactivate());
+
         const msg = response.data.message;
 
         navigate("/");

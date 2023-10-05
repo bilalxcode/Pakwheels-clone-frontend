@@ -44,7 +44,7 @@ const authenticationSlice = createSlice({
     userEmailVerified: (state) => {
       return {
         ...state,
-        verified: true, // Update to set 'verified' to true
+        verified: true,
       };
     },
   },

@@ -8,8 +8,15 @@ import {
   Menu,
   MenuItem,
   Hidden,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Activate } from "../../store/navbarSlice";
 import NavHeader from "./NavHeader";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -17,7 +24,12 @@ function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false); // For dialog state
+  const dispatch = useDispatch();
   const isHomePage = location.pathname === "/";
+
+  const activeTab = useSelector((state) => state.navbar.activeTab);
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -27,9 +39,44 @@ function Navbar() {
     setMobileMenuAnchor(null);
   };
 
+  const handleDialogOpen = () => {
+    setDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   const sellCarOpener = (e) => {
     e.preventDefault();
     navigate("/sell-vehicle/post-ad");
+  };
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    dispatch(Activate({ user: option }));
+
+    // Navigate to the corresponding route when an option is clicked
+    switch (option) {
+      case "Used Cars":
+        navigate("/used-cars");
+        break;
+      case "Used Bikes":
+        navigate("/used-bikes");
+        break;
+      case "AutoStore":
+        navigate("/autostore");
+        break;
+      case "Videos":
+        navigate("/videos");
+        break;
+      case "More":
+        // Open the dialog for "More" option
+        handleDialogOpen();
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -59,7 +106,7 @@ function Navbar() {
           color="transparent"
           style={{
             borderRadius: "1em",
-            boxShadow: "none", // Remove shadow effect
+            boxShadow: "none",
           }}
         >
           <Toolbar>
@@ -84,7 +131,12 @@ function Navbar() {
                       height: "40px",
                       color: "white",
                       textAlign: "center",
+                      boxShadow: "none",
+                      border:
+                        activeTab === "Used Cars" ? "1px solid white" : "none",
+                      color: activeTab === "Used Cars" ? "red" : "white",
                     }}
+                    onClick={() => handleOptionClick("Used Cars")}
                   >
                     Used Cars
                   </Button>
@@ -98,7 +150,12 @@ function Navbar() {
                       height: "40px",
                       color: "white",
                       textAlign: "center",
+                      boxShadow: "none",
+                      border:
+                        activeTab === "Used Bikes" ? "1px solid white" : "none",
+                      color: activeTab === "Used Bikes" ? "red" : "white",
                     }}
+                    onClick={() => handleOptionClick("Used Bikes")}
                   >
                     Used Bikes
                   </Button>
@@ -112,7 +169,12 @@ function Navbar() {
                       height: "40px",
                       color: "white",
                       textAlign: "center",
+                      boxShadow: "none",
+                      border:
+                        activeTab === "AutoStore" ? "1px solid white" : "none",
+                      color: activeTab === "AutoStore" ? "red" : "white",
                     }}
+                    onClick={() => handleOptionClick("AutoStore")}
                   >
                     AutoStore
                   </Button>
@@ -126,7 +188,12 @@ function Navbar() {
                       height: "40px",
                       color: "white",
                       textAlign: "center",
+                      boxShadow: "none",
+                      border:
+                        activeTab === "Videos" ? "1px solid white" : "none",
+                      color: activeTab === "Videos" ? "red" : "white",
                     }}
+                    onClick={() => handleOptionClick("Videos")}
                   >
                     Videos
                   </Button>
@@ -140,7 +207,11 @@ function Navbar() {
                       height: "40px",
                       color: "white",
                       textAlign: "center",
+                      boxShadow: "none",
+                      border: activeTab === "More" ? "1px solid white" : "none",
+                      color: activeTab === "More" ? "red" : "white",
                     }}
+                    onClick={() => handleOptionClick("More")}
                   >
                     More
                   </Button>
@@ -155,7 +226,7 @@ function Navbar() {
                     height: "40px",
                     color: "white",
                     textAlign: "center",
-                    boxShadow: "none", // Remove shadow effect
+                    boxShadow: "none",
                   }}
                   onClick={sellCarOpener}
                 >
@@ -178,17 +249,62 @@ function Navbar() {
                     open={Boolean(mobileMenuAnchor)}
                     onClose={handleMobileMenuClose}
                   >
-                    <MenuItem onClick={handleMobileMenuClose}>
+                    <MenuItem
+                      onClick={() => handleOptionClick("Used Cars")}
+                      style={{
+                        border:
+                          activeTab === "Used Cars"
+                            ? "1px solid white"
+                            : "none",
+                        color: activeTab === "Used Cars" ? "red" : "black",
+                      }}
+                    >
                       Used Cars
                     </MenuItem>
-                    <MenuItem onClick={handleMobileMenuClose}>
+                    <MenuItem
+                      onClick={() => handleOptionClick("Used Bikes")}
+                      style={{
+                        border:
+                          activeTab === "Used Bikes"
+                            ? "1px solid white"
+                            : "none",
+                        color: activeTab === "Used Bikes" ? "red" : "black",
+                      }}
+                    >
                       Used Bikes
                     </MenuItem>
-                    <MenuItem onClick={handleMobileMenuClose}>
+                    <MenuItem
+                      onClick={() => handleOptionClick("AutoStore")}
+                      style={{
+                        border:
+                          activeTab === "AutoStore"
+                            ? "1px solid white"
+                            : "none",
+                        color: activeTab === "AutoStore" ? "red" : "black",
+                      }}
+                    >
                       AutoStore
                     </MenuItem>
-                    <MenuItem onClick={handleMobileMenuClose}>Videos</MenuItem>
-                    <MenuItem onClick={handleMobileMenuClose}>More</MenuItem>
+                    <MenuItem
+                      onClick={() => handleOptionClick("Videos")}
+                      style={{
+                        border:
+                          activeTab === "Videos" ? "1px solid white" : "none",
+                        color: activeTab === "Videos" ? "red" : "black",
+                      }}
+                    >
+                      Videos
+                    </MenuItem>
+                    <MenuItem
+                      onClick={handleDialogOpen}
+                      style={{
+                        border:
+                          activeTab === "More" ? "1px solid white" : "none",
+                        color: activeTab === "More" ? "red" : "black",
+                      }}
+                    >
+                      More
+                    </MenuItem>
                   </Menu>
                 </Grid>
               </Hidden>
@@ -196,6 +312,21 @@ function Navbar() {
           </Toolbar>
         </AppBar>
       </div>
+
+      {/* Dialog for "More" option */}
+      <Dialog open={dialogOpen} onClose={handleDialogClose}>
+        <DialogTitle>Coming Soon</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1">
+            This feature is coming soon. Stay tuned!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

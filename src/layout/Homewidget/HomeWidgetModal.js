@@ -4,6 +4,7 @@ import "./HomeWidgetModal";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { SignUp, login } from "../../store/authenticationSlice";
+import { Deactivate } from "../../store/navbarSlice";
 import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -87,6 +88,8 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       console.log("before Login Data:", { user: user, token: jwtToken });
 
       dispatch(login({ user, token: jwtToken }));
+      dispatch(Deactivate());
+
       document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
 
       console.log("data sent" + document.cookie);
