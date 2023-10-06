@@ -48,7 +48,7 @@ function AllAdsPreview() {
         const BikeAds = response.data.bikeAds;
         setAdsData(ads);
         setBikeAdsData(BikeAds);
-        toast.success("Data loaded successfully");
+        toast.success("Ads loaded ");
       } else {
         setIsLoading(false);
         toast.error(response.data.message);

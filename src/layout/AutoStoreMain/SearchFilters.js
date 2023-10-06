@@ -42,7 +42,6 @@ function SearchFilters({
         Filter Products:
       </Typography>
 
-      <ToastContainer />
 
       <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
         <label>Category</label>

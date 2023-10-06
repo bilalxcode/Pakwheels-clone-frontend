@@ -3,8 +3,20 @@ import AutoStoreElements from "./AutoStoreElements";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { useDispatch } from "react-redux";
+import { Activate } from "../../store/navbarSlice";
+import { useNavigate } from "react-router-dom";
 
 function AutoStore() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const AutoStoreNavigate = (e) => {
+    e.preventDefault();
+    dispatch(Activate({ user: "AutoStore" }));
+
+    navigate("/autostore");
+  };
   return (
     <Box
       sx={{
@@ -20,7 +32,9 @@ function AutoStore() {
         fontWeight="bold"
         padding="20px 0px"
       >
-        AutoStore
+        <a onClick={AutoStoreNavigate} style={{ color: "black" }}>
+          AutoStore
+        </a>
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12}>

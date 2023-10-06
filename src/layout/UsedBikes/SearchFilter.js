@@ -29,7 +29,9 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
       );
 
       if (response.status === 200) {
-        const ads = response.data.cars;
+        const Defaultads = response.data.bikes;
+        const ads = Defaultads.filter((ad) => ad.isApproved);
+
         const uniqueCities = Array.from(
           new Set(ads.map((ad) => ad.city))
         ).filter((city) => city);
@@ -139,22 +141,6 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
           {engineCapacityOptions.map((capacity) => (
             <MenuItem key={capacity} value={capacity}>
               {capacity}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-
-      <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
-        <label>Transmission</label>
-        <Select
-          name="transmission"
-          onChange={handleFilterChange}
-          value={filterOptions.transmission}
-        >
-          <MenuItem value="">All</MenuItem>
-          {transmissionOptions.map((transmission) => (
-            <MenuItem key={transmission} value={transmission}>
-              {transmission}
             </MenuItem>
           ))}
         </Select>

@@ -25,6 +25,8 @@ import AllUsedCars from "./layout/UsedCars/AllUsedCars";
 import AllUsedBikes from "./layout/UsedBikes/AllUsedBikes";
 import AllProducts from "./layout/AutoStoreMain/AllProducts";
 import ShowAllVideos from "./layout/Videos/ShowAllVideos";
+import MyCart from "./layout/Cart/MyCart";
+import CheckoutPage from "./layout/Cart/CheckoutPage";
 function App() {
   const user = useSelector((state) => state.authentication.user);
   const adminTokenFromStorage = localStorage.getItem("jwtToken");
@@ -43,10 +45,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route
-          path="/verify"
-          element={user ? <EmailValidationPage /> : <Navigate to="/" />}
-        />
+        <Route path="/verify" element=<EmailValidationPage /> />
         <Route
           path="/profile/:userId"
           element={user ? <Profile /> : <Navigate to="/" />}
@@ -67,6 +66,11 @@ function App() {
           path="/my-ads"
           element={user ? <Myads /> : <Navigate to="/" />}
         />
+        <Route
+          path="/my-cart"
+          element={user ? <MyCart /> : <Navigate to="/" />}
+        />
+        <Route path="/checkout" element=<CheckoutPage /> />
         <Route path="/used-cars" element=<AllUsedCars /> />
         <Route path="/used-bikes" element=<AllUsedBikes /> />
         <Route path="/autostore" element=<AllProducts /> />

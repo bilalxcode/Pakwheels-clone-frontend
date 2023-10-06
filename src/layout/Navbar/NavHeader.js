@@ -7,7 +7,7 @@ import NavbarDropdown from "./NavbarDropdown";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../store/authenticationSlice";
-import { Deactivate } from "../../store/navbarSlice";
+import { Activate, Deactivate } from "../../store/navbarSlice";
 function NavHeader() {
   const [downloadModalIsOpen, setDownloadModalIsOpen] = useState(false);
   const [signupSigninModalIsOpen, setSignupSigninModalIsOpen] = useState(false);
@@ -64,6 +64,7 @@ function NavHeader() {
 
         dispatch(logout());
         dispatch(Deactivate());
+        dispatch(Activate({ user: null }));
 
         const msg = response.data.message;
 
@@ -90,6 +91,11 @@ function NavHeader() {
   const navigateToMyAds = (e) => {
     e.preventDefault();
     navigate("/my-ads");
+  };
+
+  const navigateToMyCart = (e) => {
+    e.preventDefault();
+    navigate("/my-cart");
   };
   return (
     <>
@@ -159,6 +165,13 @@ function NavHeader() {
 
                     <a class="dropdown-item" href="#" onClick={navigateToMyAds}>
                       My Ads
+                    </a>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      onClick={navigateToMyCart}
+                    >
+                      My Cart
                     </a>
                     <a onClick={logoutHandler} class="dropdown-item" href="#">
                       Sign Out

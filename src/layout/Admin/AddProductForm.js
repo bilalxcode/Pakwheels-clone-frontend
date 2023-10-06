@@ -183,6 +183,9 @@ const AddProductForm = () => {
       if (formData.images.length < 1) {
         return toast.error("Select minimum 1 images");
       }
+      if (formData.category === "AddNewCategory") {
+        return toast.error("Select category");
+      }
 
       const response = await axios.post(
         "http://localhost:8080/admin/addProduct", // New endpoint for image upload

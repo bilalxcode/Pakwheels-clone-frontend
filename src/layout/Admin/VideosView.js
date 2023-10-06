@@ -78,7 +78,6 @@ function VideosView() {
       );
     }
   };
-
   const getVideos = async () => {
     try {
       const response = await axios.get("http://localhost:8080/admin/getVideo", {
@@ -89,6 +88,10 @@ function VideosView() {
 
       if (response.status === 200) {
         const videos = response.data.videos;
+
+        // Sort videos by date in descending order (newest to oldest)
+        videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
         setVideos(videos);
       } else {
         toast.error("Failed to get Videos: " + response.data.message);

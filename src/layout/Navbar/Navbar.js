@@ -13,6 +13,7 @@ import {
   DialogContent,
   DialogActions,
   Typography,
+  Alert,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,8 +29,14 @@ function Navbar() {
   const [dialogOpen, setDialogOpen] = useState(false); // For dialog state
   const dispatch = useDispatch();
   const isHomePage = location.pathname === "/";
+  const user = useSelector((state) => state.authentication.user);
 
   const activeTab = useSelector((state) => state.navbar.activeTab);
+
+  // useEffect(() => {
+  //   const option = localStorage.getItem("activeTab");
+  //   dispatch(Activate({ user: option }));
+  // }, []);
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -49,14 +56,18 @@ function Navbar() {
 
   const sellCarOpener = (e) => {
     e.preventDefault();
-    navigate("/sell-vehicle/post-ad");
+    if (!user) {
+      // If the user is not logged in, show an alert
+      alert("Please log in first to post an ad.");
+    } else {
+      navigate("/sell-vehicle/post-ad");
+    }
   };
 
   const handleOptionClick = (option) => {
+    console.log(option);
     setSelectedOption(option);
     dispatch(Activate({ user: option }));
-
-    // Navigate to the corresponding route when an option is clicked
     switch (option) {
       case "Used Cars":
         navigate("/used-cars");
@@ -198,7 +209,7 @@ function Navbar() {
                     Videos
                   </Button>
                 </Grid>
-                <Grid item xs>
+                {/* <Grid item xs>
                   <Button
                     variant="contained"
                     style={{
@@ -215,7 +226,7 @@ function Navbar() {
                   >
                     More
                   </Button>
-                </Grid>
+                </Grid> */}
               </Hidden>
               <Grid item xs>
                 <Button
@@ -295,16 +306,6 @@ function Navbar() {
                     >
                       Videos
                     </MenuItem>
-                    <MenuItem
-                      onClick={handleDialogOpen}
-                      style={{
-                        border:
-                          activeTab === "More" ? "1px solid white" : "none",
-                        color: activeTab === "More" ? "red" : "black",
-                      }}
-                    >
-                      More
-                    </MenuItem>
                   </Menu>
                 </Grid>
               </Hidden>
@@ -314,19 +315,6 @@ function Navbar() {
       </div>
 
       {/* Dialog for "More" option */}
-      <Dialog open={dialogOpen} onClose={handleDialogClose}>
-        <DialogTitle>Coming Soon</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            This feature is coming soon. Stay tuned!
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }

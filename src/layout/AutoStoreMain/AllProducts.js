@@ -15,15 +15,16 @@ import {
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import Navbar from "../Navbar/Navbar";
 import SearchFilters from "./SearchFilters";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ImageIcon from "@mui/icons-material/Image";
-import { useSelector } from "react-redux"; // Import useSelector to access Redux state
+import { useDispatch, useSelector } from "react-redux"; // Import useSelector to access Redux state
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import { AddToCart } from "../../store/cartSlice";
 function AllProducts() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,14 +40,11 @@ function AllProducts() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
   const user = useSelector((state) => state.authentication.user); // Get user from Redux state
+  const orders = useSelector((state) => state.cart.orders); // Get user from Redux state
 
   const handleOpenDialog = (ad) => {
     // Open dialog only if the user is logged in
-    if (user) {
-      setSelectedAd(ad);
-    } else {
-      alert("Please log in first.");
-    }
+    setSelectedAd(ad);
   };
 
   const handleCloseDialog = () => {
@@ -123,15 +121,48 @@ function AllProducts() {
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
-
   const handleBuyNow = (ad) => {
-    if (user) {
-      // Open dialog with product details and order form
-      handleOpenDialog(ad);
-    } else {
-      alert("Please log in first.");
-    }
+    // Open dialog with product details and order form
+    handleOpenDialog(ad);
   };
+
+  const dispatch = useDispatch();
+  const [quantities, setQuantities] = useState({});
+
+  const handleQuantityChange = (orderId, newQuantity) => {
+    setQuantities({
+      ...quantities,
+      [orderId]: newQuantity,
+    });
+  };
+  const handleAdtoCart = (ad) => {
+    // Open dialog with product details and order form
+    if (!user) {
+      alert("Log In First");
+      return; // This will exit the function immediately
+    }
+
+    // Check if the product is already in the cart
+    const existingProduct = orders.find(
+      (order) => order && order._id === ad && ad._id
+    );
+
+    if (existingProduct) {
+      // If the product is already in the cart, increment its quantity
+      const newQuantity = (quantities[existingProduct.orders._id] || 0) + 1;
+      handleQuantityChange(existingProduct._id, newQuantity);
+    } else {
+      // If it's not in the cart, add it as a new item
+      dispatch(AddToCart({ orders: ad }));
+    }
+
+    toast.success("Added To Cart");
+    handleCloseDialog();
+  };
+
+  useEffect(() => {
+    console.log("Cart updated:", orders);
+  }, [orders]);
 
   const renderAds = () => {
     const startIndex = (currentPage - 1) * adsPerPage;
@@ -174,9 +205,6 @@ function AllProducts() {
                 <div style={{ flex: 1, marginLeft: "1em" }}>
                   <Typography variant="h6">{ad.name}</Typography>
 
-                  <Typography color="text.secondary">
-                    Price: {ad.price}
-                  </Typography>
                   <Typography color="text.secondary">
                     In Stock: {ad.quantity}
                   </Typography>
@@ -265,6 +293,7 @@ function AllProducts() {
                 color: "#fff",
                 marginTop: "0.5em",
               }}
+              onClick={() => handleAdtoCart(selectedAd)}
             >
               Ad To Cart
               <ShoppingBasketIcon />
@@ -281,7 +310,7 @@ function AllProducts() {
   return (
     <div>
       <Navbar />
-
+      <ToastContainer />
       <div style={{ display: "flex", margin: "1em" }}>
         <div>
           <SearchFilters

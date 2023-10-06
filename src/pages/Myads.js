@@ -3,8 +3,16 @@ import Navbar from "../layout/Navbar/Navbar";
 import Footer from "../layout/Footer/Footer";
 import MyAdsPofile from "../layout/MyAds/MyAdsPofile";
 import AllAdsPreview from "../layout/MyAds/AllAdsPreview";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { Activate } from "../store/navbarSlice";
 
 function Myads() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(Activate({ user: null }));
+  }, []);
   return (
     <div
       style={{

@@ -29,7 +29,10 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
       );
 
       if (response.status === 200) {
-        const ads = response.data.cars;
+        // const ads = response.data.cars;
+
+        const Defaultads = response.data.cars;
+        const ads = Defaultads.filter((ad) => ad.isApproved);
         const uniqueCities = Array.from(
           new Set(ads.map((ad) => ad.city))
         ).filter((city) => city);

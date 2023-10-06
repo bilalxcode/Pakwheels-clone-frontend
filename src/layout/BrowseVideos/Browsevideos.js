@@ -6,10 +6,15 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import axios from "axios"; // Import axios
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Activate } from "../../store/navbarSlice";
 
 function Browsevideos() {
   const [videos, setVideos] = useState([]);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     getVideos();
   }, []);
@@ -71,6 +76,12 @@ function Browsevideos() {
     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Add text shadow for better visibility
   };
 
+  const VideoNavigate = (e) => {
+    e.preventDefault();
+    dispatch(Activate({ user: "Videos" }));
+
+    navigate("/videos");
+  };
   return (
     <Grid container style={{ marginTop: "10em", background: "#F2F3F3" }}>
       <Grid item xs={12}>
@@ -81,7 +92,9 @@ function Browsevideos() {
           fontWeight="bold"
           padding="20px"
         >
-          Latest Videos
+          <a href="/videos" onClick={VideoNavigate} style={{ color: "black" }}>
+            Latest Videos
+          </a>
         </Typography>
       </Grid>
       <Grid item xs={12}>

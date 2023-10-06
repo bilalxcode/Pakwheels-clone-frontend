@@ -6,11 +6,17 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import axios from "axios"; // Import axios
 
+import { Activate } from "../../store/navbarSlice";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 function AutoStoreElements() {
   const [activeTab, setActiveTab] = useState("category");
   const [dropdownVisible, setDropdownVisible] = useState(true);
   const [categories, setCategories] = useState([]); // State variable for categories
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const toggleDropdown = () => {
     setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
   };
@@ -74,6 +80,12 @@ function AutoStoreElements() {
     textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Add text shadow for better visibility
   };
 
+  const AutoStoreNavigate = (e) => {
+    e.preventDefault();
+    dispatch(Activate({ user: "AutoStore" }));
+
+    navigate("/autostore");
+  };
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -83,12 +95,9 @@ function AutoStoreElements() {
               <SplideSlide key={index}>
                 <div style={slideStyle} className="card">
                   <a
-                    href="#"
+                    href="/autostore"
+                    onClick={AutoStoreNavigate}
                     title={`Category: ${category.name}`}
-                    onClick={() => {
-                      // Handle click on a category (you can add your logic here)
-                      console.log(`Clicked category: ${category.name}`);
-                    }}
                   >
                     <div style={imageContainerStyle}>
                       <Typography variant="h6" style={textStyle}>
