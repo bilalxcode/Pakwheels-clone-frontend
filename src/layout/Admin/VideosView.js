@@ -3,20 +3,19 @@ import {
   Paper,
   Tabs,
   Tab,
-  TextField,
   Button,
+  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Grid,
+  TextField,
+  Card,
+  CardMedia,
+  CardActions,
+  CardContent,
+  Typography,
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,6 +26,7 @@ function VideosView() {
   const [videoUrl, setVideoUrl] = useState("");
   const [videos, setVideos] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Load videos when the component mounts
@@ -46,38 +46,44 @@ function VideosView() {
   };
 
   const handleUploadVideo = async () => {
-    if (isUrlValid(videoUrl)) {
-      try {
-        const response = await axios.post(
-          "http://localhost:8080/admin/adVideo",
-          {
-            videoUrl: videoUrl,
-          },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          toast.success("Video Uploaded Successfully");
-          getVideos();
-          setVideoUrl("");
-        } else {
-          toast.error("Failed to Upload Video: " + response.data.message);
-        }
-      } catch (error) {
-        console.error("Video Upload error: " + error);
-        toast.error("Failed to upload video: " + error.toString());
-      }
-      setOpenDialog(false);
-    } else {
+    if (!isUrlValid(videoUrl)) {
       toast.error(
         "Invalid URL. Please enter a valid URL starting with 'http' or 'https'."
       );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/admin/adVideo",
+        {
+          videoUrl: videoUrl,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast.success("Video Uploaded Successfully");
+        getVideos();
+        setVideoUrl("");
+        setOpenDialog(false);
+      } else {
+        toast.error("Failed to Upload Video: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Video Upload error: " + error);
+      toast.error("Failed to upload video: " + error.toString());
+    } finally {
+      setLoading(false);
     }
   };
+
   const getVideos = async () => {
     try {
       const response = await axios.get("http://localhost:8080/admin/getVideo", {
@@ -109,6 +115,7 @@ function VideosView() {
   const closeAddVideoDialog = () => {
     setOpenDialog(false);
   };
+
   const handleDeleteVideo = async (videoId) => {
     console.log(videoId);
     try {
@@ -138,76 +145,45 @@ function VideosView() {
   };
 
   return (
-    <div style={{ marginTop: "1em", padding: "1em" }}>
+    <div style={{ marginTop: "3em", padding: "1em" }}>
       <Grid container justifyContent="center">
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={openAddVideoDialog}
-            style={{
-              marginTop: "5em",
-              position: "absolute",
-              top: "1em",
-              right: "1em",
-            }}
-          >
-            Add New Video
-          </Button>
-        </Grid>
         <Grid item xs={12}>
-          <div style={{ marginTop: "3em" }}>
-            <Tabs value={value} onChange={handleTabChange}>
-              <Tab
-                style={{
-                  fontSize: "1em",
-                  outline: "none",
-                }}
-                label="Currently Live Videos"
-              />
-            </Tabs>
-            <TableContainer
-              component={Paper}
-              style={{
-                marginTop: "1em",
-                width: "100%",
-              }}
+          <div style={{ marginTop: "1em" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={openAddVideoDialog}
+              style={{ marginTop: "1em", marginRight: "1em" }}
             >
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Video</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <ToastContainer />
-                <TableBody>
-                  {videos.map((video) => (
-                    <TableRow key={video._id}>
-                      <TableCell>
-                        <iframe
-                          title={`Video ${video._id}`}
-                          width="360"
-                          height="215"
-                          src={`https://www.youtube.com/embed/${video.link}`}
-                          frameBorder="0"
-                          allowFullScreen
-                        ></iframe>
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          onClick={() => handleDeleteVideo(video._id)}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+              Add New Video
+            </Button>
+            <Tabs value={value} onChange={handleTabChange}>
+              <Tab label="Currently Live Videos" />
+            </Tabs>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              {videos.map((video) => (
+                <Card key={video._id} style={{ margin: "1em", width: "300px" }}>
+                  <CardMedia
+                    component="iframe"
+                    title={`Video ${video._id}`}
+                    height="200"
+                    src={`https://www.youtube.com/embed/${video.link}`}
+                    frameBorder="0"
+                    allowFullScreen
+                  />
+
+                  <CardActions>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={() => handleDeleteVideo(video._id)}
+                    >
+                      Delete
+                    </Button>
+                  </CardActions>
+                </Card>
+              ))}
+            </div>
           </div>
         </Grid>
       </Grid>
@@ -236,8 +212,12 @@ function VideosView() {
           <Button onClick={closeAddVideoDialog} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleUploadVideo} color="primary">
-            Upload
+          <Button
+            onClick={handleUploadVideo}
+            color="primary"
+            disabled={loading}
+          >
+            {loading ? "Uploading..." : "Upload"}
           </Button>
         </DialogActions>
       </Dialog>

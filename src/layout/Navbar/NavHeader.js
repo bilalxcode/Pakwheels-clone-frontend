@@ -49,7 +49,7 @@ function NavHeader() {
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/sign-out",
-
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`, // Include the token from Redux in the headers
@@ -59,12 +59,35 @@ function NavHeader() {
       );
 
       if (response.status === 200) {
+        // Clear Google sign-in cookies
+        const googleCookiesToClear = [
+          "__Secure-3PSID",
+          "__Secure-1PSID",
+          "__Secure-3PSIDTS",
+          "__Secure-1PSIDTS",
+          "__Secure-3PAPISID",
+          "__Secure-1PAPISID",
+          "SID",
+          "SSID",
+          "APISID",
+          "SAPISID",
+          "__Secure-3PSIDCC",
+          "__Secure-1PSIDCC",
+          "SIDCC",
+        ];
+
+        googleCookiesToClear.forEach((cookieName) => {
+          document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+        });
+
+        // Clear your JWT token cookie and perform other actions
         document.cookie =
           "jwtToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;";
 
         dispatch(logout());
         dispatch(Deactivate());
         dispatch(Activate({ user: null }));
+        window.gapi.auth2.getAuthInstance().signOut();
 
         const msg = response.data.message;
 
@@ -81,6 +104,7 @@ function NavHeader() {
       // Handle network or other errors here
     }
   };
+
   const profileOpener = (e) => {
     e.preventDefault();
     console.log(user._id);

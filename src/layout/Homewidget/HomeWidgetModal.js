@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import { useSelector } from "react-redux";
+import GoogleLogin from "react-google-login";
+import { gapi } from "gapi-script";
+import { ToastContainer, toast } from "react-toastify";
 
 const HomeWidgetModal = ({ isOpen, closeModal }) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
@@ -17,6 +20,8 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const navigate = useNavigate();
+  const ClientId =
+    "857582053843-uhnd2vrnefg570aim0e4h754kcgdims8.apps.googleusercontent.com";
 
   // In your component, use the selector to access userVerified
   const overlayClassName = "custom-overlay";
@@ -202,6 +207,74 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     setRegistrationError("");
     closeModal();
   };
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  const onSuccess = async (res) => {
+    const { googleId, imageUrl, email, name, givenName, familyName } =
+      res.profileObj;
+
+    console.log("user sign in success", res.profileObj);
+
+    // Store the name and email in component state
+    setUserName(name);
+    setUserEmail(email);
+
+    if (!isValidEmail(email)) {
+      return toast.error("Invalid Email");
+    }
+
+    console.log("user name", userName, "email", userEmail);
+
+    const response = await axios.post(
+      "http://localhost:8080/auth/saveGoogleUser",
+      {
+        userName: userName,
+        userEmail: userEmail,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("sign in successfully");
+      setRegistrationError("");
+      console.log("Login successful");
+
+      const jwtToken = response.data.token;
+      const user = response.data.user;
+
+      console.log("response Data:", { user: user, token: jwtToken });
+
+      dispatch(login({ user, token: jwtToken }));
+      dispatch(Deactivate());
+
+      document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
+      closeModal(); // Close the modal after the delay
+    } else {
+      setRegistrationError("Sign in error");
+    }
+  };
+  const onFailure = (res) => {
+    console.log("user sign in failed", res);
+    setRegistrationError("Sign in error");
+  };
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: ClientId,
+        scope: "",
+        prompt: "select_account", // Set prompt to "select_account"
+      });
+    }
+
+    gapi.load("client:auth2", start);
+  }, []);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -210,6 +283,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       style={customModalStyle}
     >
       <div className="container">
+        <ToastContainer />
         <div className="row justify-content-center">
           <div className="col-md-12">
             {isLoading ? ( // Show loading text when isLoading is true
@@ -219,44 +293,59 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                 </div>
               </div>
             ) : showLoginForm ? (
-              <form onSubmit={loginHandler}>
-                <h2 className="text-center text-primary font-weight-bold">
-                  Login
-                </h2>
-                <div className="form-group">
-                  <label htmlFor="loginEmail">Email Address</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="loginEmail"
-                    placeholder="username@email.com"
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="loginPassword">Password</label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="loginPassword"
-                    placeholder="Enter your password"
-                    required
-                  />
-                </div>
-                <button type="submit" className="btn btn-primary btn-block">
-                  Log In
-                </button>
-                {registrationError && (
-                  <div className="alert alert-danger mt-3">
-                    {registrationError}
+              <>
+                <form onSubmit={loginHandler}>
+                  <h2 className="text-center text-primary font-weight-bold">
+                    Login
+                  </h2>
+                  <div className="form-group">
+                    <label htmlFor="loginEmail">Email Address</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="loginEmail"
+                      placeholder="username@email.com"
+                      required
+                    />
                   </div>
-                )}
-                <div className="mt-3 text-center">
-                  <button className="btn btn-link" onClick={toggleLoginForm}>
-                    Don't have an account? Sign Up
+                  <div className="form-group">
+                    <label htmlFor="loginPassword">Password</label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      id="loginPassword"
+                      placeholder="Enter your password"
+                      required
+                    />
+                  </div>
+                  <button type="submit" className="btn btn-primary btn-block">
+                    Log In
                   </button>
-                </div>
-              </form>
+                  <div className="mt-3 text-center">
+                    <div id="signInButton">
+                      <GoogleLogin
+                        clientId={ClientId}
+                        buttonText="Login With Google"
+                        onSuccess={onSuccess}
+                        onFailure={onFailure}
+                        cookiePolicy={"single_host_origin"}
+                        isSignedIn={true}
+                      ></GoogleLogin>
+                    </div>
+                  </div>
+
+                  {registrationError && (
+                    <div className="alert alert-danger mt-3">
+                      {registrationError}
+                    </div>
+                  )}
+                  <div className="mt-3 text-center">
+                    <button className="btn btn-link" onClick={toggleLoginForm}>
+                      Don't have an account? Sign Up
+                    </button>
+                  </div>
+                </form>
+              </>
             ) : (
               !showLoginForm &&
               (isLoading ? (
