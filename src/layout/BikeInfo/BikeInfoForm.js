@@ -11,6 +11,7 @@ import DoneIcon from "@mui/icons-material/Done"; // Import the tick emoji icon
 import Button from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
   const user = useSelector((state) => state.authentication.user);
@@ -26,7 +27,7 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
     description: "",
     engineType: "",
     engineCapacity: "",
-    assembly: "",
+    modelYear: "",
   });
   const [selectedFeatures, setSelectedFeatures] = useState([]); // State to hold selected features
   //   const [bikeCreated, setBikeCreated] = useState(false); // State to hold selected features
@@ -97,8 +98,8 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
   const handleTransmission = (event) => {
     setFormData({ ...formData, transmission: event.target.value });
   };
-  const handleAssembly = (event) => {
-    setFormData({ ...formData, assembly: event.target.value });
+  const handlemodelYear = (event) => {
+    setFormData({ ...formData, modelYear: event.target.value });
   };
 
   const handleFeatureChange = (event) => {
@@ -121,6 +122,55 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
     "Wind Sheild",
     "Self Start",
   ];
+
+  const [priceMagnitude, setPriceMagnitude] = useState(""); // State to hold the price magnitude
+  const [isPriceValid, setIsPriceValid] = useState(true); // Initially, the price is valid
+
+  // Function to calculate magnitude and check if price is valid
+  const calculateMagnitudeAndValidity = (value) => {
+    if (value === "") {
+      setIsPriceValid(true); // Price is valid when it's empty
+      return null; // Render null when empty
+    }
+
+    const priceValue = parseInt(value, 10); // Parse the price as an integer
+
+    if (priceValue >= 100000000) {
+      setIsPriceValid(false); // Price is invalid when >= 100,000,000
+      return "Invalid Price";
+    } else if (priceValue >= 10000000) {
+      setIsPriceValid(true);
+      return "Crores";
+    } else if (priceValue >= 1000000) {
+      setIsPriceValid(true);
+      return "Lacs";
+    } else if (priceValue >= 100000) {
+      setIsPriceValid(true);
+      return "Lac";
+    } else if (priceValue >= 10000) {
+      setIsPriceValid(true);
+      return "Thousands";
+    } else if (priceValue >= 1000) {
+      setIsPriceValid(true);
+      return "Thousand";
+    } else if (priceValue >= 100) {
+      setIsPriceValid(true);
+      return "Hundred";
+    } else {
+      setIsPriceValid(true);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    // Update the price magnitude and validity when the "price" field changes
+    const updatePriceMagnitude = () => {
+      const magnitude = calculateMagnitudeAndValidity(formData.price);
+      setPriceMagnitude(magnitude);
+    };
+
+    updatePriceMagnitude(); // Initial calculation
+  }, [formData.price]);
 
   return (
     <div className="container mt-5 ">
@@ -152,8 +202,8 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
                     onChange={handleInputChange}
                   >
                     <option value="">Select City</option>
-                    <option value="lahore">Lahore</option>
-                    <option value="karachi">Karachi</option>
+                    <option value="Lahore">Lahore</option>
+                    <option value="Karachi">Karachi</option>
                     <option value="Islamabad">Islamabad</option>
                   </select>
                 </div>
@@ -254,6 +304,7 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
                     <option value="">Engine Type</option>
                     <option value="2Stroke">2 Stroke</option>
                     <option value="4Stroke">4 Stroke</option>
+                    <option value="5Stroke">5 Stroke</option>
                     <option value="Electric">Electric</option>
                   </select>
                 </div>
@@ -291,19 +342,16 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
               </div> */}
               <div className="col-xs-12 col-sm-6">
                 <div className="form-group">
-                  <label htmlFor="Assembly">Assembly *</label>
-                  <select
+                  <label htmlFor="modelYear">Model Year * (e.g 2020)</label>
+                  <input
+                    type="text"
                     className="form-control"
-                    id="Assembly"
-                    name="Assembly"
+                    id="modelYear"
+                    name="modelYear"
                     required
-                    value={formData.assembly}
-                    onChange={handleAssembly}
-                  >
-                    <option value="">Assembly</option>
-                    <option value="Local">Local</option>
-                    <option value="Imported">Imported</option>
-                  </select>
+                    value={formData.modelYear}
+                    onChange={handlemodelYear}
+                  />
                 </div>
               </div>
               <div className="col-xs-12 col-sm-6">
@@ -387,6 +435,17 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
                     value={formData.price}
                     onChange={handleInputChange}
                   />
+                  {priceMagnitude !== null && (
+                    <p>
+                      {" "}
+                      <span style={{ fontWeight: "bold" }}>
+                        {priceMagnitude}
+                      </span>
+                    </p>
+                  )}
+                  {!isPriceValid && (
+                    <div className="invalid-feedback">Invalid Price</div>
+                  )}
                 </div>
               </div>
               <div className="col-xs-12 col-sm-12">
@@ -409,9 +468,13 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
               <CircularProgress size={32} /> // Show the loader
             ) : bikeCreated ? (
               <DoneIcon fontSize="large" style={{ color: "green" }} /> // Show the tick emoji
-            ) : (
+            ) : isPriceValid ? (
               <button type="submit" className="btn btn-primary mt-3">
                 Submit
+              </button>
+            ) : (
+              <button type="submit" className="btn btn-secondary mt-3" disabled>
+                Invalid Price
               </button>
             )}
           </form>

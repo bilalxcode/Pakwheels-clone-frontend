@@ -1,0 +1,48 @@
+/* Add this to your CSS stylesheet */
+
+/* Target the Splide container */
+.splide {
+  width: 80%; !important /* Adjust the width of the Splide component */
+  margin: 0 auto; /* Center the Splide component horizontally */
+  padding: 20px; /* Add padding to the Splide component */
+}
+
+/* Target the individual slides */
+.splide__slide {
+  margin-right: 10px; /* Add margin between slides */
+  flex: 0 0 calc(33.333% - 10px); /* Adjust the width of individual slides */
+  /* The above value (calc(33.333% - 10px)) is used for three slides in a row with 10px margin */
+  /* Adjust it as per your desired layout */
+}
+
+/* Target the content within each slide */
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Target the image within each slide */
+.slide img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+/* Target the h5 and p elements within each slide */
+.slide h5 {
+  color: blue !important; /* Override the default styles using !important */
+}
+
+.slide p {
+  font-size: 14px;
+  color: green !important; /* Override the default styles using !important */
+}
+
+.slide p:last-child {
+  color: grey !important; /* Override the default styles using !important */
+}

@@ -45,6 +45,7 @@ function CartItem() {
   const navigate = useNavigate();
   const navigateToAutostore = () => {
     dispatch(Activate({ user: "AutoStore" }));
+    localStorage.setItem("ActiveTab", "AutoStore");
     navigate("/autostore");
   };
   return (

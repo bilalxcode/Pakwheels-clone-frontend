@@ -4,7 +4,7 @@ import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -49,17 +49,18 @@ function Browsevideos() {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center", // Center vertically
+    justifyContent: "center",
     textAlign: "center",
-    padding: "8em", // Increased padding
+    padding: "8em",
     border: "1px solid #ccc",
     borderRadius: "5px",
     marginBottom: "20px",
-    height: "200px", // Increased height
-    width: "95%", // Increased width
+    height: "200px",
+    width: "95%",
   };
+
   const imageContainerStyle = {
-    background: "linear-gradient(to bottom, #E7232D, #012D62)", // Replace with your desired colors
+    background: "linear-gradient(to bottom, #E7232D, #012D62)",
     width: "100%",
     height: "100%",
     display: "flex",
@@ -73,15 +74,20 @@ function Browsevideos() {
 
   const textStyle = {
     color: "white",
-    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Add text shadow for better visibility
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
   };
 
   const VideoNavigate = (e) => {
     e.preventDefault();
     dispatch(Activate({ user: "Videos" }));
-
     navigate("/videos");
   };
+
+  // Function to open YouTube video in a new window
+  const openYouTubeVideo = (videoUrl) => {
+    window.open(videoUrl, "_blank");
+  };
+
   return (
     <Grid container style={{ marginTop: "10em", background: "#F2F3F3" }}>
       <Grid item xs={12}>
@@ -104,7 +110,7 @@ function Browsevideos() {
               <SplideSlide key={index}>
                 <div style={slideStyle} className="card">
                   <a
-                    href={video.link}
+                    href={`https://www.youtube.com/watch?v=${video.link}`}
                     title={video.desc}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -114,6 +120,11 @@ function Browsevideos() {
                       src={`https://www.youtube.com/embed/${video.link}`}
                       title={video.desc}
                       allowFullScreen
+                      onClick={() =>
+                        openYouTubeVideo(
+                          `https://www.youtube.com/watch?v=${video.link}`
+                        )
+                      }
                     ></iframe>
                     <p>{video.desc}</p>
                   </a>

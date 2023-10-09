@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Grid, Typography, Button } from "@mui/material";
 import HomeWidgetModal from "./HomeWidgetModal";
+import { useNavigate } from "react-router-dom";
 
 function Homewidget() {
   const user = useSelector((state) => state.authentication.user);
@@ -14,6 +15,11 @@ function Homewidget() {
 
   const closeModal = () => {
     setModalIsOpen(false);
+  };
+
+  const navigate = useNavigate();
+  const navigateToSellVehicle = () => {
+    navigate("/sell-vehicle/post-ad");
   };
 
   return (
@@ -52,10 +58,10 @@ function Homewidget() {
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled
                   style={{ margin: "1em" }}
+                  onClick={navigateToSellVehicle}
                 >
-                  Coming soon
+                  Post Your Ad
                 </Button>
               ) : (
                 <Button

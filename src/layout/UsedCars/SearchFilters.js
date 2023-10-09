@@ -16,6 +16,7 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
   const [engineCapacityOptions, setEngineCapacityOptions] = useState([]);
   const [transmissionOptions, setTransmissionOptions] = useState([]);
   const [colorOptions, setColorOptions] = useState([]);
+  const [modelYearOptions, setmodelYearOptions] = useState([]);
 
   const [provinces, setProvinces] = useState([]);
 
@@ -49,12 +50,17 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
           new Set(ads.map((ad) => ad.color))
         ).filter((color) => color);
 
+        const uniqueModelYears = Array.from(
+          new Set(ads.map((ad) => ad.modelYear))
+        ).filter((modelYear) => modelYear);
+
         setAdsData(ads);
         setCities(uniqueCities);
         setProvinces(uniqueProvinces);
         setEngineCapacityOptions(uniqueEngineCapacities);
         setTransmissionOptions(uniqueTransmissions);
         setColorOptions(uniqueColors);
+        setmodelYearOptions(uniqueModelYears);
       } else {
         toast.error("Failed to load ads: " + response.data.message);
       }
@@ -69,6 +75,7 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
     setFilterOptions((prevFilterOptions) => ({
       ...prevFilterOptions,
       [name]: value,
+      price: "",
     }));
   };
 
@@ -174,6 +181,22 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
           {colorOptions.map((color) => (
             <MenuItem key={color} value={color}>
               {color}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
+        <label>Model Year</label>
+        <Select
+          name="modelYear"
+          onChange={handleFilterChange}
+          value={filterOptions.modelYear}
+        >
+          <MenuItem value="">All</MenuItem>
+          {modelYearOptions.map((modelYear) => (
+            <MenuItem key={modelYear} value={modelYear}>
+              {modelYear}
             </MenuItem>
           ))}
         </Select>

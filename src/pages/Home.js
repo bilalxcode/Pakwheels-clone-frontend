@@ -7,7 +7,9 @@ import FeaturedNewOverlay from "../layout/FeaturedNew/FeaturedNewOverlay";
 import Footer from "../layout/Footer/Footer";
 import GetPakwheels from "../layout/GetPakwheels/GetPakwheels";
 import Homewidget from "../layout/Homewidget/Homewidget";
-import ManagedByPakwheelsOverlay from "../layout/Managedbypakwheels/ManagedByPakwheelsOverlay";
+import LatestUsedBikesOverlay from "../layout/LatestUsedBikes/LatestUsedCarsOverlay";
+import LatestUsedCarsOverlay from "../layout/LatestUsedCars/LatestUsedCarsOverlay";
+import ManagedByPakwheelsOverlay from "../layout/LatestUsedCars/LatestUsedCarsOverlay";
 import Newcars from "../layout/NewCars/Newcars";
 import SearchOverlay from "../layout/Searcbox/SearchOverlay";
 function Home() {
@@ -15,12 +17,10 @@ function Home() {
     <div>
       <SearchOverlay />
       <Homewidget />
-      <BrowseUsedCarsOverlay />
+      <LatestUsedCarsOverlay />
+      <LatestUsedBikesOverlay />
+
       <ExploreProducts />
-      {/* <ManagedByPakwheelsOverlay />
-      <FeaturedCarsOverlay /> */}
-      {/* <FeaturedNewOverlay /> */}
-      {/* <Newcars /> */}
       <AutoStore />
       <Browsevideos />
       <GetPakwheels />

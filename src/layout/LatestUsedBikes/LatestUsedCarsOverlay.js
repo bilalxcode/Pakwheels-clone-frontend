@@ -1,6 +1,7 @@
-import ManagedByPakwheels from "./ManagedByPakwheels";
+import LatestUsedCars from "./LatestUsedCars";
+import ManagedByPakwheels from "./LatestUsedCars";
 
-function ManagedByPakwheelsOverlay() {
+function LatestUsedBikesOverlay() {
   return (
     <>
       <div
@@ -8,32 +9,31 @@ function ManagedByPakwheelsOverlay() {
         style={{
           background: "#F2F3F3",
           padding: "40px 40px",
-          height: "90vh",
           marginTop: "150px",
         }}
       >
         <div className="row">
           <div className="col-md-6">
             <h3 style={{ fontWeight: "bold", padding: "20px" }}>
-              Managed By Pakwheels
+              Latest Used Cars
             </h3>
           </div>
           <div className="col-md-6 text-right">
             <a
-              href="#"
+              href="/used-cars"
               style={{
                 textDecoration: "underline",
                 marginTop: "20px !important",
               }}
             >
-              View All Managed By Pakwheels
+              View All Used Cars
             </a>
           </div>
         </div>
-        <ManagedByPakwheels />
+        <LatestUsedCars />
       </div>
     </>
   );
 }
 
-export default ManagedByPakwheelsOverlay;
+export default LatestUsedBikesOverlay;

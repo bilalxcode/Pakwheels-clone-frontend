@@ -4,7 +4,7 @@ import {
   CircularProgress,
   FormControlLabel,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import DoneIcon from "@mui/icons-material/Done"; // Import the tick emoji icon
@@ -18,6 +18,7 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
 
   const [formData, setFormData] = useState({
     city: "",
+    modelYear: "",
     modelName: "",
     registeredIn: "",
     color: "",
@@ -126,6 +127,59 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
 
     "Cool Box",
   ];
+
+  const handlemodelYear = (event) => {
+    setFormData({ ...formData, modelYear: event.target.value });
+  };
+
+  const [priceMagnitude, setPriceMagnitude] = useState(""); // State to hold the price magnitude
+  const [isPriceValid, setIsPriceValid] = useState(true); // Initially, the price is valid
+
+  // Function to calculate magnitude and check if price is valid
+  const calculateMagnitudeAndValidity = (value) => {
+    if (value === "") {
+      setIsPriceValid(true); // Price is valid when it's empty
+      return null; // Render null when empty
+    }
+
+    const priceValue = parseInt(value, 10); // Parse the price as an integer
+
+    if (priceValue >= 100000000) {
+      setIsPriceValid(false); // Price is invalid when >= 100,000,000
+      return "Invalid Price";
+    } else if (priceValue >= 10000000) {
+      setIsPriceValid(true);
+      return "Crores";
+    } else if (priceValue >= 1000000) {
+      setIsPriceValid(true);
+      return "Lacs";
+    } else if (priceValue >= 100000) {
+      setIsPriceValid(true);
+      return "Lac";
+    } else if (priceValue >= 10000) {
+      setIsPriceValid(true);
+      return "Thousands";
+    } else if (priceValue >= 1000) {
+      setIsPriceValid(true);
+      return "Thousand";
+    } else if (priceValue >= 100) {
+      setIsPriceValid(true);
+      return "Hundred";
+    } else {
+      setIsPriceValid(true);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    // Update the price magnitude and validity when the "price" field changes
+    const updatePriceMagnitude = () => {
+      const magnitude = calculateMagnitudeAndValidity(formData.price);
+      setPriceMagnitude(magnitude);
+    };
+
+    updatePriceMagnitude(); // Initial calculation
+  }, [formData.price]);
 
   return (
     <div className="container mt-5 ">
@@ -351,6 +405,20 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
               </div>
               <div className="col-xs-12 col-sm-6">
                 <div className="form-group">
+                  <label htmlFor="modelYear">Model Year * (e.g 2020)</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="modelYear"
+                    name="modelYear"
+                    required
+                    value={formData.modelYear}
+                    onChange={handlemodelYear}
+                  />
+                </div>
+              </div>
+              <div className="col-xs-12 col-sm-12">
+                <div className="form-group">
                   <label htmlFor="Features">Features</label>
                   <div
                     style={{
@@ -411,6 +479,17 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
                     value={formData.price}
                     onChange={handleInputChange}
                   />
+                  {priceMagnitude !== null && (
+                    <p>
+                      {" "}
+                      <span style={{ fontWeight: "bold" }}>
+                        {priceMagnitude}
+                      </span>
+                    </p>
+                  )}
+                  {!isPriceValid && (
+                    <div className="invalid-feedback">Invalid Price</div>
+                  )}
                 </div>
               </div>
               <div className="col-xs-12 col-sm-12">

@@ -142,7 +142,7 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {Object.keys(adsData).length === 0 && (
+                  {/* {Object.keys(adsData).length === 0 && (
                     <div>
                       <p
                         style={{
@@ -173,7 +173,7 @@ function AllAdsPreview() {
                         Post Ad
                       </Button>
                     </div>
-                  )}
+                  )} */}
                   {sortAds(adsData, sortBy).map((ad, index) => (
                     <Card key={index} className="mt-3">
                       <div

@@ -121,6 +121,12 @@ function NavHeader() {
     e.preventDefault();
     navigate("/my-cart");
   };
+
+  const navigateToMyOrders = (e) => {
+    e.preventDefault();
+
+    navigate("/my-orders");
+  };
   return (
     <>
       <nav className="navbar navbar-dark bg-dark transparent-background">
@@ -193,8 +199,11 @@ function NavHeader() {
                     <a
                       class="dropdown-item"
                       href="#"
-                      onClick={navigateToMyCart}
+                      onClick={navigateToMyOrders}
                     >
+                      My Orders
+                    </a>
+                    <a class="dropdown-item" href="" onClick={navigateToMyCart}>
                       My Cart
                     </a>
                     <a onClick={logoutHandler} class="dropdown-item" href="#">

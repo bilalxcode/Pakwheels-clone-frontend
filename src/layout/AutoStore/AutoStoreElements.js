@@ -9,6 +9,7 @@ import axios from "axios"; // Import axios
 import { Activate } from "../../store/navbarSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Card, CardContent, CardMedia, CardActionArea } from "@mui/material"; // Import Card components
 
 function AutoStoreElements() {
   const [activeTab, setActiveTab] = useState("category");
@@ -59,9 +60,10 @@ function AutoStoreElements() {
     border: "1px solid #ccc",
     borderRadius: "5px",
     marginBottom: "20px",
-    height: "200px", // Increased height
+    height: "250px", // Increased height
     width: "95%", // Increased width
   };
+
   const imageContainerStyle = {
     background: "linear-gradient(to bottom, #E7232D, #012D62)", // Replace with your desired colors
     width: "100%",
@@ -76,16 +78,15 @@ function AutoStoreElements() {
   };
 
   const textStyle = {
-    color: "white",
-    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Add text shadow for better visibility
+    color: "black",
   };
 
   const AutoStoreNavigate = (e) => {
     e.preventDefault();
     dispatch(Activate({ user: "AutoStore" }));
-
     navigate("/autostore");
   };
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -99,11 +100,22 @@ function AutoStoreElements() {
                     onClick={AutoStoreNavigate}
                     title={`Category: ${category.name}`}
                   >
-                    <div style={imageContainerStyle}>
-                      <Typography variant="h6" style={textStyle}>
-                        {category.name}
-                      </Typography>
-                    </div>
+                    {/* Use Card and CardMedia components to display a card with card media */}
+                    <Card>
+                      <CardActionArea>
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image="https://img.freepik.com/free-vector/car-repair-garage-black-isolated-icon-set-with-tools-accessories-equipments-auto-repair-shop-vector-illustration_1284-33464.jpg?w=740&t=st=1696847401~exp=1696848001~hmac=dbef91af2d8d973a20c16592d6aad87bf418cd4c1aef4dc2a52f0cf1c59da372"
+                          alt={category.name}
+                        />
+                        <CardContent>
+                          <Typography variant="h6" style={textStyle}>
+                            {category.name}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
                   </a>
                 </div>
               </SplideSlide>

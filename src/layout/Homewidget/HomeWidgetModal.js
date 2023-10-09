@@ -224,43 +224,55 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       return toast.error("Invalid Email");
     }
 
-    console.log("user name", userName, "email", userEmail);
+    console.log("user name", name, "email", email);
 
-    const response = await axios.post(
-      "http://localhost:8080/auth/saveGoogleUser",
-      {
-        userName: userName,
-        userEmail: userEmail,
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/auth/saveGoogleUser",
+        {
+          userName: name, // Use the name obtained from the response
+          userEmail: email, // Use the email obtained from the response
         },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("sign in successfully");
+        setRegistrationError("");
+        console.log("Login successful");
+
+        const jwtToken = response.data.token;
+        const user = response.data.user;
+
+        console.log("response Data:", { user: user, token: jwtToken });
+
+        dispatch(login({ user, token: jwtToken }));
+        dispatch(Deactivate());
+
+        document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
+        closeModal(); // Close the modal after the delay
+      } else if (
+        response.status === 401 &&
+        response.data.error === "User is banned"
+      ) {
+        const errorMessage = response.data.message; // Get the custom error message
+        setRegistrationError(errorMessage); // Display the error message on the frontend
+      } else {
+        setRegistrationError("Sign in error 2");
       }
-    );
-
-    if (response.status === 200) {
-      console.log("sign in successfully");
-      setRegistrationError("");
-      console.log("Login successful");
-
-      const jwtToken = response.data.token;
-      const user = response.data.user;
-
-      console.log("response Data:", { user: user, token: jwtToken });
-
-      dispatch(login({ user, token: jwtToken }));
-      dispatch(Deactivate());
-
-      document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
-      closeModal(); // Close the modal after the delay
-    } else {
+    } catch (error) {
+      console.error("Google sign-in error:", error);
       setRegistrationError("Sign in error");
     }
   };
+
   const onFailure = (res) => {
     console.log("user sign in failed", res);
-    setRegistrationError("Sign in error");
+    setRegistrationError("Sign in error ");
   };
 
   useEffect(() => {

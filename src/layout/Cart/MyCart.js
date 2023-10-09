@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../Navbar/Navbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Activate } from "../../store/navbarSlice";
+import { Activate, Deactivate } from "../../store/navbarSlice";
 import {
   Avatar,
   Box,
@@ -29,7 +29,14 @@ function MyCart() {
   const navigate = useNavigate();
   const navigateToAutostore = () => {
     dispatch(Activate({ user: "AutoStore" }));
+    localStorage.setItem("ActiveTab", "AutoStore");
     navigate("/autostore");
+  };
+
+  const navigateToCheckout = () => {
+    dispatch(Deactivate());
+    localStorage.removeItem("ActiveTab");
+    navigate("/checkout");
   };
   return (
     <div>
@@ -79,7 +86,11 @@ function MyCart() {
                 marginTop: "20px",
               }}
             >
-              <Button variant="contained" color="primary" href="/checkout">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={navigateToCheckout}
+              >
                 Checkout
               </Button>
               <Button

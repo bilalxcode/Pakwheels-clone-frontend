@@ -171,6 +171,21 @@ function BikesView() {
       setIsLoading(false); // Handle error by setting isLoading to false
     }
   };
+  function formatPrice(price) {
+    if (typeof price !== "number" || isNaN(price)) {
+      return "Invalid Price";
+    }
+
+    if (price >= 10000000) {
+      return (price / 10000000).toFixed(2) + " Crores";
+    } else if (price >= 100000) {
+      return (price / 100000).toFixed(2) + " Lacs";
+    } else if (price >= 1000) {
+      return (price / 1000).toFixed(2) + " Thousands";
+    } else {
+      return price.toFixed(2) + " PKR";
+    }
+  }
 
   return (
     <>
@@ -239,7 +254,7 @@ function BikesView() {
                   <TableCell>Colour</TableCell>
                   <TableCell>Mileage</TableCell>
                   <TableCell>Engine Type</TableCell>
-                  <TableCell>Assembly</TableCell>
+                  <TableCell>Model Year</TableCell>
                   <TableCell>Features</TableCell>
                   <TableCell>Contact</TableCell>
                   <TableCell>Price</TableCell>
@@ -286,10 +301,11 @@ function BikesView() {
                           <TableCell>{bike.color}</TableCell>
                           <TableCell>{bike.mileage}</TableCell>
                           <TableCell>{bike.engineType}</TableCell>
-                          <TableCell>{bike.assembly}</TableCell>
+                          <TableCell>{bike.modelYear}</TableCell>
                           <TableCell>{bike.features.join(", ")}</TableCell>
                           <TableCell>{bike.sellerContact}</TableCell>
-                          <TableCell>{bike.price}</TableCell>
+                          <TableCell>{formatPrice(bike.price)}</TableCell>
+
                           <TableCell>{bike.description}</TableCell>
                           <TableCell>
                             {bike.images.map((image, imageIndex) => (

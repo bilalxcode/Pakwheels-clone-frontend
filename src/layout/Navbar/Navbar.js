@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Activate } from "../../store/navbarSlice";
+import { Activate, Deactivate } from "../../store/navbarSlice";
 import NavHeader from "./NavHeader";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -33,10 +33,10 @@ function Navbar() {
 
   const activeTab = useSelector((state) => state.navbar.activeTab);
 
-  // useEffect(() => {
-  //   const option = localStorage.getItem("activeTab");
-  //   dispatch(Activate({ user: option }));
-  // }, []);
+  useEffect(() => {
+    const option = localStorage.getItem("ActiveTab");
+    dispatch(Activate({ user: option }));
+  }, []);
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -67,6 +67,7 @@ function Navbar() {
   const handleOptionClick = (option) => {
     console.log(option);
     setSelectedOption(option);
+    localStorage.setItem("ActiveTab", option);
     dispatch(Activate({ user: option }));
     switch (option) {
       case "Used Cars":
@@ -88,6 +89,12 @@ function Navbar() {
       default:
         break;
     }
+  };
+  const handleLogoClick = () => {
+    // Clear local storage for ActiveTab element
+    localStorage.removeItem("ActiveTab");
+    // Dispatch the Deactivate action
+    dispatch(Deactivate());
   };
 
   return (
@@ -129,6 +136,7 @@ function Navbar() {
                     alt="logo"
                     width="150"
                     height="40"
+                    onClick={handleLogoClick}
                   />
                 </a>
               </Grid>

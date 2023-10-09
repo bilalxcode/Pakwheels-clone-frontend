@@ -112,6 +112,11 @@ function AllUsedBikes() {
         (ad) => ad.color === filterOptions.color
       );
     }
+    if (filterOptions.modelYear) {
+      filteredData = filteredData.filter(
+        (ad) => ad.modelYear === filterOptions.modelYear
+      );
+    }
 
     setFilteredAds(filteredData);
   };
@@ -123,6 +128,17 @@ function AllUsedBikes() {
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
+  function formatPrice(price) {
+    if (price >= 10000000) {
+      return (price / 10000000).toFixed(2) + " Crores";
+    } else if (price >= 100000) {
+      return (price / 100000).toFixed(2) + " Lacs";
+    } else if (price >= 1000) {
+      return (price / 1000).toFixed(2) + " Thousands";
+    } else {
+      return price.toFixed(2) + " PKR";
+    }
+  }
 
   const renderAds = () => {
     // Calculate the starting and ending indexes for the ads to display on the current page
@@ -183,11 +199,9 @@ function AllUsedBikes() {
                   <Typography color="text.secondary">
                     Mileage: {ad.mileage} km
                   </Typography>
+
                   <Typography color="text.secondary">
-                    Transmission: {ad.transmission}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Assembly: {ad.assembly}
+                    Model Year: {ad.modelYear}
                   </Typography>
                   <Typography color="text.secondary">
                     Engine Capacity: {ad.engineCapacity}
@@ -202,7 +216,9 @@ function AllUsedBikes() {
                   }}
                 >
                   <Typography variant="h6">Price</Typography>
-                  <Typography color="text.secondary">{ad.price} PKR</Typography>
+                  <Typography color="text.secondary">
+                    {formatPrice(ad.price)}
+                  </Typography>
                   <div style={{ marginTop: "auto" }}>
                     <Button
                       variant="contained"
@@ -266,17 +282,17 @@ function AllUsedBikes() {
           <Typography color="text.secondary">
             Mileage: {selectedAd.mileage} km
           </Typography>
+
           <Typography color="text.secondary">
-            Transmission: {selectedAd.transmission}
-          </Typography>
-          <Typography color="text.secondary">
-            Assembly: {selectedAd.assembly}
+            Model Year: {selectedAd.modelYear}
           </Typography>
           <Typography color="text.secondary">
             Engine Capacity: {selectedAd.engineCapacity}
           </Typography>
           <Typography variant="h6">Price</Typography>
-          <Typography color="text.secondary">{selectedAd.price} PKR</Typography>
+          <Typography color="text.secondary">
+            {formatPrice(selectedAd.price)}
+          </Typography>
           <div style={{ flex: 1 }}>
             {selectedAd.features.length > 0 && (
               <div className="mt-3">

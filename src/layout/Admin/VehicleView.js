@@ -172,6 +172,22 @@ function VehicleView() {
     }
   };
 
+  function formatPrice(price) {
+    if (typeof price !== "number" || isNaN(price)) {
+      return "Invalid Price";
+    }
+
+    if (price >= 10000000) {
+      return (price / 10000000).toFixed(2) + " Crores";
+    } else if (price >= 100000) {
+      return (price / 100000).toFixed(2) + " Lacs";
+    } else if (price >= 1000) {
+      return (price / 1000).toFixed(2) + " Thousands";
+    } else {
+      return price.toFixed(2) + " PKR";
+    }
+  }
+
   return (
     <>
       <div>
@@ -235,7 +251,7 @@ function VehicleView() {
                   <TableCell>ID</TableCell>
                   <TableCell>Model Name</TableCell>
                   <TableCell>Registered In</TableCell>
-                  <TableCell>Available In</TableCell>
+                  <TableCell>Model Year</TableCell>
                   <TableCell>Colour</TableCell>
                   <TableCell>Mileage</TableCell>
                   <TableCell>Engine Type</TableCell>
@@ -282,7 +298,7 @@ function VehicleView() {
                           <TableCell>{id}</TableCell>
                           <TableCell>{car.modelName}</TableCell>
                           <TableCell>{car.registeredIn}</TableCell>
-                          <TableCell>{car.city}</TableCell>
+                          <TableCell>{car.modelYear}</TableCell>
                           <TableCell>{car.color}</TableCell>
                           <TableCell>{car.mileage}</TableCell>
                           <TableCell>{car.engineType}</TableCell>
@@ -291,7 +307,7 @@ function VehicleView() {
                           </TableCell>
                           <TableCell>{car.features.join(", ")}</TableCell>
                           <TableCell>{car.sellerContact}</TableCell>
-                          <TableCell>{car.price}</TableCell>
+                          <TableCell>{formatPrice(car.price)}</TableCell>
                           <TableCell>{car.description}</TableCell>
                           <TableCell>
                             {car.images.map((image, imageIndex) => (

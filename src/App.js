@@ -27,12 +27,17 @@ import AllProducts from "./layout/AutoStoreMain/AllProducts";
 import ShowAllVideos from "./layout/Videos/ShowAllVideos";
 import MyCart from "./layout/Cart/MyCart";
 import CheckoutPage from "./layout/Cart/CheckoutPage";
+import { Deactivate } from "./store/navbarSlice";
+import Myorders from "./pages/Myorders";
 function App() {
   const user = useSelector((state) => state.authentication.user);
   const adminTokenFromStorage = localStorage.getItem("jwtToken");
   const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
 
   const dispatch = useDispatch();
+
+  // Dispatch Deactivate() action when the component mounts for the "/"
+
   useEffect(() => {
     if (adminTokenFromStorage) {
       dispatch(AdminLoggedIn({ token: adminTokenFromStorage }));
@@ -67,11 +72,21 @@ function App() {
           element={user ? <Myads /> : <Navigate to="/" />}
         />
         <Route
+          path="/my-orders"
+          element={user ? <Myorders /> : <Navigate to="/" />}
+        />
+        <Route
           path="/my-cart"
           element={user ? <MyCart /> : <Navigate to="/" />}
         />
-        <Route path="/checkout" element=<CheckoutPage /> />
+        <Route
+          path="/checkout"
+          element={user ? <CheckoutPage /> : <Navigate to="/" />}
+        />
+
         <Route path="/used-cars" element=<AllUsedCars /> />
+        <Route path="/used-cars" element=<AllUsedCars /> />
+
         <Route path="/used-bikes" element=<AllUsedBikes /> />
         <Route path="/autostore" element=<AllProducts /> />
         <Route path="/videos" element=<ShowAllVideos /> />

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Card,
   CardContent,
@@ -27,12 +28,24 @@ function AllUsedCars() {
   const location = useLocation();
   const [adsData, setAdsData] = useState([]);
   const [filteredAds, setFilteredAds] = useState([]);
+  const queryParams = new URLSearchParams(location.search);
+  console.log(location.search);
+
+  console.log(queryParams);
+  const city = queryParams.get("city");
+  const price = queryParams.get("price");
+  const engineCapacity = queryParams.get("engineCapacity");
+
+  console.log("City:", city);
+  console.log("Price:", price);
+  console.log("Engine Capacity:", engineCapacity);
   const [filterOptions, setFilterOptions] = useState({
-    city: "",
+    city: queryParams.get("city") || "",
     province: "",
-    engineCapacity: "", // Add engineCapacity filter
+    engineCapacity: queryParams.get("engineCapacity") || "",
     transmission: "", // Add transmission filter
     color: "", // Add color filter
+    price: queryParams.get("price") || "",
   });
 
   const [selectedAd, setSelectedAd] = useState(null);
@@ -85,16 +98,11 @@ function AllUsedCars() {
     }
   };
   const applyFilters = () => {
-    let filteredData = adsData;
+    let filteredData = adsData.slice();
 
     if (filterOptions.city) {
       filteredData = filteredData.filter(
         (ad) => ad.city === filterOptions.city
-      );
-    }
-    if (filterOptions.province) {
-      filteredData = filteredData.filter(
-        (ad) => ad.registeredIn === filterOptions.province
       );
     }
     if (filterOptions.engineCapacity) {
@@ -113,16 +121,56 @@ function AllUsedCars() {
       );
     }
 
+    if (filterOptions.province) {
+      filteredData = filteredData.filter(
+        (ad) => ad.registeredIn === filterOptions.province
+      );
+    }
+
+    if (filterOptions.modelYear) {
+      filteredData = filteredData.filter(
+        (ad) => ad.modelYear === filterOptions.modelYear
+      );
+    }
+    if (filterOptions.price) {
+      const [minPrice, maxPrice] = filterOptions.price.split("-");
+
+      filteredData = filteredData.filter((ad) => {
+        // Ensure that ad.price is treated as a string
+        const adPrice = ad.price.toString();
+
+        return (
+          parseFloat(adPrice.replace(/,/g, "")) >=
+            parseFloat(minPrice) * 100000 &&
+          parseFloat(adPrice.replace(/,/g, "")) <= parseFloat(maxPrice) * 100000
+        );
+      });
+    }
+
+    // Update the filteredAds state with the filtered data
     setFilteredAds(filteredData);
   };
-
   useEffect(() => {
-    applyFilters();
-  }, [filterOptions]);
+    // Check if the ads data has been loaded
+    if (adsData.length > 0) {
+      applyFilters();
+    }
+  }, [adsData, filterOptions]);
 
   const handlePageChange = (event, newPage) => {
     setCurrentPage(newPage);
   };
+  function formatPrice(price) {
+    if (price >= 10000000) {
+      return (price / 10000000).toFixed(2) + " Crores";
+    } else if (price >= 100000) {
+      return (price / 100000).toFixed(2) + " Lacs";
+    } else if (price >= 1000) {
+      return (price / 1000).toFixed(2) + " Thousands";
+    } else {
+      return price.toFixed(2) + " PKR";
+    }
+  }
 
   const renderAds = () => {
     // Calculate the starting and ending indexes for the ads to display on the current page
@@ -132,6 +180,46 @@ function AllUsedCars() {
     // Get the ads to display on the current page
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
 
+    if (adsToDisplay.length === 0) {
+      // Display a message when no ads are found
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding:"5em 20em"
+          }}
+        >
+          <Card
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "2em",
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-616.jpg?w=740&t=st=1696856261~exp=1696856861~hmac=d9b86916a3389166d173a357ba600d17c2f1eee6fc61656f7701a2ac64966404"
+              alt="No Data"
+              style={{ maxWidth: "100px" }}
+            />
+            <Typography
+              variant="h5"
+              style={{ fontWeight: "bold", margin: "1em" }}
+            >
+              Results Not Found
+            </Typography>
+            <div>
+              <Typography variant="h6">
+                No ads found. Try another filter combination.
+              </Typography>
+            </div>
+          </Card>
+        </div>
+      );
+    }
     return (
       <div>
         {adsToDisplay.map((ad) => (
@@ -178,6 +266,9 @@ function AllUsedCars() {
                     Registered In: {ad.registeredIn}
                   </Typography>
                   <Typography color="text.secondary">
+                    Year: {ad.modelYear}
+                  </Typography>
+                  <Typography color="text.secondary">
                     Color: {ad.color}
                   </Typography>
                   <Typography color="text.secondary">
@@ -202,7 +293,10 @@ function AllUsedCars() {
                   }}
                 >
                   <Typography variant="h6">Price</Typography>
-                  <Typography color="text.secondary">{ad.price} PKR</Typography>
+                  <Typography color="text.secondary">
+                    {formatPrice(ad.price)}
+                  </Typography>
+
                   <div style={{ marginTop: "auto" }}>
                     <Button
                       variant="contained"
@@ -261,6 +355,9 @@ function AllUsedCars() {
             Registered In: {selectedAd.registeredIn}
           </Typography>
           <Typography color="text.secondary">
+            Year: {selectedAd.modelYear}
+          </Typography>
+          <Typography color="text.secondary">
             Color: {selectedAd.color}
           </Typography>
           <Typography color="text.secondary">
@@ -276,7 +373,9 @@ function AllUsedCars() {
             Engine Capacity: {selectedAd.engineCapacity}
           </Typography>
           <Typography variant="h6">Price</Typography>
-          <Typography color="text.secondary">{selectedAd.price} PKR</Typography>
+          <Typography color="text.secondary">
+            {formatPrice(selectedAd.price)}
+          </Typography>
           <div style={{ flex: 1 }}>
             {selectedAd.features.length > 0 && (
               <div className="mt-3">

@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 
-function MyAdsProfile() {
+function MyOrdersPofile() {
   const user = useSelector((state) => state.authentication.user);
   const [selectedGender, setSelectedGender] = useState(user.gender);
 
@@ -108,4 +108,4 @@ function MyAdsProfile() {
   );
 }
 
-export default MyAdsProfile;
+export default MyOrdersPofile;
