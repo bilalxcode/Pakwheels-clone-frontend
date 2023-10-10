@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import { CircularProgress } from "@mui/material";
+import { Card, CircularProgress, Typography } from "@mui/material";
 function ShowAllVideos() {
   const [videos, setVideos] = useState([]);
   const [latestVideo, setLatestVideo] = useState(null);

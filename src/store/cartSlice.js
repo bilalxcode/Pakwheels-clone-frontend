@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   orders: [], // Initialize as an empty array
+  orderQuantities: {}, // Add this if needed
 };
 
 const cartSlice = createSlice({
@@ -14,11 +15,17 @@ const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       // Filter out the product with the matching orderId
-      state.orders = state.orders.filter((order) => order._id !== action.payload);
+      state.orders = state.orders.filter(
+        (order) => order._id !== action.payload
+      );
+    },
+    clearCart: (state) => {
+      // Clear the cart by setting orders to an empty array
+      state.orders = [];
     },
   },
 });
 
-export const { AddToCart, removeFromCart } = cartSlice.actions;
+export const { AddToCart, removeFromCart, clearCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

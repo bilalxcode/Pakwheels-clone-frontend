@@ -8,7 +8,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react"; // Remove useState import
 import DeleteIcon from "@mui/icons-material/Delete";
 import { removeFromCart } from "../../store/cartSlice"; // Import the removeFromCart action
 import { useNavigate } from "react-router-dom";
@@ -19,28 +19,11 @@ function CartItem() {
   const orders = useSelector((state) => state.cart.orders);
   const dispatch = useDispatch(); // Get the dispatch function
 
-  // Create a state to manage the quantity of each product
-  const [quantities, setQuantities] = useState({});
-
-  // Function to handle quantity changes
-  const handleQuantityChange = (orderId, newQuantity) => {
-    setQuantities({
-      ...quantities,
-      [orderId]: newQuantity,
-    });
-  };
-
   // Function to handle delete icon click
   const handleDeleteClick = (orderId) => {
     // Dispatch the removeFromCart action with the orderId to remove the item
     dispatch(removeFromCart(orderId)); // Dispatch the removeFromCart action
   };
-
-  // Calculate the total amount by summing up the prices of all orders
-  const totalAmount = orders.reduce((acc, order) => {
-    const quantity = quantities[order._id] || 1; // Default to 1 if quantity is not set
-    return acc + parseFloat(order.price) * quantity;
-  }, 0);
 
   const navigate = useNavigate();
   const navigateToAutostore = () => {
@@ -48,6 +31,14 @@ function CartItem() {
     localStorage.setItem("ActiveTab", "AutoStore");
     navigate("/autostore");
   };
+  const totalAmount = orders.reduce((acc, order) => {
+    const price = parseFloat(order.price);
+    if (!isNaN(price)) {
+      return acc + price;
+    }
+    return acc;
+  }, 0);
+
   return (
     <>
       {orders.length === 0 ? ( // Check if orders array is empty
@@ -86,7 +77,6 @@ function CartItem() {
               justifyContent: "center", // Center horizontally
               alignItems: "center", // Center vertically
               height: "400px",
-              // Adjust the height as needed
             }}
           >
             {orders.map((order) => (
@@ -95,7 +85,7 @@ function CartItem() {
                   <Card
                     style={{
                       width: "200px", // Set the desired width
-                      height: "300px", // Set the desired height
+                      height: "25 0px", // Set the desired height
                       margin: "8px",
                       border: "1px solid #EEEEEE",
                     }}
@@ -103,49 +93,56 @@ function CartItem() {
                     <CardContent style={{ position: "relative" }}>
                       <div
                         style={{
-                          textAlign: "center",
-                          paddingTop: "0px",
+                          display: "flex",
+                          justifyContent: "center", // Center horizontally
+                          alignItems: "center", // Center vertically
                           height: "80px",
                           width: "100px",
                           backgroundColor: "#f8f8f9",
-                          margin: "0 auto",
+                          margin: "1em auto",
                         }}
                       >
                         <img
                           src={`http://localhost:8080/${order.images?.[0]}`}
                           alt={order.name}
                           style={{
-                            maxWidth: "100%",
-                            maxHeight: "100%",
+                            maxWidth: "150%",
+                            maxHeight: "150%",
                             objectFit: "contain",
                             borderRadius: "1em",
                           }}
                         />
                       </div>
-                      <Typography variant="h6">
-                        {order.name
-                          .split(" ") // Split the name into words
-                          .slice(0, 3) // Take the first 3 words
-                          .join(" ")}{" "}
-                        {/* Join them back */}
-                      </Typography>
-                      <input
-                        type="number" // Change to a number input
-                        min="1" // Set a minimum value for quantity
-                        className="form-control"
-                        placeholder="1"
-                        style={{ width: "100%" }}
-                        value={quantities[order._id] || 1} // Get quantity from state or default to 1
-                        onChange={(e) =>
-                          handleQuantityChange(order._id, e.target.value)
-                        } // Update quantity on change
-                      />
-                      <Typography variant="h6">
-                        PKR
-                        {(order.price * (quantities[order._id] || 1)).toFixed(
-                          2
-                        )}
-                      </Typography>
+                      <div
+                        style={{
+                          justifyContent: "center", // Center horizontally
+                          alignItems: "center", // Center vertically
+                          backgroundColor: "#f8f8f9",
+                          margin: "0 auto",
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          style={{
+                            marginTop: "3vh",
+                            textAlign: "center", // Center horizontally
+                          }}
+                        >
+                          {order.name
+                            .split(" ") // Split the name into words
+                            .slice(0, 3) // Take the first 3 words
+                            .join(" ")}{" "}
+                          {/* Join them back */}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          style={{
+                            textAlign: "center", // Center horizontally
+                          }}
+                        >
+                          PKR {order.price}
+                        </Typography>
+                      </div>
                       <div
                         style={{
                           position: "absolute",

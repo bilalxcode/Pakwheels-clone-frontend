@@ -25,6 +25,7 @@ function Myorders() {
       if (response.status === 200) {
         const ordersData = response.data.orders;
         setOrders(ordersData);
+        console.log(ordersData);
       } else {
         toast.error("Failed to load orders: " + response.data.message);
       }
@@ -48,6 +49,17 @@ function Myorders() {
     return rows;
   };
 
+  // Function to calculate the total price of items in an order
+  // Function to calculate the total price of items in an order
+  const calculateTotalPrice = (order) => {
+    return order.products.reduce((total, product) => {
+      return total + parseFloat(product.price) + 150;
+    }, 0);
+  };
+
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
   return (
     <>
       <div>
@@ -72,7 +84,7 @@ function Myorders() {
             margin: "20px 0",
           }}
         >
-          {groupOrdersIntoRows(orders).map((row, rowIndex) => (
+          {groupOrdersIntoRows(sortedOrders).map((row, rowIndex) => (
             <div
               key={rowIndex}
               style={{
@@ -103,6 +115,9 @@ function Myorders() {
                       </li>
                     ))}
                   </ul>
+                  <p>Shipping Charges: 150</p>
+
+                  <p>Total Price: PKR {calculateTotalPrice(order)}</p>
                   <p>Address: {order.address}</p>
                   <p>Phone Number: {order.phoneNumber}</p>
                   <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>

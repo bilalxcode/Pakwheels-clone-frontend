@@ -31,6 +31,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import StoreIcon from "@mui/icons-material/Store";
 import YouTubeIcon from "@mui/icons-material/YouTube";
+import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
 import BookIcon from "@mui/icons-material/Book";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
@@ -42,6 +43,7 @@ import VideosView from "./VideosView";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import BikesView from "./BikesView";
+import OrdersView from "./OrdersView";
 
 const drawerWidth = 300;
 
@@ -189,6 +191,7 @@ const AdminHome = () => {
             "Add Product",
             "View Products",
             "Videos",
+            "Orders",
           ].map((text, index) => (
             <ListItem
               button
@@ -204,6 +207,7 @@ const AdminHome = () => {
                 {index === 4 && <PostAddIcon />}
                 {index === 5 && <StoreIcon />}
                 {index === 6 && <YouTubeIcon />}
+                {index === 7 && <LocalGroceryStoreIcon />}
               </ListItemIcon>
               <ListItemText primary={text} />
             </ListItem>
@@ -233,6 +237,8 @@ const AdminHome = () => {
         {selectedMenuItem === "Add Product" && <AddProductForm />}
         {selectedMenuItem === "View Products" && <ProductsView />}
         {selectedMenuItem === "Videos" && <VideosView />}
+        {selectedMenuItem === "Orders" && <OrdersView />}
+
         {selectedMenuItem === "Log Out" && LogOutHandler}
       </main>
       <footer

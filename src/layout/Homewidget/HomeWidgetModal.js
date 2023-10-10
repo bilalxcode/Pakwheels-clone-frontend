@@ -356,6 +356,28 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                       Don't have an account? Sign Up
                     </button>
                   </div>
+                  <div className="mt-3 text-center">
+                    <a
+                      href="/forget-password"
+                      style={{
+                        textDecoration: "none",
+                        color: "#007BFF",
+                        fontWeight: "bold",
+                        fontSize: "0.8em",
+                        padding: "10px 20px",
+                        border: "1px solid #007BFF",
+                        borderRadius: "5px",
+                        backgroundColor: "#FFFFFF",
+                        transition: "background-color 0.3s, color 0.3s",
+                        position: "absolute", // Position it absolutely
+                        bottom: "-22vh", // Adjust the distance from the bottom
+                        left: "50%", // Center it horizontally
+                        transform: "translateX(-50%)", // Center it horizontally
+                      }}
+                    >
+                      Forgot Password 
+                    </a>
+                  </div>
                 </form>
               </>
             ) : (

@@ -83,11 +83,12 @@ function NavHeader() {
         // Clear your JWT token cookie and perform other actions
         document.cookie =
           "jwtToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        window.gapi.auth2.getAuthInstance().signOut();
 
         dispatch(logout());
         dispatch(Deactivate());
         dispatch(Activate({ user: null }));
-        window.gapi.auth2.getAuthInstance().signOut();
+        localStorage.removeItem("ActiveTab");
 
         const msg = response.data.message;
 

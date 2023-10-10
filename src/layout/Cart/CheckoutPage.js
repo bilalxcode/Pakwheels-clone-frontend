@@ -9,11 +9,13 @@ import {
   Alert,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import Navbar from "../Navbar/Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { clearCart } from "../../store/cartSlice";
 
 function CheckoutPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("stripe");
@@ -25,6 +27,7 @@ function CheckoutPage() {
   const user = useSelector((state) => state.authentication.user);
   const orders = useSelector((state) => state.cart.orders);
 
+  const dispatch = useDispatch();
   const handlePaymentMethodChange = (method) => {
     setSelectedPaymentMethod(method);
   };
@@ -56,12 +59,13 @@ function CheckoutPage() {
     } else {
       try {
         console.log(orders);
+
         // Make a POST request to the backend to create the COD order
         const response = await axios.post(
           "http://localhost:8080/admin/userCODOrder",
           {
-            user: user, // Replace with the actual user data
-            products: orders, // Send all products in the "orders" array
+            user: user, 
+            products: orders, 
             address: address,
             phoneNumber: phoneNumber,
           },
@@ -74,6 +78,8 @@ function CheckoutPage() {
 
         if (response.status === 201) {
           toast.success("Order Placed");
+          dispatch(clearCart()); // Dispatch the clearCart action
+
           setIsOrderPlaced(true);
           setPhoneNumberValid(true);
         }
@@ -84,7 +90,13 @@ function CheckoutPage() {
       }
     }
   };
-
+  const totalAmount = orders.reduce((acc, order) => {
+    const price = parseFloat(order.price);
+    if (!isNaN(price)) {
+      return acc + price;
+    }
+    return acc;
+  }, 0);
   const renderPaymentContent = () => {
     if (selectedPaymentMethod === "stripe") {
       // Render Stripe payment content here
@@ -97,8 +109,6 @@ function CheckoutPage() {
         </div>
       );
     } else if (selectedPaymentMethod === "cod") {
-      // Render Cash on Delivery payment content here
-      let subtotal = 0;
       return (
         <>
           <div>
@@ -124,22 +134,28 @@ function CheckoutPage() {
               error={!phoneNumberValid} // Apply error styling if phoneNumberValid is false
               helperText={!phoneNumberValid ? "Invalid Phone Number" : ""}
             />
-            {orders.map((order) => {
-              const { name, price } = order;
-              subtotal += parseFloat(price);
+            {orders.map((order, index) => {
+              const { name, price, quantity } = order;
+              const parsedPrice = parseFloat(price); // Parse the price as a float
+              const productTotal = parsedPrice * quantity;
               return (
-                <div key={order._id} style={{ marginTop: "1em" }}>
+                <div key={order._id} style={{ marginTop: "0.5em" }}>
                   <Typography variant="subtitle1">
-                    {name}
-                    <span> {price} PKR</span>
+                    ✔ {name}
+                    {parsedPrice} PKR
                   </Typography>
                 </div>
               );
             })}
 
-            <Typography variant="body1">Shipping: 150 PKR</Typography>
-            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
-              Total: {subtotal + 150} PKR
+            <Typography variant="body1" style={{ marginTop: "0.5em" }}>
+              Shipping: 150 PKR
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              style={{ fontWeight: "bold", marginTop: "0.5em" }}
+            >
+              Total:{totalAmount} PKR
             </Typography>
           </div>
           {isOrderPlaced && (

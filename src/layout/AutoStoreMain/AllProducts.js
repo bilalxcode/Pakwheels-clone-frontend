@@ -143,17 +143,27 @@ function AllProducts() {
     }
 
     // Check if the product is already in the cart
-    const existingProduct = orders.find(
-      (order) => order && order._id === ad && ad._id
-    );
+    const existingProduct = orders.find((order) => order._id === ad._id);
 
     if (existingProduct) {
-      // If the product is already in the cart, increment its quantity
-      const newQuantity = (quantities[existingProduct.orders._id] || 0) + 1;
-      handleQuantityChange(existingProduct._id, newQuantity);
+      // If the product is already in the cart, get the current quantity
+      const currentQuantity = quantities[ad._id] || 0;
+
+      // Increment the quantity by 1
+      const newQuantity = currentQuantity + 1;
+
+      // Update the quantities state with the new quantity
+      setQuantities({
+        ...quantities,
+        [ad._id]: newQuantity,
+      });
     } else {
-      // If it's not in the cart, add it as a new item
+      // If it's not in the cart, add it as a new item with quantity 1
       dispatch(AddToCart({ orders: ad }));
+      setQuantities({
+        ...quantities,
+        [ad._id]: 1, // Initialize the quantity to 1
+      });
     }
 
     toast.success("Added To Cart");
@@ -168,6 +178,47 @@ function AllProducts() {
     const startIndex = (currentPage - 1) * adsPerPage;
     const endIndex = startIndex + adsPerPage;
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
+
+    if (adsToDisplay.length === 0) {
+      // Display a message when no ads are found
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "5em 20em",
+          }}
+        >
+          <Card
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "2em",
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-616.jpg?w=740&t=st=1696856261~exp=1696856861~hmac=d9b86916a3389166d173a357ba600d17c2f1eee6fc61656f7701a2ac64966404"
+              alt="No Data"
+              style={{ maxWidth: "100px" }}
+            />
+            <Typography
+              variant="h5"
+              style={{ fontWeight: "bold", margin: "1em" }}
+            >
+              Results Not Found
+            </Typography>
+            <div>
+              <Typography variant="h6">
+                No products found. Try another category.
+              </Typography>
+            </div>
+          </Card>
+        </div>
+      );
+    }
 
     return (
       <div>
@@ -202,16 +253,29 @@ function AllProducts() {
                     {ad.images.length} <ImageIcon />
                   </div>
                 </div>
-                <div style={{ flex: 1, marginLeft: "1em" }}>
-                  <Typography variant="h6">{ad.name}</Typography>
-
-                  <Typography color="text.secondary">
-                    In Stock: {ad.quantity}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    Description: {ad.description}
-                  </Typography>
+                <div
+                  style={{
+                    flex: 1,
+                    marginLeft: "1em",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <Typography
+                      style={{ fontWeight: "bold", marginBottom: "2vh" }}
+                      variant="h5"
+                    >
+                      {ad.name}
+                    </Typography>
+                    <Typography
+                      style={{ marginBottom: "2vh" }}
+                      color="text.secondary"
+                    >
+                      Description: {ad.description}
+                    </Typography>
+                  </div>
                 </div>
+
                 <div
                   style={{
                     flex: 1,
@@ -273,16 +337,13 @@ function AllProducts() {
           <Typography color="text.secondary">
             Category: {selectedAd.category.$oid}
           </Typography>
-          <Typography color="text.secondary">
-            Price: {selectedAd.price}
-          </Typography>
-          <Typography color="text.secondary">
-            In Stock: {selectedAd.quantity}
-          </Typography>
+
           <Typography color="text.secondary">
             Description: {selectedAd.description}
           </Typography>
-          <Typography variant="h6">Price</Typography>
+          <Typography variant="h6" style={{ marginTop: "1vh" }}>
+            Price
+          </Typography>
           <Typography color="text.secondary">{selectedAd.price} PKR</Typography>
           <div style={{ marginTop: "auto" }}>
             <Button

@@ -29,6 +29,7 @@ import MyCart from "./layout/Cart/MyCart";
 import CheckoutPage from "./layout/Cart/CheckoutPage";
 import { Deactivate } from "./store/navbarSlice";
 import Myorders from "./pages/Myorders";
+import ForgetPasswordPage from "./layout/ForgetPassword/ForgetPasswordPage";
 function App() {
   const user = useSelector((state) => state.authentication.user);
   const adminTokenFromStorage = localStorage.getItem("jwtToken");
@@ -85,6 +86,10 @@ function App() {
         />
 
         <Route path="/used-cars" element=<AllUsedCars /> />
+        <Route
+          path="/forget-password"
+          element={!user ? <ForgetPasswordPage /> : <Navigate to="/" />}
+        />
         <Route path="/used-cars" element=<AllUsedCars /> />
 
         <Route path="/used-bikes" element=<AllUsedBikes /> />

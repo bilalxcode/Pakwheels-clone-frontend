@@ -148,6 +148,47 @@ function AllUsedBikes() {
     // Get the ads to display on the current page
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
 
+    if (adsToDisplay.length === 0) {
+      // Display a message when no ads are found
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "5em 20em",
+          }}
+        >
+          <Card
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "2em",
+              textAlign: "center",
+            }}
+          >
+            <img
+              src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-616.jpg?w=740&t=st=1696856261~exp=1696856861~hmac=d9b86916a3389166d173a357ba600d17c2f1eee6fc61656f7701a2ac64966404"
+              alt="No Data"
+              style={{ maxWidth: "100px" }}
+            />
+            <Typography
+              variant="h5"
+              style={{ fontWeight: "bold", margin: "1em" }}
+            >
+              Results Not Found
+            </Typography>
+            <div>
+              <Typography variant="h6">
+                No ads found. Try another filter combination.
+              </Typography>
+            </div>
+          </Card>
+        </div>
+      );
+    }
+
     return (
       <div>
         {adsToDisplay.map((ad) => (

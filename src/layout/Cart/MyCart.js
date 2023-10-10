@@ -39,75 +39,77 @@ function MyCart() {
     navigate("/checkout");
   };
   return (
-    <div>
+    <>
       <div>
-        <Navbar />
-      </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          marginTop: "1em",
-        }}
-      >
+        <div>
+          <Navbar />
+        </div>
         <div
           style={{
-            background: "#eee",
-            borderRadius: "10px", // Border radius
-            padding: "20px",
-            width: "60em",
-            border: "4px solid #012E64",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "1em",
           }}
         >
           <div
             style={{
-              display: "flex",
-              alignItems: "center", // Center vertically within this container
-              marginBottom: "10px", // Add some spacing between the icon and text
+              background: "#eee",
+              borderRadius: "10px", // Border radius
+              padding: "20px",
+              width: "60em",
+              border: "4px solid #012E64",
             }}
           >
-            <Typography variant="h5">My Cart</Typography>
-            <ShoppingCartIcon style={{ marginLeft: "10px" }} />
-          </div>
-
-          <TableContainer component={Paper}>
-            <Table>
-              <TableBody>
-                <CartItem />
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {orders.length !== 0 && (
             <div
               style={{
                 display: "flex",
-                justifyContent: "space-between",
-                marginTop: "20px",
+                alignItems: "center", // Center vertically within this container
+                marginBottom: "10px", // Add some spacing between the icon and text
               }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={navigateToCheckout}
-              >
-                Checkout
-              </Button>
-              <Button
-                variant="outlined"
-                onClick={navigateToAutostore}
-                color="primary"
-              >
-                Continue Shopping
-              </Button>
+              <Typography variant="h5">My Cart</Typography>
+              <ShoppingCartIcon style={{ marginLeft: "10px" }} />
             </div>
-          )}
+
+            <TableContainer component={Paper}>
+              <Table>
+                <TableBody>
+                  <CartItem />
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {orders.length !== 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginTop: "20px",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={navigateToCheckout}
+                >
+                  Checkout
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={navigateToAutostore}
+                  color="primary"
+                >
+                  Continue Shopping
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div style={{ marginTop: "2em" }}>
         <Footer />
       </div>
-    </div>
+    </>
   );
 }
 
