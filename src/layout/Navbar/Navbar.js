@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Activate, Deactivate } from "../../store/navbarSlice";
 import NavHeader from "./NavHeader";
 import MenuIcon from "@mui/icons-material/Menu";
+import { ToastContainer, toast } from "react-toastify";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -33,10 +34,10 @@ function Navbar() {
 
   const activeTab = useSelector((state) => state.navbar.activeTab);
 
-  useEffect(() => {
-    const option = localStorage.getItem("ActiveTab");
-    dispatch(Activate({ user: option }));
-  }, []);
+  // useEffect(() => {
+  //   const option = localStorage.getItem("ActiveTab");
+  //   dispatch(Activate({ user: option }));
+  // }, []);
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -58,7 +59,7 @@ function Navbar() {
     e.preventDefault();
     if (!user) {
       // If the user is not logged in, show an alert
-      alert("Please log in first to post an ad.");
+      toast.error("Please log in first to post an ad.");
     } else {
       navigate("/sell-vehicle/post-ad");
     }
@@ -74,14 +75,29 @@ function Navbar() {
     if (location.pathname === "/" || location.pathname === "/my-cart") {
       // Dispatch the DeActivate action
       dispatch(Deactivate());
+    } else if (location.pathname === "/used-cars") {
+      // Dispatch the DeActivate action
+      dispatch(Activate({ user: "Used Cars" }));
+    } else if (location.pathname === "/used-bikes") {
+      // Dispatch the DeActivate action
+      dispatch(Activate({ user: "Used Bikes" }));
+    } else if (location.pathname === "/autostore") {
+      // Dispatch the DeActivate action
+      dispatch(Activate({ user: "AutoStore" }));
+    } else if (location.pathname === "/videos") {
+      // Dispatch the DeActivate action
+      dispatch(Activate({ user: "Videos" }));
+    } else if (location.pathname === "/sell-vehicle/post-ad") {
+      // Dispatch the DeActivate action
+      dispatch(Deactivate());
     }
   }, [dispatch, location.pathname]);
 
   const handleOptionClick = (option) => {
     console.log(option);
     setSelectedOption(option);
-    localStorage.setItem("ActiveTab", option);
-    dispatch(Activate({ user: option }));
+    // localStorage.setItem("ActiveTab", option);
+    // dispatch(Activate({ user: option }));
     switch (option) {
       case "Used Cars":
         navigate("/used-cars");
@@ -192,6 +208,7 @@ function Navbar() {
                     Used Bikes
                   </Button>
                 </Grid>
+                <ToastContainer />
                 <Grid item xs>
                   <Button
                     variant="contained"
@@ -241,6 +258,8 @@ function Navbar() {
                     color: "white",
                     textAlign: "center",
                     boxShadow: "none",
+                    outline: "none",
+                    border: "none",
                   }}
                   onClick={sellCarOpener}
                 >

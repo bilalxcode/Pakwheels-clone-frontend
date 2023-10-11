@@ -125,6 +125,7 @@ function BikeContactForm({ bikeCreated, bike }) {
                   size="large"
                   type="submit"
                   disabled={!isValidPhoneNumber}
+                  style={{ outline: "none", border: "none" }}
                 >
                   Submit & Continue
                 </Button>
@@ -136,7 +137,12 @@ function BikeContactForm({ bikeCreated, bike }) {
               <Alert severity="success">
                 Your Ad is currently under review. It will be live shortly
               </Alert>
-              <Button onClick={navigateToMyAds}>See My Ads</Button>
+              <Button
+                style={{ outline: "none", border: "none" }}
+                onClick={navigateToMyAds}
+              >
+                See My Ads
+              </Button>
             </div>
           )}
         </div>

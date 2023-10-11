@@ -7,13 +7,6 @@ const errorPageStyle = {
   fontFamily: "'Arvo', serif",
 };
 
-const bgStyle = {
-  backgroundImage:
-    "url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif)",
-  height: "400px",
-  backgroundPosition: "center",
-};
-
 const h1Style = {
   fontSize: "80px",
 };
@@ -25,15 +18,17 @@ const h3Style = {
 const linkStyle = {
   color: "#fff",
   padding: "10px 20px",
-  background: "#39ac31",
-  margin: "20px 0",
+  borderRadius: "1em",
+  background: "#B73439",
+  margin: "5px 0",
   display: "inline-block",
 };
+
 const centerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  minHeight: "80vh", // Adjust the height as needed
+  minHeight: "30vh", // Adjust the height as needed
 };
 
 function ErrorPage() {
@@ -47,19 +42,9 @@ function ErrorPage() {
           <div className="container">
             <div className="row">
               <div className="col-sm-12">
-                <div className="col-sm-10 col-sm-offset-1 text-center">
-                  <div style={bgStyle} className="four_zero_four_bg">
-                    <h1 style={h1Style} className="text-center">
-                      404
-                    </h1>
-                  </div>
-
+                <div className="col-sm-12 col-sm-offset-1 text-center">
                   <div className="contant_box_404">
-                    <h3 style={h3Style} className="h2">
-                      Look like you're lost
-                    </h3>
-
-                    <p>the page you are looking for is not available!</p>
+                    <p>The page you are looking for is not available!</p>
 
                     <a href="/" style={linkStyle} className="link_404">
                       Go to Home

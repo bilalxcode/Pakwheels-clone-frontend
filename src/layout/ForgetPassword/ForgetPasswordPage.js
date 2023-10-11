@@ -63,13 +63,13 @@ function ForgetPasswordPage() {
             // Handle 404 status code
             toast.error("Invalid email");
           } else {
-            toast.error("Failed to send verification email. ");
+            toast.error(response.data.error);
           }
           setLoading(false); // Stop loading on error
         }
       } catch (error) {
         console.error("Sending verification email error: " + error);
-        toast.error("Failed to send verification email ");
+        toast.error(error.response.data.error);
         setLoading(false); // Stop loading on error
       }
     } else {
@@ -182,7 +182,6 @@ function ForgetPasswordPage() {
               padding: "1em 10em",
             }}
           >
-            <ToastContainer />
             <CardMedia
               component="img"
               alt="Verification Code"
@@ -240,7 +239,6 @@ function ForgetPasswordPage() {
               padding: "1em 10em",
             }}
           >
-            <ToastContainer />
             <CardMedia
               component="img"
               alt="Password Reset"

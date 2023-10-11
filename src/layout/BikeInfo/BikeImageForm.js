@@ -303,7 +303,12 @@ function BikeImageForm({ bikeCreated, bike }) {
             ) : imageSent ? (
               <DoneIcon fontSize="large" style={{ color: "green" }} />
             ) : (
-              <Button onClick={submitImage} variant="contained" color="primary">
+              <Button
+                onClick={submitImage}
+                style={{ outline: "none", border: "none" }}
+                variant="contained"
+                color="primary"
+              >
                 Submit
               </Button>
             )}

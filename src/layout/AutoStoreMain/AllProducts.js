@@ -138,7 +138,7 @@ function AllProducts() {
   const handleAdtoCart = (ad) => {
     // Open dialog with product details and order form
     if (!user) {
-      alert("Log In First");
+      toast.error("Log In First");
       return; // This will exit the function immediately
     }
 
@@ -290,7 +290,12 @@ function AllProducts() {
                     <Button
                       variant="contained"
                       color="primary"
-                      style={{ background: "#1976D2", color: "#fff" }}
+                      style={{
+                        background: "#1976D2",
+                        color: "#fff",
+                        outline: "none",
+                        border: "none",
+                      }}
                       onClick={() => handleBuyNow(ad)}
                     >
                       Buy Now
@@ -353,6 +358,8 @@ function AllProducts() {
                 background: "#1976D2",
                 color: "#fff",
                 marginTop: "0.5em",
+                outline: "none",
+                border: "none",
               }}
               onClick={() => handleAdtoCart(selectedAd)}
             >
@@ -371,7 +378,6 @@ function AllProducts() {
   return (
     <div>
       <Navbar />
-      <ToastContainer />
       <div style={{ display: "flex", margin: "1em" }}>
         <div>
           <SearchFilters

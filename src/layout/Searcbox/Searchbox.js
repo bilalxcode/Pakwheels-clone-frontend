@@ -191,7 +191,7 @@ function Searchbox() {
                 fullWidth
                 color="success"
                 startIcon={<i className="fa fa-search"></i>}
-                style={{ padding: "1em" }}
+                style={{ padding: "1em", outline: "none", border: "none" }}
                 onClick={handleSearch}
               >
                 Search

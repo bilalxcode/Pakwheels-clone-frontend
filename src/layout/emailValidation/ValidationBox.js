@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import axios from "axios";
 import {
   SignUp,
@@ -18,7 +18,7 @@ function ValidationBox() {
   const [loadingState, setLoadingstate] = useState(false);
   const [validationError, setValidationError] = useState("");
   const [userVerified, setUserVerified] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false); // New state to control login modal
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const [formValues, setFormValues] = useState({
     code1: "",
@@ -29,19 +29,36 @@ function ValidationBox() {
     code6: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const inputRefs = {
+    code1: useRef(null),
+    code2: useRef(null),
+    code3: useRef(null),
+    code4: useRef(null),
+    code5: useRef(null),
+    code6: useRef(null),
+  };
+
+  const handleInputChange = (e, inputName) => {
+    const { value } = e.target;
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: value,
+      [inputName]: value,
     }));
+
+    // Focus on the next input field if there is one
+    const currentIndex = Number(inputName.charAt(inputName.length - 1));
+    if (currentIndex < 6) {
+      const nextInputName = `code${currentIndex + 1}`;
+      inputRefs[nextInputName].current.focus();
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const concatenatedValue = Object.values(formValues).join(""); // Combine all input values
+    const concatenatedValue = Object.values(formValues).join("");
     console.log("Code Value:", concatenatedValue);
-    setLoadingstate(true); // Set loading to true when the request is sent
+    setLoadingstate(true);
+
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/verify",
@@ -54,38 +71,32 @@ function ValidationBox() {
           },
         }
       );
-      console.log("API Response:", response); // Log the entire response object
-
-      // Set loading to false as soon as the response comes
+      console.log("API Response:", response);
       setLoadingstate(false);
 
       if (response.status === 200) {
-        // Verification successful
         console.log("email Verification successful");
         console.log("API Response:", response.data);
 
         const jwtToken = response.data.jwttoken;
         const user = response.data.user;
         console.log(jwtToken, user);
-        // max-age is set to 1 hour (3600 seconds)
         setUserVerified(true);
 
         dispatch(userEmailVerified());
         setShowLoginModal(true);
       } else if (response.status === 400) {
-        // Log the response data to check if there's an error message
         console.error("Validation error response:", response.data);
 
         if (response.data && response.data.error) {
-          setValidationError(response.data.error); // Set validation error message
+          setValidationError(response.data.error);
         } else {
-          setValidationError("Invalid Code"); // Default error message
+          setValidationError("Invalid Code");
         }
 
         console.error("Verification failed with status code:", response.status);
       }
     } catch (error) {
-      // Set loading to false on error
       setLoadingstate(false);
       setValidationError("Invalid Code");
       console.error("verification error:", error);
@@ -93,7 +104,7 @@ function ValidationBox() {
   };
 
   return (
-    <div className=" m-5 d-flex justify-content-center align-items-center vh-100">
+    <div className="m-5 d-flex justify-content-center align-items-center vh-100">
       {loadingState ? (
         <div
           style={{
@@ -106,7 +117,7 @@ function ValidationBox() {
             <CircularProgress />
           </Box>
         </div>
-      ) : showLoginModal ? ( // Show only the login modal when showLoginModal is true
+      ) : showLoginModal ? (
         <HomeWidgetModal
           isOpen={showLoginModal}
           closeModal={() => setShowLoginModal(false)}
@@ -123,12 +134,12 @@ function ValidationBox() {
         >
           <form onSubmit={handleSubmit}>
             <h4
-              class="text-center mb-4"
+              className="text-center mb-4"
               style={{ color: "#233D7B", fontWeight: "bold" }}
             >
               Enter your code
             </h4>
-            <p class="text-center mb-4">
+            <p className="text-center mb-4">
               Please enter the Code received on your email for verification.
             </p>
             <div className="d-flex mb-3">
@@ -140,10 +151,11 @@ function ValidationBox() {
                   maxLength="1"
                   pattern="[0-9]"
                   value={formValues[`code${i + 1}`]}
-                  onChange={handleInputChange}
+                  onChange={(e) => handleInputChange(e, `code${i + 1}`)}
                   className="form-control"
                   style={{ margin: "0px 5px" }}
                   required
+                  ref={inputRefs[`code${i + 1}`]}
                 />
               ))}
             </div>

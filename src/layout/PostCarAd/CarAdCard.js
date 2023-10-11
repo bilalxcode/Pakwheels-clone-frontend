@@ -49,6 +49,7 @@ function CarAdCard() {
           color="success"
           size="small"
           onClick={CarInfoPageOpener}
+          style={{ outline: "none", border: "none" }}
         >
           Post Ad
         </Button>

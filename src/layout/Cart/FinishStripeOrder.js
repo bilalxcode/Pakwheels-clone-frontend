@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { ToastContainer, toast } from "react-toastify";
 function FinishStripeOrder() {
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
@@ -61,11 +62,12 @@ function FinishStripeOrder() {
           console.log(updatedOrder);
           setIsOrderPlaced(true);
           setPhoneNumberValid(true);
+          toast.success("Error placing the order. Please try again later.");
         }
       } catch (error) {
         console.error("Error placing COD order:", error);
         setIsProcessing(false);
-        alert("Error placing the order. Please try again later.");
+        toast.error("Error placing the order. Please try again later.");
       }
     }
   };
@@ -95,6 +97,7 @@ function FinishStripeOrder() {
               error={!phoneNumberValid} // Apply error styling if phoneNumberValid is false
               helperText={!phoneNumberValid ? "Invalid Phone Number" : ""}
             />
+            <ToastContainer/>
             <Button
               variant="contained"
               style={{ outline: "none" }}

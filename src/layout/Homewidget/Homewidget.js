@@ -58,7 +58,7 @@ function Homewidget() {
                 <Button
                   variant="contained"
                   color="primary"
-                  style={{ margin: "1em" }}
+                  style={{ margin: "1em", outline: "none" }}
                   onClick={navigateToSellVehicle}
                 >
                   Post Your Ad
@@ -68,7 +68,7 @@ function Homewidget() {
                   variant="contained"
                   color="primary"
                   onClick={openModal}
-                  style={{ margin: "1em" }}
+                  style={{ margin: "1em", outline: "none" }}
                 >
                   Post Your Ad
                 </Button>
@@ -102,7 +102,7 @@ function Homewidget() {
                   variant="contained"
                   color="primary"
                   disabled
-                  style={{ margin: "1em" }}
+                  style={{ margin: "1em", outline: "none" }}
                 >
                   Coming Soon
                 </Button>
@@ -111,7 +111,7 @@ function Homewidget() {
                   variant="contained"
                   color="error"
                   onClick={openModal}
-                  style={{ margin: "1em" }}
+                  style={{ margin: "1em", outline: "none" }}
                 >
                   Register Your Car
                 </Button>

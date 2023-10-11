@@ -19,7 +19,6 @@ function Home() {
       <Homewidget />
       <LatestUsedCarsOverlay />
       <LatestUsedBikesOverlay />
-
       <ExploreProducts />
       <AutoStore />
       <Browsevideos />

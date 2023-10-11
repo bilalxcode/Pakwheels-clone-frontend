@@ -95,10 +95,39 @@ const AdminHome = () => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
   const handleMenuItemClick = (text) => {
     setSelectedMenuItem(text);
     localStorage.setItem("selectedMenuItem", text);
+
+    // Navigate to the corresponding route based on the selected menu item
+    switch (text) {
+      case "Dashboard":
+        navigate("/admin/home");
+        break;
+      case "Users":
+        navigate("/admin/users");
+        break;
+      case "Cars":
+        navigate("/admin/cars");
+        break;
+      case "Bikes":
+        navigate("/admin/bikes");
+        break;
+      case "Add Product":
+        navigate("/admin/add-product");
+        break;
+      case "View Products":
+        navigate("/admin/view-products");
+        break;
+      case "Videos":
+        navigate("/admin/videos");
+        break;
+      case "Orders":
+        navigate("/admin/orders");
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {

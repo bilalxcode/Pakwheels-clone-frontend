@@ -50,6 +50,7 @@ function BikeAdCard() {
           color="success"
           size="small"
           onClick={BikeInfoPageOpener}
+          style={{ outline: "none", border: "none" }}
         >
           Post Ad
         </Button>

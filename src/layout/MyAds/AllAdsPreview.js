@@ -13,6 +13,7 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function AllAdsPreview() {
   const user = useSelector((state) => state.authentication.user);
@@ -48,7 +49,6 @@ function AllAdsPreview() {
         const BikeAds = response.data.bikeAds;
         setAdsData(ads);
         setBikeAdsData(BikeAds);
-        toast.success("Ads loaded ");
       } else {
         setIsLoading(false);
         toast.error(response.data.message);
@@ -76,7 +76,10 @@ function AllAdsPreview() {
   const sortAds = (ads, sortOrder) => {
     return sortAdsByTimestamp(ads, sortOrder);
   };
-
+  const navigate = useNavigate();
+  const navigateToPostAd = (ads, sortOrder) => {
+    navigate("/sell-vehicle/post-ad");
+  };
   const approvedAds = adsData.filter((ad) => ad.isApproved === true);
   const pendingAds = adsData.filter((ad) => ad.isApproved === null);
   const removedAds = adsData.filter((ad) => ad.isApproved === false);
@@ -142,7 +145,7 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {/* {Object.keys(adsData).length === 0 && (
+                  {Object.keys(adsData).length === 0 && (
                     <div>
                       <p
                         style={{
@@ -168,12 +171,13 @@ function AllAdsPreview() {
                           justifyContent: "center", // Center the image horizontally
                           alignItems: "center",
                         }}
-                        href="/sell-vehicle/post-ad"
+                        // href="/sell-vehicle/post-ad"
+                        onClick={navigateToPostAd}
                       >
                         Post Ad
                       </Button>
                     </div>
-                  )} */}
+                  )}
                   {sortAds(adsData, sortBy).map((ad, index) => (
                     <Card key={index} className="mt-3">
                       <div
@@ -528,7 +532,8 @@ function AllAdsPreview() {
                           justifyContent: "center", // Center the image horizontally
                           alignItems: "center",
                         }}
-                        href="/sell-vehicle/post-ad"
+                        // href="/sell-vehicle/post-ad"
+                        onClick={navigateToPostAd}
                       >
                         Post Ad
                       </Button>
@@ -822,7 +827,8 @@ function AllAdsPreview() {
                           justifyContent: "center", // Center the image horizontally
                           alignItems: "center",
                         }}
-                        href="/sell-vehicle/post-ad"
+                        // href="/sell-vehicle/post-ad"
+                        onClick={navigateToPostAd}
                       >
                         Post Ad
                       </Button>
@@ -1118,7 +1124,8 @@ function AllAdsPreview() {
                           justifyContent: "center", // Center the image horizontally
                           alignItems: "center",
                         }}
-                        href="/sell-vehicle/post-ad"
+                        // href="/sell-vehicle/post-ad"
+                        onClick={navigateToPostAd}
                       >
                         Post Ad
                       </Button>

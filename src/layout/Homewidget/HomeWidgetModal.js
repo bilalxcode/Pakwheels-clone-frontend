@@ -20,11 +20,36 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const ClientId =
     "857582053843-uhnd2vrnefg570aim0e4h754kcgdims8.apps.googleusercontent.com";
 
+  // const ClientId = process.env.GOOGLE_LOGIN_CLIENT_ID;
+
   // In your component, use the selector to access userVerified
   const overlayClassName = "custom-overlay";
+
+  // const customModalStyle = {
+  //   overlay: {
+  //     backgroundColor: "rgba(0, 0, 0, 0.8)",
+  //     display: "flex",
+  //     justifyContent: "center",
+  //     alignItems: "center",
+  //   },
+  //   content: {
+  //     width: "30%",
+  //     minWidth: "30%",
+  //     maxWidth: "500px",
+  //     maxHeight: "90%",
+  //     margin: "auto",
+  //     padding: "20px",
+  //     borderRadius: "15px",
+  //   },
+  // };
 
   const customModalStyle = {
     overlay: {
@@ -34,8 +59,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       alignItems: "center",
     },
     content: {
-      width: "30%",
-      minWidth: "30%",
+      width: "80%", // Default width for larger screens
       maxWidth: "500px",
       maxHeight: "90%",
       margin: "auto",
@@ -44,6 +68,20 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     },
   };
 
+  // Add responsive styles for different screen sizes using media queries
+  // Adjust the width, padding, or other styles as needed for each breakpoint
+  if (window.matchMedia("(max-width: 576px)").matches) {
+    customModalStyle.content.width = "90%";
+  }
+  if (window.matchMedia("(min-width: 577px) and (max-width: 768px)").matches) {
+    customModalStyle.content.width = "80%";
+  }
+  if (window.matchMedia("(min-width: 769px) and (max-width: 992px)").matches) {
+    customModalStyle.content.width = "70%";
+  }
+  if (window.matchMedia("(min-width: 993px)").matches) {
+    customModalStyle.content.width = "60%";
+  }
   const toggleLoginForm = () => {
     setRegistrationError("");
     setShowLoginForm(!showLoginForm);
@@ -60,10 +98,10 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     const password = document.getElementById("loginPassword").value;
 
     if (!isValidEmail(email)) {
-      return setRegistrationError("Invalid Email");
+      return toast.error("Invalid Email");
     } else {
       if (password === "") {
-        return setRegistrationError("Invalid password");
+        return toast.error("Invalid password");
       }
     }
 
@@ -111,13 +149,13 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       if (error.response) {
         if (error.response.status === 400) {
           if (error.response.data.error === "Email not found") {
-            setRegistrationError("Email not found");
+            toast.error("Email not found");
             console.log("email not found");
           } else if (error.response.data.error === "Invalid password") {
-            setRegistrationError("Invalid password");
+            toast.error("Invalid password");
             console.log("password not found");
           } else if (error.response.data.error === "User is banned") {
-            setRegistrationError("You are banned ❌");
+            toast.error("You are banned ❌");
             console.log("user is banned");
           }
         } else if (error.response.status === 500) {
@@ -132,18 +170,28 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       setIsLoading(false);
     }
   };
-
   const handleRegistration = async (e) => {
     e.preventDefault();
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("signupEmail").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
+    if (name.length <= 2) {
+      return toast.error("Invalid Name");
+    }
+    if (password.length < 8) {
+      return toast.error("Password must be at least 8 characters long");
+    }
+
+    if (!/[A-Z]/.test(password)) {
+      return toast.error("Password must contain at least 1 capital character");
+    }
+
+    if (!/[@$!%*#?&]/.test(password)) {
+      return toast.error("Password must contain at least 1 special character");
+    }
 
     if (confirmPassword !== password) {
-      return setRegistrationError("Password doesn't match!");
+      return toast.error("Password Not matched");
     }
+
     setIsLoading(true);
 
     try {
@@ -162,21 +210,16 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       );
       setRegistrationError("");
       console.log("Registration successful");
+
       if (response.status === 200) {
         setIsLoading(false);
-
         navigate("/verify");
       } else {
         setIsLoading(false);
-
         console.error("Verification failed with status code:", response.status);
         setRegistrationError(response.status.error);
+        toast.error(response.status.error);
       }
-
-      // setTimeout(() => {
-      //   setIsLoading(false); // Set loading to false
-      //   closeModal(); // Close the modal after the delay
-      // }, 2000);
     } catch (error) {
       console.error("Registration error:", error);
 
@@ -185,16 +228,17 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         error.response.data.error === "Email already taken"
       ) {
         console.log("email taken");
-
-        setRegistrationError("Email already taken");
+        toast.error("Email already taken");
       } else if (
         error.response &&
         error.response.data.error ===
           "Password must be at least 8 characters long and contain at least one capital letter and one special character."
       ) {
         console.log("invalid password");
-
         setRegistrationError(
+          "Password must be at least 8 characters long and contain at least one capital letter and one special character."
+        );
+        toast.error(
           "Password must be at least 8 characters long and contain at least one capital letter and one special character."
         );
       } else {
@@ -203,6 +247,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       setIsLoading(false);
     }
   };
+
   const handleModalClose = () => {
     setRegistrationError("");
     closeModal();
@@ -298,11 +343,9 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         <ToastContainer />
         <div className="row justify-content-center">
           <div className="col-md-12">
-            {isLoading ? ( // Show loading text when isLoading is true
+            {isLoading ? ( // Display circular progress when isLoading is true
               <div className="d-flex justify-content-center align-items-center">
-                <div className="spinner-border text-primary" role="status">
-                  <span className="sr-only">Loading...</span>
-                </div>
+                <CircularProgress color="primary" />
               </div>
             ) : showLoginForm ? (
               <>
@@ -375,7 +418,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                         transform: "translateX(-50%)", // Center it horizontally
                       }}
                     >
-                      Forgot Password 
+                      Forgot Password
                     </a>
                   </div>
                 </form>
@@ -391,6 +434,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                   <h2 className="text-center text-primary font-weight-bold">
                     Sign Up
                   </h2>
+                  <ToastContainer />
 
                   <div className="form-group">
                     <label htmlFor="name">Full Name</label>
@@ -401,6 +445,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                       id="name"
                       placeholder="Enter your full name here"
                       name="name"
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
@@ -411,6 +456,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                       className="form-control"
                       id="signupEmail"
                       placeholder="username@email.com"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
@@ -421,6 +467,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                       className="form-control"
                       id="password"
                       placeholder="Set a new password"
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div className="form-group">
@@ -430,6 +477,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                       className="form-control"
                       id="confirmPassword"
                       placeholder="Enter your password again"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
                   <button type="submit" className="btn btn-primary btn-block">

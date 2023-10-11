@@ -15,18 +15,18 @@ function LatestUsedBikesOverlay() {
         <div className="row">
           <div className="col-md-6">
             <h3 style={{ fontWeight: "bold", padding: "20px" }}>
-              Latest Used Cars
+              Latest Used Bikes
             </h3>
           </div>
           <div className="col-md-6 text-right">
             <a
-              href="/used-cars"
+              href="/used-bikes"
               style={{
                 textDecoration: "underline",
                 marginTop: "20px !important",
               }}
             >
-              View All Used Cars
+              View All Used Bikes
             </a>
           </div>
         </div>

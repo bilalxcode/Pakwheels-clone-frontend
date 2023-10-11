@@ -6,7 +6,6 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
 
 function SearchFilters({
   filterOptions,
@@ -41,7 +40,6 @@ function SearchFilters({
       <Typography variant="outlined" style={{ fontWeight: "bold" }}>
         Filter Products:
       </Typography>
-
 
       <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
         <label>Category</label>

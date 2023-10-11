@@ -60,25 +60,25 @@ function NavHeader() {
 
       if (response.status === 200) {
         // Clear Google sign-in cookies
-        const googleCookiesToClear = [
-          "__Secure-3PSID",
-          "__Secure-1PSID",
-          "__Secure-3PSIDTS",
-          "__Secure-1PSIDTS",
-          "__Secure-3PAPISID",
-          "__Secure-1PAPISID",
-          "SID",
-          "SSID",
-          "APISID",
-          "SAPISID",
-          "__Secure-3PSIDCC",
-          "__Secure-1PSIDCC",
-          "SIDCC",
-        ];
+        // const googleCookiesToClear = [
+        //   "__Secure-3PSID",
+        //   "__Secure-1PSID",
+        //   "__Secure-3PSIDTS",
+        //   "__Secure-1PSIDTS",
+        //   "__Secure-3PAPISID",
+        //   "__Secure-1PAPISID",
+        //   "SID",
+        //   "SSID",
+        //   "APISID",
+        //   "SAPISID",
+        //   "__Secure-3PSIDCC",
+        //   "__Secure-1PSIDCC",
+        //   "SIDCC",
+        // ];
 
-        googleCookiesToClear.forEach((cookieName) => {
-          document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-        });
+        // googleCookiesToClear.forEach((cookieName) => {
+        //   document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+        // });
 
         // Clear your JWT token cookie and perform other actions
         document.cookie =
@@ -152,7 +152,7 @@ function NavHeader() {
           </a>
         </div>
         <form className="form-inline">
-          <div style={{ padding: "5px", color: "slategrey" }}>
+          {/* <div style={{ padding: "5px", color: "slategrey" }}>
             <a
               href="#"
               style={{
@@ -165,7 +165,7 @@ function NavHeader() {
               اردو
             </a>
             |
-          </div>
+          </div> */}
           {user ? (
             <>
               <div

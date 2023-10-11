@@ -437,7 +437,6 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
                   />
                   {priceMagnitude !== null && (
                     <p>
-                      {" "}
                       <span style={{ fontWeight: "bold" }}>
                         {priceMagnitude}
                       </span>
@@ -457,7 +456,7 @@ function BikeInfoForm({ bikeCreated, setBikeCreated, setBike }) {
                     name="description"
                     rows="4"
                     required
-                    placeholder="Describe Your Car..."
+                    placeholder="Describe Your Bike..."
                     value={formData.description}
                     onChange={handleInputChange}
                   />

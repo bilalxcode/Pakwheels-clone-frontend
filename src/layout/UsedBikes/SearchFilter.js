@@ -209,7 +209,7 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
         variant="contained"
         color="primary"
         onClick={getAllAds}
-        style={{ marginTop: "1em" }}
+        style={{ marginTop: "1em", outline: "none", border: "none" }}
       >
         Apply Filter
       </Button>

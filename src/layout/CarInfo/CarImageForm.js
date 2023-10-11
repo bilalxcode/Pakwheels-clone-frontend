@@ -306,7 +306,12 @@ function CarImageForm({ carCreated, car }) {
             <DoneIcon fontSize="large" style={{ color: "green" }} />
           ) : (
             // Show the Submit button when neither isLoading nor imageSent is true
-            <Button onClick={submitImage} variant="contained" color="primary">
+            <Button
+              onClick={submitImage}
+              style={{ outline: "none", border: "none" }}
+              variant="contained"
+              color="primary"
+            >
               Submit
             </Button>
           )}
