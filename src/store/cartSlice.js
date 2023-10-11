@@ -23,9 +23,25 @@ const cartSlice = createSlice({
       // Clear the cart by setting orders to an empty array
       state.orders = [];
     },
+    orderToBeUpdated: (state, action) => {
+      // Append the new product to the existing list of products
+      state.orders = [...state.orders, action.payload.orders];
+    },
+    isCartEmpty: (state) => {
+      return {
+        ...state,
+        Yes: true,
+      };
+    },
   },
 });
 
-export const { AddToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const {
+  AddToCart,
+  removeFromCart,
+  clearCart,
+  orderToBeUpdated,
+  isCartEmpty,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

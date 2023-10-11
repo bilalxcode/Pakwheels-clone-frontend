@@ -194,6 +194,10 @@ function OrdersView() {
                   <td>{order.phoneNumber}</td>
                 </tr>
                 <tr style={{ border: "1px solid grey" }}>
+                  <td>Payment Mode:</td>
+                  <td>{order.isPaid ? <p>Stripe</p> : <p>COD</p>}</td>
+                </tr>
+                <tr style={{ border: "1px solid grey" }}>
                   <td>Date:</td>
                   <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 </tr>

@@ -63,6 +63,19 @@ function Navbar() {
       navigate("/sell-vehicle/post-ad");
     }
   };
+  // // ... rest of your code
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const dispatch = useDispatch();
+  // ... other state and variable declarations
+
+  useEffect(() => {
+    // Check if the current location is the root ("/") page
+    if (location.pathname === "/" || location.pathname === "/my-cart") {
+      // Dispatch the DeActivate action
+      dispatch(Deactivate());
+    }
+  }, [dispatch, location.pathname]);
 
   const handleOptionClick = (option) => {
     console.log(option);
@@ -217,24 +230,6 @@ function Navbar() {
                     Videos
                   </Button>
                 </Grid>
-                {/* <Grid item xs>
-                  <Button
-                    variant="contained"
-                    style={{
-                      background: "transparent",
-                      borderRadius: "10px",
-                      height: "40px",
-                      color: "white",
-                      textAlign: "center",
-                      boxShadow: "none",
-                      border: activeTab === "More" ? "1px solid white" : "none",
-                      color: activeTab === "More" ? "red" : "white",
-                    }}
-                    onClick={() => handleOptionClick("More")}
-                  >
-                    More
-                  </Button>
-                </Grid> */}
               </Hidden>
               <Grid item xs>
                 <Button
