@@ -1,16 +1,25 @@
+//imports
+import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   ButtonBase,
   Checkbox,
   CircularProgress,
   FormControlLabel,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import DoneIcon from "@mui/icons-material/Done"; // Import the tick emoji icon
+import DoneIcon from "@mui/icons-material/Done";
 import Button from "@mui/material";
+
+//hooks
+import { useSelector } from "react-redux";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+//axios
+import axios from "axios";
 
 function CarInfoForm({ carCreated, setCarCreated, setCar }) {
   const user = useSelector((state) => state.authentication.user);
@@ -30,9 +39,8 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
     engineCapacity: "",
     assembly: "",
   });
-  const [selectedFeatures, setSelectedFeatures] = useState([]); // State to hold selected features
-  //   const [carCreated, setCarCreated] = useState(false); // State to hold selected features
-  const [isLoading, setIsLoading] = useState(false); // State to control the loader
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -42,11 +50,9 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
     console.log(userId);
 
     try {
-      setIsLoading(true); // Show the loader
+      setIsLoading(true);
 
-      // Simulate a 2-second delay for demonstration purposes
       setTimeout(async () => {
-        // Send a POST request to your server
         const response = await axios.post(
           "http://localhost:8080/ad/post-car-ad",
           {
@@ -62,17 +68,16 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
         );
 
         if (response.status === 200) {
-          setIsLoading(false); // Hide the loader
-          toast.success("Step 1 Completed"); // Display a success message
+          setIsLoading(false);
+          toast.success("Step 1 Completed");
           setCarCreated(true);
           console.log("car created without approval");
           const carData = response.data.car;
           setCar(carData);
           console.log(carData);
         } else {
-          setIsLoading(false); // Hide the loader
+          setIsLoading(false);
 
-          //   alert(response.data.error);
           toast.error(response.data.error);
         }
       }, 2000);
@@ -132,24 +137,26 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
     setFormData({ ...formData, modelYear: event.target.value });
   };
 
-  const [priceMagnitude, setPriceMagnitude] = useState(""); // State to hold the price magnitude
-  const [isPriceValid, setIsPriceValid] = useState(true); // Initially, the price is valid
+  const [priceMagnitude, setPriceMagnitude] = useState("");
+  const [isPriceValid, setIsPriceValid] = useState(true);
 
-  // Function to calculate magnitude and check if price is valid
   const calculateMagnitudeAndValidity = (value) => {
     if (value === "") {
-      setIsPriceValid(true); // Price is valid when it's empty
-      return null; // Render null when empty
+      setIsPriceValid(true);
+      return null;
     }
 
-    const priceValue = parseInt(value, 10); // Parse the price as an integer
+    const priceValue = parseInt(value, 10);
 
-    if (priceValue >= 100000000) {
-      setIsPriceValid(false); // Price is invalid when >= 100,000,000
+    if (priceValue >= 1000000000) {
+      setIsPriceValid(false);
       return "Invalid Price";
-    } else if (priceValue >= 10000000) {
+    } else if (priceValue >= 100000000) {
       setIsPriceValid(true);
       return "Crores";
+    } else if (priceValue >= 10000000) {
+      setIsPriceValid(true);
+      return "Crore";
     } else if (priceValue >= 1000000) {
       setIsPriceValid(true);
       return "Lacs";
@@ -172,13 +179,12 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
   };
 
   useEffect(() => {
-    // Update the price magnitude and validity when the "price" field changes
     const updatePriceMagnitude = () => {
       const magnitude = calculateMagnitudeAndValidity(formData.price);
       setPriceMagnitude(magnitude);
     };
 
-    updatePriceMagnitude(); // Initial calculation
+    updatePriceMagnitude();
   }, [formData.price]);
 
   return (
@@ -189,7 +195,7 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
           width: "100%",
           height: "100%",
           border: "2px solid lightgrey",
-          borderStyle: "outset", // Center horizontally
+          borderStyle: "outset",
         }}
       >
         <div className="card-content">
@@ -429,15 +435,14 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
                       maxWidth: "300px",
                       margin: "0 auto",
                       borderRadius: "10px",
-                      borderStyle: "outset", // Center horizontally
-                      // Limit the maximum width
+                      borderStyle: "outset",
                     }}
                   >
                     {features.map((feature, index) => (
                       <div
                         key={index}
                         style={{
-                          width: "50%", // 2 items per row (50% / 2)
+                          width: "50%",
                           padding: "0px",
                           boxSizing: "border-box",
                           display: "flex",
@@ -509,9 +514,9 @@ function CarInfoForm({ carCreated, setCarCreated, setCar }) {
               </div>
             </div>
             {isLoading ? (
-              <CircularProgress size={32} /> // Show the loader
+              <CircularProgress size={32} />
             ) : carCreated ? (
-              <DoneIcon fontSize="large" style={{ color: "green" }} /> // Show the tick emoji
+              <DoneIcon fontSize="large" style={{ color: "green" }} />
             ) : (
               <button type="submit" className="btn btn-primary mt-3">
                 Submit

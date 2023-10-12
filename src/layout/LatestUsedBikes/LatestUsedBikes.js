@@ -1,8 +1,15 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
+import { CircularProgress } from "@mui/material";
+
+//axios
+import axios from "axios";
+
+//splide
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/dist/css/themes/splide-default.min.css";
-import axios from "axios";
-import { CircularProgress } from "@mui/material";
 
 function LatestUsedBikes() {
   const splideOptions = {
@@ -24,7 +31,6 @@ function LatestUsedBikes() {
           const ads = response.data.bikes;
           const approvedAds = ads.filter((ad) => ad.isApproved);
 
-          // Sort approved ads by a date field (e.g., createdAt) in descending order
           approvedAds.sort((ad1, ad2) => {
             return new Date(ad2.createdAt) - new Date(ad1.createdAt);
           });
@@ -50,8 +56,8 @@ function LatestUsedBikes() {
     padding: "10px",
     border: "1px solid #ccc",
     borderRadius: "5px",
-    width: "300px", // Set the desired width for each slide
-    height: "320px", // Set the desired height for each slide
+    width: "300px",
+    height: "320px",
     marginBottom: "20px",
   };
 
@@ -74,10 +80,10 @@ function LatestUsedBikes() {
   };
 
   const imageStyle = {
-    width: "100%", // Set the desired width for the images
-    height: "200px", // Set the desired height for the images
+    width: "100%",
+    height: "200px",
     objectFit: "cover",
-    borderRadius: "0.6em", // Maintain aspect ratio and cover the entire container
+    borderRadius: "0.6em",
   };
 
   function formatPrice(price) {

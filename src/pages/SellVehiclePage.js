@@ -1,7 +1,10 @@
+//imports
 import React from "react";
 import Navbar from "../layout/Navbar/Navbar";
 import CarAdCard from "../layout/PostCarAd/CarAdCard";
 import BikeAdCard from "../layout/PostBikeAd/BikeAdCard";
+
+//material-ui
 import Grid from "@mui/material/Grid";
 
 function SellVehiclePage() {

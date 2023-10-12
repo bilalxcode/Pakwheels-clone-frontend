@@ -1,10 +1,15 @@
+//imports
 import React from "react";
 import Navbar from "../layout/Navbar/Navbar";
 import Footer from "../layout/Footer/Footer";
 import MyAdsPofile from "../layout/MyAds/MyAdsPofile";
 import AllAdsPreview from "../layout/MyAds/AllAdsPreview";
+
+//hooks
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+
+//store
 import { Activate } from "../store/navbarSlice";
 
 function Myads() {

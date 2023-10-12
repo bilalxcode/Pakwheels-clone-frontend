@@ -1,14 +1,27 @@
+//imports
 import React, { useState, useEffect } from "react";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/splide/dist/css/themes/splide-default.min.css";
+
+//material-ui
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import axios from "axios";
-import { toast } from "react-toastify";
+
+//hooks
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//store
 import { Activate } from "../../store/navbarSlice";
+
+//toastify
+import { toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
+//splide
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 
 function Browsevideos() {
   const [videos, setVideos] = useState([]);
@@ -83,7 +96,6 @@ function Browsevideos() {
     navigate("/videos");
   };
 
-  // Function to open YouTube video in a new window
   const openYouTubeVideo = (videoUrl) => {
     window.open(videoUrl, "_blank");
   };

@@ -1,6 +1,7 @@
-import axios from "axios";
+//imports
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+
+//material-ui
 import {
   Card,
   CardContent,
@@ -26,11 +27,17 @@ import {
   Tabs,
 } from "@mui/material";
 
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
 function ProductsView() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(1);
-  const [rowsPerPage] = useState(3); // Number of rows per page
+  const [rowsPerPage] = useState(3);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [editedProductName, setEditedProductName] = useState("");
@@ -39,7 +46,7 @@ function ProductsView() {
   const [editedProductDescription, setEditedProductDescription] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [productToDeleteId, setProductToDeleteId] = useState("");
-  const [activeTab, setActiveTab] = useState(0); // Added activeTab state
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     getAllCategories();
@@ -82,12 +89,10 @@ function ProductsView() {
     }
   };
 
-  // Function to handle page change
   const handlePageChange = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Function to open the edit dialog
   const openEditDialog = (productId) => {
     const product = products.find((p) => p._id === productId);
 
@@ -112,7 +117,6 @@ function ProductsView() {
     setOpenDialog(false);
   };
 
-  // Function to handle saving changes
   const handleSaveChanges = async () => {
     try {
       const response = await axios.post(
@@ -192,7 +196,7 @@ function ProductsView() {
                 key={category._id}
                 style={{
                   fontSize: "1em",
-                  outline: "none", // Remove outline border
+                  outline: "none",
                 }}
                 label={category.name}
               />
@@ -204,7 +208,6 @@ function ProductsView() {
               (product) => product.category === category._id
             );
 
-            // Calculate the start and end index for pagination
             const startIndex = (page - 1) * rowsPerPage;
             const endIndex = startIndex + rowsPerPage;
 

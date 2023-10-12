@@ -1,28 +1,37 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import { Avatar, Button, CircularProgress } from "@mui/material";
-import { Form, useNavigate } from "react-router-dom";
-import axios from "axios";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import DoneIcon from "@mui/icons-material/Done"; // Import the tick emoji icon
+import DoneIcon from "@mui/icons-material/Done";
+
+//hooks
+import { useNavigate } from "react-router-dom";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+//axios
+import axios from "axios";
 
 function CarImageForm({ carCreated, car }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [mainImageIndex, setMainImageIndex] = useState(-1);
   const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); // State for loading indicator
-  const [imageSent, setImageSent] = useState(false); // State for loading indicator
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageSent, setImageSent] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState("warning");
   const [alertMessage, setAlertMessage] = useState("");
-  const [showAlert, setShowAlert] = useState(false); // State for showing the alert
+  const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate();
 
   const handleImageUpload = async (event) => {
     const files = event.target.files;
     const newUploadedFiles = [];
-    const formData = new FormData(); // Create FormData here
+    const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -38,17 +47,14 @@ function CarImageForm({ carCreated, car }) {
         newUploadedFiles.push({ file, isMain: newUploadedFiles.length === 0 });
 
         if (newUploadedFiles.length === files.length) {
-          // All files have been read and added to state
           setUploadedFiles(newUploadedFiles);
 
-          // Now you can log formData here, and it should work
           console.log("FormData after appending files:", formData);
         }
       };
 
       reader.readAsDataURL(file);
 
-      // Append the file to FormData
       formData.append(`image${i}`, file);
     }
   };
@@ -63,7 +69,6 @@ function CarImageForm({ carCreated, car }) {
       const file = files[i];
       newUploadedFiles.push({ file, isMain: false });
 
-      // Create a URL for each selected image to display a preview
       const imageURL = URL.createObjectURL(file);
       newSelectedImages.push({ src: imageURL, isMain: false });
     }
@@ -83,21 +88,14 @@ function CarImageForm({ carCreated, car }) {
     e.preventDefault();
 
     if (!carCreated) {
-      // Display an alert to the user to submit car info form first
-      // setAlertSeverity("warning");
-      // setAlertMessage("Please submit the car info form first.");
-      // setShowAlert(true); // Set showAlert to true to display the alert
-      toast.error("Please submit the car info form first."); // Display a success message
+      toast.error("Please submit the car info form first.");
 
       setSelectedImages([]);
       setUploadedFiles([]);
       return;
     }
     if (uploadedFiles.length <= 2) {
-      // setAlertSeverity("warning");
-      // setAlertMessage("Please choose minimum 3 images.");
-      // setShowAlert(true); // Set showAlert to true to display the alert
-      toast.error("Please choose minimum 3 images."); // Display a success message
+      toast.error("Please choose minimum 3 images.");
 
       return;
     }
@@ -106,7 +104,7 @@ function CarImageForm({ carCreated, car }) {
     const formData = new FormData();
 
     uploadedFiles.forEach((fileData, index) => {
-      formData.append("images[]", fileData.file); // Use the same field name "images[]"
+      formData.append("images[]", fileData.file);
     });
 
     formData.append("car", JSON.stringify(car));
@@ -123,13 +121,12 @@ function CarImageForm({ carCreated, car }) {
       );
 
       if (response.status === 200) {
-        console.log("Images uploaded successfully");
         setImageSent(true);
-        toast.success("Step 2 Completed"); // Display a success message
+        toast.success("Step 2 Completed");
 
         setTimeout(() => {
           setIsLoading(false);
-        }, 2000); // Set loading state to false when the request is completed
+        }, 2000);
       }
     } catch (error) {
       setIsLoading(false);
@@ -138,21 +135,18 @@ function CarImageForm({ carCreated, car }) {
       setAlertSeverity("error");
       setAlertMessage("Error uploading images. Please try again.");
       setShowAlert(true);
-      toast.error("Error uploading images. Please try again."); // Display a success message
-      // Set showAlert to true to display the alert
+      toast.error("Error uploading images. Please try again.");
     }
   };
 
   const handleSubmit = async () => {
     if (uploadedFiles.length === 0) {
-      // Show the alert if no images are chosen
       setShowAlert(true);
-      return; // Don't proceed with the submission
+      return;
     }
     setShowAlert(false);
 
     const formData = new FormData();
-    // Append each uploaded file to the FormData
     uploadedFiles.forEach((fileData, index) => {
       formData.append(`image${index}`, fileData.file);
     });
@@ -165,16 +159,14 @@ function CarImageForm({ carCreated, car }) {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data", // Set the correct content type
+            "Content-Type": "multipart/form-data",
           },
         }
       );
 
       if (response.status === 200) {
         console.log("Images uploaded successfully");
-        // Handle the response from the server as needed
       } else {
-        // Handle non-200 status codes here
         console.error("Image upload failed with status code:", response.status);
         setAlertSeverity("error");
         setAlertMessage("Image upload failed. Please try again.");
@@ -200,7 +192,7 @@ function CarImageForm({ carCreated, car }) {
           flexDirection: "column",
           alignItems: "center",
           height: "130%",
-          borderStyle: "outset", // Center horizontally
+          borderStyle: "outset",
         }}
       >
         <div className="card-content">
@@ -218,7 +210,6 @@ function CarImageForm({ carCreated, car }) {
                   accept="image/jpeg, image/jpg, image/png, image/gif"
                   style={{ display: "none" }}
                   multiple
-                  // onChange={handleImageUpload}
                   onChange={onInputChange}
                 />
               </label>
@@ -299,13 +290,10 @@ function CarImageForm({ carCreated, car }) {
           </div>
 
           {isLoading ? (
-            // Show loading indicator while isLoading is true
             <CircularProgress />
           ) : imageSent ? (
-            // Show the DoneIcon when imageSent is true
             <DoneIcon fontSize="large" style={{ color: "green" }} />
           ) : (
-            // Show the Submit button when neither isLoading nor imageSent is true
             <Button
               onClick={submitImage}
               style={{ outline: "none", border: "none" }}

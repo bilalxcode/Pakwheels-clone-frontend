@@ -1,55 +1,48 @@
+//imports
 import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import "./HomeWidgetModal";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { SignUp, login } from "../../store/authenticationSlice";
-import { Deactivate } from "../../store/navbarSlice";
-import Loader from "../../components/Loader";
-import { useNavigate } from "react-router-dom";
+
+//material-ui
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+
+//hooks
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+
+//store
+import { SignUp, login } from "../../store/authenticationSlice";
+import { Deactivate } from "../../store/navbarSlice";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
+//google login
 import GoogleLogin from "react-google-login";
 import { gapi } from "gapi-script";
-import { ToastContainer, toast } from "react-toastify";
 
 const HomeWidgetModal = ({ isOpen, closeModal }) => {
   const [showLoginForm, setShowLoginForm] = useState(true);
   const [registrationError, setRegistrationError] = useState(null);
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [loginEmail, setLoginEmail] = useState("");
+  const [LoginPassword, setLoginPassword] = useState("");
   const ClientId =
     "857582053843-uhnd2vrnefg570aim0e4h754kcgdims8.apps.googleusercontent.com";
 
-  // const ClientId = process.env.GOOGLE_LOGIN_CLIENT_ID;
-
-  // In your component, use the selector to access userVerified
   const overlayClassName = "custom-overlay";
-
-  // const customModalStyle = {
-  //   overlay: {
-  //     backgroundColor: "rgba(0, 0, 0, 0.8)",
-  //     display: "flex",
-  //     justifyContent: "center",
-  //     alignItems: "center",
-  //   },
-  //   content: {
-  //     width: "30%",
-  //     minWidth: "30%",
-  //     maxWidth: "500px",
-  //     maxHeight: "90%",
-  //     margin: "auto",
-  //     padding: "20px",
-  //     borderRadius: "15px",
-  //   },
-  // };
 
   const customModalStyle = {
     overlay: {
@@ -59,7 +52,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       alignItems: "center",
     },
     content: {
-      width: "80%", // Default width for larger screens
+      width: "80%",
       maxWidth: "500px",
       maxHeight: "90%",
       margin: "auto",
@@ -68,8 +61,6 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     },
   };
 
-  // Add responsive styles for different screen sizes using media queries
-  // Adjust the width, padding, or other styles as needed for each breakpoint
   if (window.matchMedia("(max-width: 576px)").matches) {
     customModalStyle.content.width = "90%";
   }
@@ -108,7 +99,6 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     try {
       setIsLoading(true);
 
-      // Send a POST request to your login endpoint on the server
       const response = await axios.post(
         "http://localhost:8080/auth/logIn",
         {
@@ -122,27 +112,21 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         }
       );
 
-      console.log("Login response:", response.data); // Log the response data
       setRegistrationError("");
-      console.log("Login successful");
 
       const jwtToken = response.data.token;
       const user = response.data.user;
-      console.log("before Login Data:", { user: user, token: jwtToken });
 
       dispatch(login({ user, token: jwtToken }));
       dispatch(Deactivate());
 
       document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
 
-      console.log("data sent" + document.cookie);
-      console.log("after Login Data:", { user: user, token: jwtToken });
-
       setTimeout(() => {
-        setIsLoading(false); // Set loading to false
-        closeModal(); // Close the modal after the delay
+        setIsLoading(false);
+        closeModal();
       }, 2000);
-      navigate("/"); // Redirect to the home page
+      navigate("/");
     } catch (error) {
       console.error("Login error:", error);
 
@@ -150,13 +134,10 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         if (error.response.status === 400) {
           if (error.response.data.error === "Email not found") {
             toast.error("Email not found");
-            console.log("email not found");
           } else if (error.response.data.error === "Invalid password") {
             toast.error("Invalid password");
-            console.log("password not found");
           } else if (error.response.data.error === "User is banned") {
             toast.error("You are banned ❌");
-            console.log("user is banned");
           }
         } else if (error.response.status === 500) {
           setRegistrationError("An error occurred during login.");
@@ -209,7 +190,6 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         }
       );
       setRegistrationError("");
-      console.log("Registration successful");
 
       if (response.status === 200) {
         setIsLoading(false);
@@ -259,9 +239,6 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
     const { googleId, imageUrl, email, name, givenName, familyName } =
       res.profileObj;
 
-    console.log("user sign in success", res.profileObj);
-
-    // Store the name and email in component state
     setUserName(name);
     setUserEmail(email);
 
@@ -269,14 +246,12 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       return toast.error("Invalid Email");
     }
 
-    console.log("user name", name, "email", email);
-
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/saveGoogleUser",
         {
-          userName: name, // Use the name obtained from the response
-          userEmail: email, // Use the email obtained from the response
+          userName: name,
+          userEmail: email,
         },
         {
           headers: {
@@ -286,26 +261,22 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       );
 
       if (response.status === 200) {
-        console.log("sign in successfully");
         setRegistrationError("");
-        console.log("Login successful");
 
         const jwtToken = response.data.token;
         const user = response.data.user;
-
-        console.log("response Data:", { user: user, token: jwtToken });
 
         dispatch(login({ user, token: jwtToken }));
         dispatch(Deactivate());
 
         document.cookie = `jwtToken=${jwtToken}; path=/; max-age=3600`;
-        closeModal(); // Close the modal after the delay
+        closeModal();
       } else if (
         response.status === 401 &&
         response.data.error === "User is banned"
       ) {
-        const errorMessage = response.data.message; // Get the custom error message
-        setRegistrationError(errorMessage); // Display the error message on the frontend
+        const errorMessage = response.data.message;
+        setRegistrationError(errorMessage);
       } else {
         setRegistrationError("Sign in error 2");
       }
@@ -325,17 +296,16 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
       gapi.client.init({
         clientId: ClientId,
         scope: "",
-        prompt: "select_account", // Set prompt to "select_account"
+        prompt: "select_account",
       });
     }
 
     gapi.load("client:auth2", start);
   }, []);
-
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={handleModalClose} // Call handleModalClose when the modal is closed
+      onRequestClose={handleModalClose}
       contentLabel="Example Modal"
       style={customModalStyle}
     >
@@ -343,7 +313,7 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
         <ToastContainer />
         <div className="row justify-content-center">
           <div className="col-md-12">
-            {isLoading ? ( // Display circular progress when isLoading is true
+            {isLoading ? (
               <div className="d-flex justify-content-center align-items-center">
                 <CircularProgress color="primary" />
               </div>
@@ -412,10 +382,10 @@ const HomeWidgetModal = ({ isOpen, closeModal }) => {
                         borderRadius: "5px",
                         backgroundColor: "#FFFFFF",
                         transition: "background-color 0.3s, color 0.3s",
-                        position: "absolute", // Position it absolutely
-                        bottom: "-22vh", // Adjust the distance from the bottom
-                        left: "50%", // Center it horizontally
-                        transform: "translateX(-50%)", // Center it horizontally
+                        position: "absolute",
+                        bottom: "-22vh",
+                        left: "50%",
+                        transform: "translateX(-50%)",
                       }}
                     >
                       Forgot Password

@@ -1,16 +1,23 @@
+//imports
 import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
+
+//material-ui
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Typography, CircularProgress } from "@mui/material";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import Footer from "../Footer/Footer";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { DoneOutline } from "@mui/icons-material";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
 
 function ForgetPasswordPage() {
   const [email, setEmail] = useState("");
@@ -33,14 +40,13 @@ function ForgetPasswordPage() {
   const handleEmailChange = (e) => {
     const enteredEmail = e.target.value;
     setEmail(enteredEmail);
-    // Check for a valid email format using a regular expression
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     setValidEmail(emailPattern.test(enteredEmail));
   };
 
   const handleSubmit = async () => {
     if (validEmail) {
-      setLoading(true); // Start loading
+      setLoading(true);
       try {
         const response = await axios.post(
           "http://localhost:8080/auth/resetPassword",
@@ -52,25 +58,22 @@ function ForgetPasswordPage() {
         if (response.status === 200) {
           toast.success("Verification Code Sent!");
 
-          // Wait for 2000 milliseconds before rendering the Verification Card
           setTimeout(() => {
-            setLoading(false); // Stop loading
+            setLoading(false);
             setShowVerificationCard(true);
           }, 2000);
         } else {
-          // Handle different status codes here
           if (response.status === 400) {
-            // Handle 404 status code
             toast.error("Invalid email");
           } else {
             toast.error(response.data.error);
           }
-          setLoading(false); // Stop loading on error
+          setLoading(false);
         }
       } catch (error) {
         console.error("Sending verification email error: " + error);
         toast.error(error.response.data.error);
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     } else {
       console.log("Invalid email format");
@@ -93,19 +96,17 @@ function ForgetPasswordPage() {
         setIsVerificationCodeCorrect(true);
         setVerificationDone(true);
       } else {
-        // Handle different status codes here
         if (response.status === 400) {
-          // Handle 400 status code (Invalid email or verification code)
           toast.error("Invalid email or verification code");
         } else {
           toast.error("Failed to validate verification code");
         }
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     } catch (error) {
       console.error("Verification error: " + error);
       toast.error("Failed to validate verification code");
-      setLoading(false); // Stop loading on error
+      setLoading(false);
     }
   };
 
@@ -127,8 +128,6 @@ function ForgetPasswordPage() {
       return;
     }
 
-    console.log("New password:", newPassword);
-    // Add logic to send the new password to the server here
     try {
       const response = await axios.post(
         "http://localhost:8080/auth/finalResetPassword",
@@ -143,11 +142,9 @@ function ForgetPasswordPage() {
         setPasswordUpdated(true);
         setPasswordErrors([""]);
       } else {
-        // Handle different status codes here
-
         toast.error("Failed to validate verification code");
 
-        setLoading(false); // Stop loading on error
+        setLoading(false);
       }
     } catch (error) {
       console.error("Verification error: " + error);
@@ -158,7 +155,6 @@ function ForgetPasswordPage() {
 
   useEffect(() => {
     if (verificationDone) {
-      // Simulate waiting for 1 second before rendering the other card
       setTimeout(() => {
         setShowVerificationCard(false);
       }, 1000);
@@ -170,7 +166,6 @@ function ForgetPasswordPage() {
       <div>
         <Navbar />
         {showVerificationCard ? (
-          // Render the verification card
           <Card
             sx={{
               maxWidth: 585,
@@ -227,7 +222,6 @@ function ForgetPasswordPage() {
             </CardContent>
           </Card>
         ) : isVerificationCodeCorrect ? (
-          // Render the password reset card
           <Card
             sx={{
               maxWidth: 585,
@@ -321,7 +315,6 @@ function ForgetPasswordPage() {
             </CardContent>
           </Card>
         ) : (
-          // Render the initial email input card
           <Card
             sx={{
               maxWidth: 585,

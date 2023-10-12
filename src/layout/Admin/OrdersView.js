@@ -1,13 +1,20 @@
-import { CircularProgress } from "@mui/material";
-import axios from "axios";
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
+import { CircularProgress } from "@mui/material";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
 
 function OrdersView() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState({}); // Initialize as an empty object
-  const [allProducts, setAllProducts] = useState({}); // Initialize as an empty object
+  const [products, setProducts] = useState({});
+  const [allProducts, setAllProducts] = useState({});
 
   const getOrders = async () => {
     try {
@@ -19,7 +26,7 @@ function OrdersView() {
         console.log("products", products);
 
         setOrders(orders);
-        setIsLoading(false); // Set loading to false when data is loaded
+        setIsLoading(false);
         preloadProductData(products);
         setAllProducts(products);
       } else {
@@ -38,7 +45,6 @@ function OrdersView() {
     }
     setProducts(productMap);
   };
-  // Function to calculate the total amount for an order
   const calculateTotalAmount = (order, products) => {
     let totalPrice = 0;
 
@@ -51,8 +57,7 @@ function OrdersView() {
       }
     }
 
-    // Add shipping charges (e.g., 150 PKR) to the total price
-    totalPrice += 150; // You can adjust the shipping charges as needed
+    totalPrice += 150;
 
     return totalPrice.toFixed(2);
   };
@@ -68,7 +73,6 @@ function OrdersView() {
   const handleDispatchClick = async (order) => {
     console.log(order);
     try {
-      // Display a loading indicator on the dispatch button
       const updatedOrders = orders.map((o) =>
         o._id === order._id ? { ...o, isDispatching: true } : o
       );
@@ -77,7 +81,7 @@ function OrdersView() {
       const response = await axios.post(
         "http://localhost:8080/admin/dispatchOrder",
         {
-          orderId: order._id, // Send the order ID instead of the whole order object
+          orderId: order._id,
         },
         {
           headers: {
@@ -87,14 +91,12 @@ function OrdersView() {
       );
 
       if (response.status === 200) {
-        // Update the local order with the dispatched status
         toast.success("Order Dispatched");
         const updatedOrders = orders.map((o) =>
           o._id === order._id ? { ...o, isDispatched: true } : o
         );
         setOrders(updatedOrders);
       } else {
-        // Display an error message and reset the dispatching state
         toast.error(response.data.message);
         const updatedOrders = orders.map((o) =>
           o._id === order._id ? { ...o, isDispatching: false } : o
@@ -173,8 +175,6 @@ function OrdersView() {
                           <tr key={productId}>
                             <td>{products[productId]?.name}</td>
                             <td>PKR {products[productId]?.price}</td>
-
-                            {/* Display Quantity */}
                           </tr>
                         ))}
                       </tbody>
@@ -208,8 +208,6 @@ function OrdersView() {
                 <tr style={{ border: "1px solid grey" }}>
                   <td>Total Price:</td>
                   <td>PKR {calculateTotalAmount(order, allProducts)}</td>
-                  {/* Pass the 'products' array */}
-                  {/* Display Total Price */}
                 </tr>
                 <tr>
                   <td colSpan="2">

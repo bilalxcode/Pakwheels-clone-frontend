@@ -1,7 +1,10 @@
+//imports
 import React from "react";
-import { Grid, Container } from "@mui/material";
 import Searchbox from "./Searchbox";
 import Navbar from "../Navbar/Navbar";
+
+//material-ui
+import { Grid, Container } from "@mui/material";
 
 function SearchOverlay() {
   return (

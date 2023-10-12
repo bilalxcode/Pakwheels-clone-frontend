@@ -1,17 +1,28 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import { Grid, Typography, Box, MenuItem, Select, Button } from "@mui/material";
+
+//toastify
 import { toast } from "react-toastify";
+
+//axios
 import axios from "axios";
+
+//hooks
 import { useNavigate } from "react-router-dom";
-import { Activate } from "../../store/navbarSlice";
 import { useDispatch } from "react-redux";
+
+//store
+import { Activate } from "../../store/navbarSlice";
 
 function Searchbox() {
   const [cities, setCities] = useState([]);
   const [engineCapacityOptions, setEngineCapacityOptions] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(""); // Store selected city
-  const [selectedPriceRange, setSelectedPriceRange] = useState(["", ""]); // Store selected price range as [minPrice, maxPrice]
-  const [selectedEngineCapacity, setSelectedEngineCapacity] = useState(""); // Store selected engine capacity
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedPriceRange, setSelectedPriceRange] = useState(["", ""]);
+  const [selectedEngineCapacity, setSelectedEngineCapacity] = useState("");
 
   useEffect(() => {
     getAllAds();
@@ -48,13 +59,11 @@ function Searchbox() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleSearch = () => {
-    // Build the query parameters string
     const queryParams = new URLSearchParams();
     if (selectedCity) {
       queryParams.append("city", selectedCity);
     }
     if (selectedPriceRange[0] !== "" && selectedPriceRange[1] !== "") {
-      // Append the selected price range as "minPrice-maxPrice"
       const priceRange = `${selectedPriceRange[0]}-${selectedPriceRange[1]}`;
       queryParams.append("price", priceRange);
     }
@@ -62,11 +71,9 @@ function Searchbox() {
       queryParams.append("engineCapacity", selectedEngineCapacity);
     }
 
-    // Construct the full URL with query parameters
     const searchUrl = `/used-cars?${queryParams.toString()}`;
     dispatch(Activate({ user: "Used Cars" }));
     localStorage.setItem("ActiveTab", "Used Cars");
-    // Navigate to the search URL
     navigate(searchUrl, {
       state: {
         city: selectedCity,
@@ -164,8 +171,6 @@ function Searchbox() {
                   <MenuItem value="60">60 Lacs</MenuItem>
                   <MenuItem value="80">80 Lacs</MenuItem>
                   <MenuItem value="100">100 Lacs</MenuItem>
-
-                  {/* Add other price options */}
                 </Select>
               </div>
             </Grid>

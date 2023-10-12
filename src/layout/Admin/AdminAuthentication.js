@@ -1,14 +1,16 @@
+//imports
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AdminLoggedIn, AdminLoggedOut } from "../../store/adminSlice";
 import { useNavigate } from "react-router-dom";
 
 const AdminAuthentication = () => {
+  //dispatch
   const dispatch = useDispatch();
 
+  //useEffect
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
-    console.log("checking token", token);
 
     if (token) {
       dispatch(AdminLoggedIn({ token: token }));

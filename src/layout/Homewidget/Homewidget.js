@@ -1,8 +1,13 @@
+//imports
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Grid, Typography, Button } from "@mui/material";
 import HomeWidgetModal from "./HomeWidgetModal";
+
+//hooks
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//material-ui
+import { Grid, Typography, Button } from "@mui/material";
 
 function Homewidget() {
   const user = useSelector((state) => state.authentication.user);

@@ -1,14 +1,8 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import axios from "axios";
+//imports
 import React, { useState } from "react";
+
+//material-ui
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-import { ToastContainer, toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  clearCart,
-  isCartEmpty,
-  orderToBeUpdated,
-} from "../../store/cartSlice";
 import {
   Button,
   TextField,
@@ -16,10 +10,29 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
-import FinishStripeOrder from "./FinishStripeOrder";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+//hooks
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// Define your styles as JavaScript objects
+
+//store
+import {
+  clearCart,
+  isCartEmpty,
+  orderToBeUpdated,
+} from "../../store/cartSlice";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
+//stripe
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+
+//styles
 const cardOptions = {
   base: {
     iconColor: "#c4f0ff",
@@ -56,7 +69,6 @@ const buttonStyles = {
   border: "none",
 };
 
-// Your PaymentForm component
 export default function PaymentForm(props) {
   const [success, setSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
@@ -67,7 +79,7 @@ export default function PaymentForm(props) {
   const orders = useSelector((state) => state.cart.orders);
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberValid, setPhoneNumberValid] = useState(true); // State for phone number validation
+  const [phoneNumberValid, setPhoneNumberValid] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
@@ -89,19 +101,15 @@ export default function PaymentForm(props) {
     const specialCharactersOnlyRegex = /^[!@#$%^&*(),.?":{}|<>]+$/;
 
     if (address.trim() === "") {
-      // Check if the trimmed address is empty
       return alert("Invalid Address");
     } else if (
       numbersOnlyRegex.test(address) ||
       specialCharactersOnlyRegex.test(address)
     ) {
-      // Check if the trimmed address is empty
       return alert("Invalid Address");
     } else if (!isPhoneValid) {
-      // If phone number is not valid, set the phoneNumberValid state to false
       return setPhoneNumberValid(false);
     } else if (hasSpecialCharacters) {
-      // If phone number contains special characters, show an alert
       return alert(
         "Invalid Phone Number. It should not contain special characters."
       );
@@ -130,16 +138,13 @@ export default function PaymentForm(props) {
         console.log("Response from server:", response);
 
         if (response.data.success) {
-          console.log("Successful payment");
           const savedOrder = response.data.savedOrder;
-          console.log("u", savedOrder);
           dispatch(clearCart());
           dispatch(isCartEmpty());
           toast.success("Payment Successfull");
           setSuccess(true);
-          props.setPaymentSuccess(true); // Update the payment success state
+          props.setPaymentSuccess(true);
 
-          // Display circular progress for 1 second
           setTimeout(() => {
             setIsOrderPlaced(true);
 
@@ -179,7 +184,7 @@ export default function PaymentForm(props) {
               >
                 {orders.map((order, index) => {
                   const { name, price, quantity } = order;
-                  const parsedPrice = parseFloat(price); // Parse the price as a float
+                  const parsedPrice = parseFloat(price);
                   const productTotal = parsedPrice * quantity;
                   return (
                     <div key={order._id} style={{ marginTop: "0.5em" }}>
@@ -212,8 +217,8 @@ export default function PaymentForm(props) {
                     variant="contained"
                     style={{
                       outline: "none",
-                      fontSize: "14px", // Adjust the font size as needed
-                      textTransform: "none", // Prevent uppercase text
+                      fontSize: "14px",
+                      textTransform: "none",
                       background: "transparent",
                       marginTop: "3em",
                     }}
@@ -239,7 +244,7 @@ export default function PaymentForm(props) {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     margin="normal"
                     required
-                    error={!phoneNumberValid} // Apply error styling if phoneNumberValid is false
+                    error={!phoneNumberValid}
                     helperText={!phoneNumberValid ? "Invalid Phone Number" : ""}
                   />
                 </form>
@@ -269,7 +274,7 @@ export default function PaymentForm(props) {
         <div
           style={{
             display: "flex",
-            flexDirection: "column", // Column layout for vertical alignment
+            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
           }}

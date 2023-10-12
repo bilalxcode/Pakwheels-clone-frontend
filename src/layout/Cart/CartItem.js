@@ -1,4 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
+//imports
+import React from "react";
+
+//material-ui
 import {
   Button,
   Card,
@@ -8,21 +11,22 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import React from "react"; // Remove useState import
 import DeleteIcon from "@mui/icons-material/Delete";
-import { removeFromCart } from "../../store/cartSlice"; // Import the removeFromCart action
+
+//hooks
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//store
+import { removeFromCart } from "../../store/cartSlice";
 import { Activate } from "../../store/navbarSlice";
 
 function CartItem() {
-  // Get the orders data from the Redux store
   const orders = useSelector((state) => state.cart.orders);
-  const dispatch = useDispatch(); // Get the dispatch function
+  const dispatch = useDispatch();
 
-  // Function to handle delete icon click
   const handleDeleteClick = (orderId) => {
-    // Dispatch the removeFromCart action with the orderId to remove the item
-    dispatch(removeFromCart(orderId)); // Dispatch the removeFromCart action
+    dispatch(removeFromCart(orderId));
   };
 
   const navigate = useNavigate();
@@ -41,21 +45,21 @@ function CartItem() {
 
   return (
     <>
-      {orders.length === 0 ? ( // Check if orders array is empty
+      {orders.length === 0 ? (
         <TableRow>
           <TableCell colSpan={orders.length} align="center">
             <div
               style={{
                 display: "flex",
-                justifyContent: "center", // Center horizontally
-                alignItems: "center", // Center vertically
+                justifyContent: "center",
+                alignItems: "center",
                 height: "200px",
               }}
             >
               <Card
                 style={{
-                  width: "200px", // Set the desired width
-                  height: "100px", // Set the desired height
+                  width: "200px",
+                  height: "100px",
                   margin: "8px",
                   border: "1px solid #EEEEEE",
                 }}
@@ -74,8 +78,8 @@ function CartItem() {
           <div
             style={{
               display: "flex",
-              justifyContent: "center", // Center horizontally
-              alignItems: "center", // Center vertically
+              justifyContent: "center",
+              alignItems: "center",
               height: "400px",
             }}
           >
@@ -84,8 +88,8 @@ function CartItem() {
                 <TableCell>
                   <Card
                     style={{
-                      width: "200px", // Set the desired width
-                      height: "25 0px", // Set the desired height
+                      width: "200px",
+                      height: "25 0px",
                       margin: "8px",
                       border: "1px solid #EEEEEE",
                     }}
@@ -94,8 +98,8 @@ function CartItem() {
                       <div
                         style={{
                           display: "flex",
-                          justifyContent: "center", // Center horizontally
-                          alignItems: "center", // Center vertically
+                          justifyContent: "center",
+                          alignItems: "center",
                           height: "80px",
                           width: "100px",
                           backgroundColor: "#f8f8f9",
@@ -115,8 +119,8 @@ function CartItem() {
                       </div>
                       <div
                         style={{
-                          justifyContent: "center", // Center horizontally
-                          alignItems: "center", // Center vertically
+                          justifyContent: "center",
+                          alignItems: "center",
                           backgroundColor: "#f8f8f9",
                           margin: "0 auto",
                         }}
@@ -125,19 +129,15 @@ function CartItem() {
                           variant="h6"
                           style={{
                             marginTop: "3vh",
-                            textAlign: "center", // Center horizontally
+                            textAlign: "center",
                           }}
                         >
-                          {order.name
-                            .split(" ") // Split the name into words
-                            .slice(0, 3) // Take the first 3 words
-                            .join(" ")}{" "}
-                          {/* Join them back */}
+                          {order.name.split(" ").slice(0, 3).join(" ")}{" "}
                         </Typography>
                         <Typography
                           variant="subtitle1"
                           style={{
-                            textAlign: "center", // Center horizontally
+                            textAlign: "center",
                           }}
                         >
                           PKR {order.price}
@@ -152,7 +152,7 @@ function CartItem() {
                       >
                         <IconButton
                           aria-label="delete"
-                          onClick={() => handleDeleteClick(order._id)} // Handle delete on click
+                          onClick={() => handleDeleteClick(order._id)}
                         >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
@@ -165,7 +165,6 @@ function CartItem() {
           </div>
         </TableRow>
       )}
-      {/* Display the total amount */}
       {orders.length !== 0 && (
         <TableRow>
           <TableCell colSpan={orders.length} align="right">

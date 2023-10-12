@@ -5,15 +5,14 @@ import Modal from "react-modal";
 const NavbarModal = ({ isOpen, closeModal }) => {
   const customModalStyle = {
     overlay: {
-      // Define custom overlay styles here
-      backgroundColor: "rgba(0, 0, 0, 0.7)", // Darken the background
-      zIndex: 1000, // Ensure it's above other elements
+      backgroundColor: "rgba(0, 0, 0, 0.7)",
+      zIndex: 1000,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
     },
     content: {
-      width: "50vw", // Adjust the width as needed
+      width: "50vw",
       margin: "auto",
       height: "18vw",
       padding: "20px",
@@ -87,8 +86,6 @@ const NavbarModal = ({ isOpen, closeModal }) => {
         </div>
         <div style={{ marginTop: "5px" }}></div>
       </div>
-
-      {/* <button onClick={closeModal}>Close Modal</button> */}
     </Modal>
   );
 };

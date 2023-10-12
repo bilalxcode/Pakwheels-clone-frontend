@@ -1,16 +1,25 @@
+//imports
 import React, { useState, useRef } from "react";
-import axios from "axios";
+import HomeWidgetModal from "../Homewidget/HomeWidgetModal";
+
+//material-ui
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
+//hooks
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+//store
 import {
   SignUp,
   login,
   userEmailVerified,
   userLoggedIn,
 } from "../../store/authenticationSlice";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
-import HomeWidgetModal from "../Homewidget/HomeWidgetModal";
+
+//axios
+import axios from "axios";
 
 function ValidationBox() {
   const navigate = useNavigate();

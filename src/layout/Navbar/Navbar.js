@@ -1,4 +1,8 @@
+//imports
 import React, { useState, useEffect } from "react";
+import NavHeader from "./NavHeader";
+
+//material-ui
 import {
   Grid,
   AppBar,
@@ -15,11 +19,16 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+
+//hooks
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
+//store
 import { Activate, Deactivate } from "../../store/navbarSlice";
-import NavHeader from "./NavHeader";
-import MenuIcon from "@mui/icons-material/Menu";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
 
 function Navbar() {
@@ -27,17 +36,12 @@ function Navbar() {
   const location = useLocation();
   const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
   const [selectedOption, setSelectedOption] = useState("");
-  const [dialogOpen, setDialogOpen] = useState(false); // For dialog state
+  const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const isHomePage = location.pathname === "/";
   const user = useSelector((state) => state.authentication.user);
 
   const activeTab = useSelector((state) => state.navbar.activeTab);
-
-  // useEffect(() => {
-  //   const option = localStorage.getItem("ActiveTab");
-  //   dispatch(Activate({ user: option }));
-  // }, []);
 
   const handleMobileMenuOpen = (event) => {
     setMobileMenuAnchor(event.currentTarget);
@@ -58,37 +62,24 @@ function Navbar() {
   const sellCarOpener = (e) => {
     e.preventDefault();
     if (!user) {
-      // If the user is not logged in, show an alert
       toast.error("Please log in first to post an ad.");
     } else {
       navigate("/sell-vehicle/post-ad");
     }
   };
-  // // ... rest of your code
-  // const navigate = useNavigate();
-  // const location = useLocation();
-  // const dispatch = useDispatch();
-  // ... other state and variable declarations
 
   useEffect(() => {
-    // Check if the current location is the root ("/") page
     if (location.pathname === "/" || location.pathname === "/my-cart") {
-      // Dispatch the DeActivate action
       dispatch(Deactivate());
     } else if (location.pathname === "/used-cars") {
-      // Dispatch the DeActivate action
       dispatch(Activate({ user: "Used Cars" }));
     } else if (location.pathname === "/used-bikes") {
-      // Dispatch the DeActivate action
       dispatch(Activate({ user: "Used Bikes" }));
     } else if (location.pathname === "/autostore") {
-      // Dispatch the DeActivate action
       dispatch(Activate({ user: "AutoStore" }));
     } else if (location.pathname === "/videos") {
-      // Dispatch the DeActivate action
       dispatch(Activate({ user: "Videos" }));
     } else if (location.pathname === "/sell-vehicle/post-ad") {
-      // Dispatch the DeActivate action
       dispatch(Deactivate());
     }
   }, [dispatch, location.pathname]);
@@ -96,8 +87,6 @@ function Navbar() {
   const handleOptionClick = (option) => {
     console.log(option);
     setSelectedOption(option);
-    // localStorage.setItem("ActiveTab", option);
-    // dispatch(Activate({ user: option }));
     switch (option) {
       case "Used Cars":
         navigate("/used-cars");
@@ -112,7 +101,6 @@ function Navbar() {
         navigate("/videos");
         break;
       case "More":
-        // Open the dialog for "More" option
         handleDialogOpen();
         break;
       default:
@@ -120,9 +108,7 @@ function Navbar() {
     }
   };
   const handleLogoClick = () => {
-    // Clear local storage for ActiveTab element
     localStorage.removeItem("ActiveTab");
-    // Dispatch the Deactivate action
     dispatch(Deactivate());
   };
 
@@ -335,8 +321,6 @@ function Navbar() {
           </Toolbar>
         </AppBar>
       </div>
-
-      {/* Dialog for "More" option */}
     </>
   );
 }

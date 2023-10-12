@@ -1,5 +1,10 @@
+//imports
 import React from "react";
+
+//material-ui
 import { Card, Avatar } from "@mui/material";
+
+//hooks
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
@@ -8,6 +13,7 @@ function MyAdsProfile() {
   const user = useSelector((state) => state.authentication.user);
   const [selectedGender, setSelectedGender] = useState(user.gender);
 
+  //styles
   const cardStyles = {
     width: "100%",
     margin: "10px 0",
@@ -39,7 +45,7 @@ function MyAdsProfile() {
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start", // Align text to the left
+    alignItems: "flex-start",
   };
 
   const maleImageUrl =

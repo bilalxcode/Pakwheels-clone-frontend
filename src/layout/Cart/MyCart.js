@@ -1,8 +1,10 @@
+//imports
 import React from "react";
 import Navbar from "../Navbar/Navbar";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Activate, Deactivate } from "../../store/navbarSlice";
+import CartItem from "./CartItem";
+import Footer from "../Footer/Footer";
+
+//material-ui
 import {
   Avatar,
   Box,
@@ -13,10 +15,15 @@ import {
   TableContainer,
   Typography,
 } from "@mui/material";
-import CartItem from "./CartItem";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import Footer from "../Footer/Footer";
+
+//hooks
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//store
+import { Activate, Deactivate } from "../../store/navbarSlice";
 
 function MyCart() {
   const dispatch = useDispatch();
@@ -55,7 +62,7 @@ function MyCart() {
           <div
             style={{
               background: "#eee",
-              borderRadius: "10px", // Border radius
+              borderRadius: "10px",
               padding: "20px",
               width: "60em",
               border: "4px solid #012E64",
@@ -64,8 +71,8 @@ function MyCart() {
             <div
               style={{
                 display: "flex",
-                alignItems: "center", // Center vertically within this container
-                marginBottom: "10px", // Add some spacing between the icon and text
+                alignItems: "center",
+                marginBottom: "10px",
               }}
             >
               <Typography variant="h5">My Cart</Typography>

@@ -1,4 +1,7 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   Paper,
   Tabs,
@@ -17,8 +20,12 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+//axios
 import axios from "axios";
 
 function VideosView() {
@@ -29,7 +36,6 @@ function VideosView() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Load videos when the component mounts
     getVideos();
   }, []);
 
@@ -95,7 +101,6 @@ function VideosView() {
       if (response.status === 200) {
         const videos = response.data.videos;
 
-        // Sort videos by date in descending order (newest to oldest)
         videos.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         setVideos(videos);
@@ -117,7 +122,6 @@ function VideosView() {
   };
 
   const handleDeleteVideo = async (videoId) => {
-    console.log(videoId);
     try {
       const response = await axios.post(
         "http://localhost:8080/admin/DeleteVideo",
@@ -133,7 +137,6 @@ function VideosView() {
 
       if (response.status === 200) {
         toast.success("Video Deleted Successfully");
-        // Reload videos after delete
         getVideos();
       } else {
         toast.error("Failed to Delete Video: " + response.data.message);

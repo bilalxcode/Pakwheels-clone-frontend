@@ -1,6 +1,8 @@
+//imports
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 
+//style
 const errorPageStyle = {
   padding: "40px 0",
   background: "#fff",
@@ -28,7 +30,7 @@ const centerStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  minHeight: "30vh", // Adjust the height as needed
+  minHeight: "30vh",
 };
 
 function ErrorPage() {

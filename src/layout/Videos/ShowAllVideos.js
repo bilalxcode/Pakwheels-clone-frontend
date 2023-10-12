@@ -1,27 +1,30 @@
+//imports
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
+
+//axios
+import axios from "axios";
+
+//material-ui
 import { Card, CircularProgress, Typography } from "@mui/material";
+
 function ShowAllVideos() {
   const [videos, setVideos] = useState([]);
   const [latestVideo, setLatestVideo] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // State to track loading state
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Show CircularProgress for 1 second
     const loadingTimer = setTimeout(() => {
-      setIsLoading(false); // After 1 second, set isLoading to false
+      setIsLoading(false);
     }, 1000);
 
-    // Cleanup the timer when the component unmounts
     return () => clearTimeout(loadingTimer);
   }, []);
 
   useEffect(() => {
     if (!isLoading) {
-      // Fetch all videos when the component mounts and isLoading is false
       getVideos();
     }
   }, [isLoading]);
@@ -37,27 +40,22 @@ function ShowAllVideos() {
       if (response.status === 200) {
         const videoData = response.data;
 
-        // Sort videos by date in descending order (newest to oldest)
         const sortedVideos = videoData.videos.sort((a, b) => {
           return new Date(b.date) - new Date(a.date);
         });
 
-        // Reverse the order to make the latest video appear at the top
         const reversedVideos = [...sortedVideos].reverse();
 
         setVideos(reversedVideos);
 
-        // Set the latest video as the first one
         if (reversedVideos.length > 0) {
           setLatestVideo(reversedVideos[0]);
         }
       } else {
         console.error("Failed to get Videos: " + response.data.message);
-        // Handle the error, show a toast message, or perform other error handling here
       }
     } catch (error) {
       console.error("Video fetch error: " + error);
-      // Handle the error, show a toast message, or perform other error handling here
     }
   };
 
@@ -70,7 +68,7 @@ function ShowAllVideos() {
       <div>
         <Navbar />
       </div>
-      {isLoading ? ( // Show CircularProgress while isLoading is true
+      {isLoading ? (
         <div
           style={{
             display: "flex",
@@ -91,7 +89,7 @@ function ShowAllVideos() {
                 </h2>
                 <iframe
                   width="90%"
-                  height="450px" // Increase height for the latest video
+                  height="450px"
                   src={`https://www.youtube.com/embed/${selectedVideo.link}`}
                   title={selectedVideo.title}
                   allowFullScreen
@@ -109,7 +107,7 @@ function ShowAllVideos() {
                 </h2>
                 <iframe
                   width="90%"
-                  height="450px" // Increase height for the latest video
+                  height="450px"
                   src={`https://www.youtube.com/embed/${latestVideo.link}`}
                   title={latestVideo.title}
                   allowFullScreen
@@ -147,11 +145,10 @@ function ShowAllVideos() {
                     listStyle: "none",
                   }}
                 >
-                  {/* Display video information here */}
                   <p>{video.title}</p>
                   <iframe
                     width="270"
-                    height="200" // Reduce height for videos in the list
+                    height="200"
                     src={`https://www.youtube.com/embed/${video.link}`}
                     title={video.title}
                     allowFullScreen

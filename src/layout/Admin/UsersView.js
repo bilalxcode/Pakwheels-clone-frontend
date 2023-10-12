@@ -1,4 +1,7 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   TableContainer,
   Table,
@@ -12,8 +15,12 @@ import {
   Typography,
   CircularProgress,
 } from "@mui/material";
-import axios from "axios";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
 
 function UsersView() {
   const [page, setPage] = useState(0);
@@ -33,9 +40,8 @@ function UsersView() {
   };
 
   useEffect(() => {
-    // Load users when the component mounts
     getUsersData();
-  }, []); // Empty dependency array to run the effect once on mount
+  }, []);
 
   const getUsersData = async () => {
     try {
@@ -71,13 +77,11 @@ function UsersView() {
       );
 
       if (response.status === 200) {
-        // Show the toast on success
         setUserBanned(true);
         setTimeout(() => {
           setLoadingUsers({ ...loadingUsers, [userId]: false });
           toast.success("User Banned Successfully");
 
-          // Fetch data again after a successful ban
           getUsersData();
         }, 2000);
       } else {
@@ -106,13 +110,11 @@ function UsersView() {
       );
 
       if (response.status === 200) {
-        // Show the toast on success
         setUserBanned(true);
         setTimeout(() => {
           setLoadingUsers({ ...loadingUsers, [userId]: false });
           toast.success("User UnBanned Successfully");
 
-          // Fetch data again after a successful ban
           getUsersData();
         }, 2000);
       } else {

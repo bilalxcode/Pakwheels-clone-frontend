@@ -1,3 +1,4 @@
+//imports
 import React from "react";
 import "./Footer.css";
 
@@ -20,13 +21,9 @@ function Footer() {
             Reserved.
           </p>
           <br />
-          <a href="/" >
-            Terms of Service
-          </a>
+          <a href="/">Terms of Service</a>
           &nbsp;|&nbsp;
-          <a href="/" >
-            Privacy Policy
-          </a>
+          <a href="/">Privacy Policy</a>
           <p class="copyright mt0" style={{ color: "#999" }}>
             Reproduction of material from any PakWheels.com pages without
             permission is strictly prohibited.

@@ -33,17 +33,13 @@ function CarContactForm({ carCreated, car }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!carCreated) {
-      // Display an alert to the user to submit car info form first
-      // setAlertSeverity("warning");
-      // setAlertMessage("Please submit the car info form first.");
-      // setShowAlert(true); // Set showAlert to true to display the alert
-      toast.error("Please submit the car info form first."); // Display a success message
+      toast.error("Please submit the car info form first.");
 
       return;
     }
     if (isValidPhoneNumber) {
       console.log("Valid phone number:", phoneNumber);
-      setIsLoading(true); // Start loading
+      setIsLoading(true);
       try {
         const response = await axios.post(
           "http://localhost:8080/ad/seller-contact",
@@ -60,14 +56,14 @@ function CarContactForm({ carCreated, car }) {
 
         if (response.status === 200) {
           console.log("PhoneNumber uploaded successfully");
-          setIsSubmissionSuccess(true); // Set submission success state
+          setIsSubmissionSuccess(true);
           toast.success("Step 3 Completed");
         }
       } catch (error) {
         console.error("Error uploading images:", error);
-        toast.error("Error uploading Contact. Please try again."); // Display an error message
+        toast.error("Error uploading Contact. Please try again.");
       } finally {
-        setIsLoading(false); // Stop loading, whether success or failure
+        setIsLoading(false);
       }
     } else {
       console.log("Invalid phone number");
@@ -109,7 +105,7 @@ function CarContactForm({ carCreated, car }) {
                     : "Invalid phone number format. Please use the format 03XXXXXXXXX."
                 }
                 inputProps={{
-                  pattern: "03[0-9]{9}", // Enforce the pattern format
+                  pattern: "03[0-9]{9}",
                 }}
               />
             </div>

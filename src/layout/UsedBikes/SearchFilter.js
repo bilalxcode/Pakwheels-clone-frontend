@@ -1,4 +1,7 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   Typography,
   FormControl,
@@ -6,7 +9,11 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
+
+//axios
 import axios from "axios";
 
 function SearchFilters({ filterOptions, setFilterOptions }) {
@@ -94,14 +101,6 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
 
       <ToastContainer />
 
-      {/* SEARCH BY KEYWORD */}
-      {/* <FormControl fullWidth variant="outlined">
-        <label>SEARCH BY KEYWORD</label>
-        <input type="text" name="keyword" placeholder="e.g. Honda in Lahore" />
-      </FormControl> */}
-
-      {/* CITY */}
-
       <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
         <label>Available In</label>
         <Select
@@ -118,7 +117,6 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
         </Select>
       </FormControl>
 
-      {/* PROVINCE */}
       <FormControl fullWidth variant="outlined" style={{ marginTop: "0.5em" }}>
         <label>Registered In</label>
         <Select
@@ -183,28 +181,6 @@ function SearchFilters({ filterOptions, setFilterOptions }) {
         </Select>
       </FormControl>
 
-      {/* MAKE */}
-      {/* <FormControl fullWidth variant="outlined">
-        <label>MAKE</label>
-        <Select
-          name="make"
-          onChange={handleFilterChange}
-          value={filterOptions.make}
-        >
-          <MenuItem value="">All</MenuItem>
-          {makes.map((make) => (
-            <MenuItem key={make} value={make}>
-              {make}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl> */}
-
-      {/* PRICE RANGE */}
-      {/* ... */}
-      {/* Add other filter options as needed */}
-
-      {/* Apply Filter Button */}
       <Button
         variant="contained"
         color="primary"

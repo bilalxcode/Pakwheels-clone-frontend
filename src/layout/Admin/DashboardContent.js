@@ -1,4 +1,7 @@
+//imports
 import React, { useState, useEffect } from "react";
+
+//material-ui
 import {
   Avatar,
   Button,
@@ -9,19 +12,25 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
 import { Skeleton } from "@mui/material";
 
-import { AdsData, UsersData } from "../../store/adminSlice";
+//hooks
 import { useDispatch, useSelector } from "react-redux";
+
+//store
+import { AdsData, UsersData } from "../../store/adminSlice";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
 const notClickableButtonStyle = {
   pointerEvents: "none",
   opacity: 1,
 };
 function DashboardContent() {
-  // const adsData = useSelector((state) => state.admin.AllAds);
-  // const usersData = useSelector((state) => state.admin.AllUsers);
   const adminLoggedIn = useSelector((state) => state.admin.isLoggedIn);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -33,7 +42,6 @@ function DashboardContent() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    // Simulate loading for 2 seconds
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
@@ -41,12 +49,11 @@ function DashboardContent() {
     return () => clearTimeout(timer);
   }, []);
   useEffect(() => {
-    // Load ads when the component mounts
     getAllAds();
     getUsersData();
     getVideos();
     getAllProducts();
-  }, []); // Empty dependency array to run the effect once on mount
+  }, []);
 
   const getAllProducts = async () => {
     try {
@@ -113,13 +120,8 @@ function DashboardContent() {
         const users = response.data.users;
         const bikes = response.data.bikes;
 
-        console.log(ads, users);
         setaAdsData(ads);
         setBikeAdsData(bikes);
-        // dispatch(AdsData({ AllAds: ads }));
-        // dispatch(UsersData({ AllUsers: users }));
-
-        // toast.success("Ads loaded successfully");
       } else {
         toast.error("Failed to load ads: " + response.data.message);
       }
@@ -197,7 +199,7 @@ function DashboardContent() {
                     <Avatar
                       alt="Car Avatar"
                       src="https://image.shutterstock.com/image-vector/set-all-transport-means-world-260nw-2223117993.jpg"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                      sx={{ width: 100, height: 100 }}
                     />
                   </CardContent>
                   <CardActions
@@ -260,7 +262,7 @@ function DashboardContent() {
                       src="https://img.freepik.com/free-vector/modern-blue-urban-adventure-suv-vehicle-illustration_1344-205.jpg?w=740&t=st=1695727547~exp=1695728147~hmac=737feb57e9ff6c540fba1b0d810f5463ad1096d0770778e8f8aaaea55a86ed42s"
                       sx={{
                         width: 100,
-                        height: 100, // Increase the size of the Avatar
+                        height: 100,
                       }}
                     />
                   </CardContent>
@@ -310,7 +312,7 @@ function DashboardContent() {
                     <Avatar
                       alt="Car Avatar"
                       src="https://images.vexels.com/media/users/3/152654/isolated/lists/e5694fb12916c00661195c0a833d1ba9-sports-bike-icon.png"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                      sx={{ width: 100, height: 100 }}
                     />
                   </CardContent>
                   <CardActions
@@ -368,7 +370,7 @@ function DashboardContent() {
                     <Avatar
                       alt="Car Avatar"
                       src="https://static.thenounproject.com/png/897669-200.png"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                      sx={{ width: 100, height: 100 }}
                     />
                   </CardContent>
                   <CardActions
@@ -400,7 +402,7 @@ function DashboardContent() {
                     <Avatar
                       alt="Car Avatar"
                       src="https://img.freepik.com/free-vector/people-outdoor-card_24908-55055.jpg?w=360&t=st=1695728414~exp=1695729014~hmac=440939e22e2a66bb20f95df5b0d40dcdf45cf9ebd1838e4f78979e0c778516e2"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                      sx={{ width: 100, height: 100 }}
                     />
                   </CardContent>
                   <CardActions
@@ -442,7 +444,7 @@ function DashboardContent() {
                     <Avatar
                       alt="Car Avatar"
                       src="https://img.freepik.com/premium-vector/engine-oil-filters-isolated-white-background_258836-181.jpg?w=740"
-                      sx={{ width: 100, height: 100 }} // Increase the size of the Avatar
+                      sx={{ width: 100, height: 100 }}
                     />
                   </CardContent>
 

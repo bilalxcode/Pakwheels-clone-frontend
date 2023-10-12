@@ -1,4 +1,9 @@
+//imports
 import React, { useState, useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
+import SearchFilters from "./SearchFilters";
+
+//material-ui
 import {
   Card,
   CardContent,
@@ -13,18 +18,27 @@ import {
   Pagination,
   CircularProgress,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import Navbar from "../Navbar/Navbar";
-import SearchFilters from "./SearchFilters";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ImageIcon from "@mui/icons-material/Image";
-import { useDispatch, useSelector } from "react-redux"; // Import useSelector to access Redux state
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+
+//hooks
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux"; // Import useSelector to access Redux state
+
+//store
 import { AddToCart } from "../../store/cartSlice";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
+//carousel
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 function AllProducts() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,11 +53,10 @@ function AllProducts() {
   const adsPerPage = 3;
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const user = useSelector((state) => state.authentication.user); // Get user from Redux state
-  const orders = useSelector((state) => state.cart.orders); // Get user from Redux state
+  const user = useSelector((state) => state.authentication.user);
+  const orders = useSelector((state) => state.cart.orders);
 
   const handleOpenDialog = (ad) => {
-    // Open dialog only if the user is logged in
     setSelectedAd(ad);
   };
 
@@ -122,7 +135,6 @@ function AllProducts() {
     setCurrentPage(newPage);
   };
   const handleBuyNow = (ad) => {
-    // Open dialog with product details and order form
     handleOpenDialog(ad);
   };
 
@@ -136,33 +148,27 @@ function AllProducts() {
     });
   };
   const handleAdtoCart = (ad) => {
-    // Open dialog with product details and order form
     if (!user) {
       toast.error("Log In First");
-      return; // This will exit the function immediately
+      return;
     }
 
-    // Check if the product is already in the cart
     const existingProduct = orders.find((order) => order._id === ad._id);
 
     if (existingProduct) {
-      // If the product is already in the cart, get the current quantity
       const currentQuantity = quantities[ad._id] || 0;
 
-      // Increment the quantity by 1
       const newQuantity = currentQuantity + 1;
 
-      // Update the quantities state with the new quantity
       setQuantities({
         ...quantities,
         [ad._id]: newQuantity,
       });
     } else {
-      // If it's not in the cart, add it as a new item with quantity 1
       dispatch(AddToCart({ orders: ad }));
       setQuantities({
         ...quantities,
-        [ad._id]: 1, // Initialize the quantity to 1
+        [ad._id]: 1,
       });
     }
 
@@ -180,7 +186,6 @@ function AllProducts() {
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
 
     if (adsToDisplay.length === 0) {
-      // Display a message when no ads are found
       return (
         <div
           style={{

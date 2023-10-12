@@ -1,22 +1,31 @@
+//imports
 import React, { useEffect } from "react";
+//material-ui
 import { Alert, Avatar, Card, CircularProgress } from "@mui/material";
+
+//hooks
 import { useState } from "react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { AdminLoggedIn } from "../../store/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+//store
+import { AdminLoggedIn } from "../../store/adminSlice";
+
+//axios
+import axios from "axios";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
 
 const cardStyles = {
   width: "100%",
-  padding: "50px", // Added "px" to padding values
+  padding: "50px",
   textAlign: "center",
   background: "linear-gradient( #000,#01336F)",
 };
 
 const stepContainerStyles = {
   display: "flex",
-  flexDirection: "column", // Make it a column to center vertically
+  flexDirection: "column",
   alignItems: "center",
   marginTop: "20px",
 };
@@ -71,16 +80,10 @@ function AdminLogin() {
         toast.success("Welcome Back Admin!");
         const token = response.data.token;
 
-        console.log("Response Data:", token);
-
-        // Store the JWT token in local storage
         localStorage.setItem("jwtToken", token);
 
-        // Set the admin login state in local storage
         localStorage.setItem("AdminLoggedIn", "true");
 
-        // Dispatch action to log in
-        // dispatch(AdminLoggedIn({ token }));
         dispatch(AdminLoggedIn({ token: token }));
 
         navigate("/admin/home");
@@ -98,7 +101,7 @@ function AdminLogin() {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    minHeight: "100vh", // Center vertically within the viewport
+    minHeight: "100vh",
   };
 
   return (
@@ -114,7 +117,7 @@ function AdminLogin() {
           <div style={stepContainerStyles}>
             <div style={stepStyles}>
               <Avatar
-                style={{ width: "100px", height: "100px" }} // Adjust the width and height as needed
+                style={{ width: "100px", height: "100px" }}
                 alt="Logo"
                 src="https://images.crunchbase.com/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/v1406364553/kmsoahr21m6zogtykmsz.png"
               />
@@ -153,16 +156,16 @@ function AdminLogin() {
               <button
                 className="log"
                 style={{
-                  color: "white", // Match text color with card
-                  backgroundColor: "rgba(0, 19, 111, 1)", // Match background color with card
-                  border: "1px solid rgba(0, 19, 111, 1)", // Match border color with card
+                  color: "white",
+                  backgroundColor: "rgba(0, 19, 111, 1)",
+                  border: "1px solid rgba(0, 19, 111, 1)",
                   cursor: "pointer",
                   borderRadius: "4px",
                   fontWeight: "600",
-                  margin: "20px 0", // Add some vertical margin
+                  margin: "20px 0",
                   width: "200px",
                   padding: "10px 0",
-                  boxShadow: "0 0 20px rgba(0, 19, 111, 0.2)", // Match box-shadow color with card
+                  boxShadow: "0 0 20px rgba(0, 19, 111, 0.2)",
                   transition: "0.4s",
                 }}
               >

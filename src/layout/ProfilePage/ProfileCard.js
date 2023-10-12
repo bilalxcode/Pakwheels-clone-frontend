@@ -1,11 +1,14 @@
+//imports
 import React from "react";
-import { useSelector } from "react-redux";
 import "./ProfileCard";
-import { Select, MenuItem, InputLabel, Alert } from "@mui/material";
+
+//hooks
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { UpdateUser } from "../../store/authenticationSlice";
-import axios from "axios";
+
+//material-ui
+import { Select, MenuItem, InputLabel, Alert } from "@mui/material";
 import {
   Modal,
   Box,
@@ -16,6 +19,13 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
+
+//store
+import { UpdateUser } from "../../store/authenticationSlice";
+
+//axios
+import axios from "axios";
+
 function ProfileCard() {
   const user = useSelector((state) => state.authentication.user);
   const [selectedCity, setSelectedCity] = useState(user.city || "Lahore");
@@ -24,7 +34,7 @@ function ProfileCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedGender, setSelectedGender] = useState(user.gender || "male");
   const [userUpdated, setUserUpdated] = useState(false);
-  const [userNotUpdated, setuserNotUpdated] = useState(false); // State to control the visibility of the success message
+  const [userNotUpdated, setuserNotUpdated] = useState(false);
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -51,16 +61,9 @@ function ProfileCard() {
     const updatedPhoneNumber = phoneNumber;
     const updatedName = name;
     const updatedCity = selectedCity;
-    const selectedGenderValue = selectedGender; // Get the selected gender value
+    const selectedGenderValue = selectedGender;
     const userId = user._id;
-    console.log(
-      "Working",
-      userId,
-      updatedPhoneNumber,
-      updatedName,
-      updatedCity,
-      selectedGenderValue
-    );
+
     try {
       const response = await axios.post(
         "http://localhost:8080/profile/update",
@@ -79,13 +82,10 @@ function ProfileCard() {
       );
 
       if (response.status === 200) {
-        console.log("ok");
         closeModal();
         const updatedUser = response.data.user;
-        console.log(updatedUser);
         dispatch(UpdateUser({ user: updatedUser }));
         setUserUpdated(true);
-        console.log(user.gender);
         setTimeout(() => {
           setUserUpdated(false);
         }, 2000);
@@ -93,28 +93,20 @@ function ProfileCard() {
         console.error("Profile Update error: ");
         setuserNotUpdated(true);
 
-        // Automatically hide the success message after 2 seconds
         setTimeout(() => {
           setuserNotUpdated(false);
         }, 2000);
         closeModal();
-
-        // Handle error messages from the server
       }
     } catch (error) {
       console.error("Profile Update error: " + error);
       setuserNotUpdated(true);
 
-      // Automatically hide the success message after 2 seconds
       setTimeout(() => {
         setuserNotUpdated(false);
       }, 2000);
       closeModal();
-
-      // Handle network or other errors here
     }
-
-    // Close the modal
   };
 
   const closeModal = () => {
@@ -129,8 +121,6 @@ function ProfileCard() {
   const femaleImageUrl =
     "https://img.freepik.com/free-psd/3d-illustration-person-with-pink-hair_23-2149436186.jpg?w=740&t=st=1695027996~exp=1695028596~hmac=d5b9060fb47de6b61a5fb27af065de816e91ac0b1e99f236f5af46d1f48a94e2";
 
-  //   const profileImageUrl =
-  //     selectedGender === "female" ? femaleImageUrl : maleImageUrl;
   const profileImageUrl =
     user.gender === "female"
       ? femaleImageUrl
@@ -233,7 +223,6 @@ function ProfileCard() {
                         />
                       </RadioGroup>
                       <p>Selected Gender: {selectedGender}</p>
-                      {/* Display the selected value */}
                     </FormControl>
                   </div>
                   <div className="col-md-12">
@@ -248,14 +237,14 @@ function ProfileCard() {
                   </div>
                 </div>
                 <div className="mt-5 text-center">
-                  {userUpdated && ( // Display success message when showSuccessMessage is true
+                  {userUpdated && (
                     <div>
                       <Alert severity="success">
                         Profile Updated Successfully
                       </Alert>
                     </div>
                   )}
-                  {userNotUpdated && ( // Display success message when showSuccessMessage is true
+                  {userNotUpdated && (
                     <Alert severity="error">Error Updating Profile</Alert>
                   )}
                   <button

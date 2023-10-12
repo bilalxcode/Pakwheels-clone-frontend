@@ -9,11 +9,11 @@ const adminSlice = createSlice({
   reducers: {
     AdminLoggedIn: (state, action) => {
       state.isLoggedIn = true;
-      state.token = action.payload.token; // Update the 'token' property
+      state.token = action.payload.token;
     },
     AdminLoggedOut: (state) => {
       state.isLoggedIn = false;
-      state.token = null; // Clear the 'token' when logging out
+      state.token = null;
     },
   },
 });

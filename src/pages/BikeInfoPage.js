@@ -1,14 +1,12 @@
+//imports
 import React, { useState } from "react";
 import Navbar from "../layout/Navbar/Navbar";
-import CarAdSteps from "../layout/CarInfo/CarAdSteps";
-import CarInfoForm from "../layout/CarInfo/CarInfoForm";
-import CarImageForm from "../layout/CarInfo/CarImageForm";
-import CarContactForm from "../layout/CarInfo/CarContactForm";
 import Footer from "../layout/Footer/Footer";
 import BikeAdSteps from "../layout/BikeInfo/BikeAdSteps";
 import BikeInfoForm from "../layout/BikeInfo/BikeInfoForm";
 import BikeImageForm from "../layout/BikeInfo/BikeImageForm";
 import BikeContactForm from "../layout/BikeInfo/BikeContactForm";
+
 function BikeInfoPage() {
   const [bikeCreated, setBikeCreated] = useState(false);
   const [bike, setBike] = useState({});

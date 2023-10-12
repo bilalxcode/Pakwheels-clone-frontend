@@ -1,6 +1,10 @@
+//imports
 import React from "react";
+
+//material-ui
 import { Avatar, Card } from "@mui/material";
 
+//styles
 const cardStyles = {
   width: "100%",
   margin: "10 0",
@@ -12,7 +16,7 @@ const stepContainerStyles = {
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  marginTop: "20px", // Add some top margin for spacing
+  marginTop: "20px",
 };
 
 const stepStyles = {

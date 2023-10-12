@@ -1,7 +1,13 @@
 // useAuth.js
+
+//hooks
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+//store
 import { login } from "../store/authenticationSlice";
+
+//axios
 import axios from "axios";
 
 const getCookie = (name) => {
@@ -33,21 +39,17 @@ const useAuth = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Check if the JWT token exists in the cookie
-    const jwtToken = getCookie("jwtToken"); // Implement getCookie function
+    const jwtToken = getCookie("jwtToken");
 
     if (jwtToken) {
-      // Decode the JWT token and extract user information
-      const decodedToken = decodeToken(jwtToken); // Implement decodeToken function
+      const decodedToken = decodeToken(jwtToken);
       const userObject = decodedToken.user;
 
-      // Ensure that userObject is defined before attempting to access _id
       if (userObject && userObject._id) {
         const userId = userObject._id;
 
         const fetchUserData = async () => {
           try {
-            // Send a POST request to your login endpoint on the server
             const response = await axios.post(
               "http://localhost:8080/auth/getUser",
               {
@@ -60,7 +62,6 @@ const useAuth = () => {
               }
             );
 
-            console.log("Response:", response.data);
             const userData = response.data;
 
             if (response.status === 200) {

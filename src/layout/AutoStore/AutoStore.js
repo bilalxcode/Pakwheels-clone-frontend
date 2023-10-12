@@ -1,8 +1,13 @@
+//imports
 import React from "react";
 import AutoStoreElements from "./AutoStoreElements";
+
+//material-ui
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+
+//hooks
 import { useDispatch } from "react-redux";
 import { Activate } from "../../store/navbarSlice";
 import { useNavigate } from "react-router-dom";

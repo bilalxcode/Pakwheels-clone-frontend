@@ -1,4 +1,7 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   Typography,
   FormControl,
@@ -13,11 +16,11 @@ function SearchFilters({
   getAllAds,
   categories,
   selectedCategory,
-  setSelectedCategory, // Receive the function to update selected category
+  setSelectedCategory,
 }) {
   const handleCategoryChange = (event) => {
     const selectedCategoryId = event.target.value;
-    setSelectedCategory(selectedCategoryId); // Update the selected category state
+    setSelectedCategory(selectedCategoryId);
   };
 
   const applyFilter = () => {

@@ -1,9 +1,7 @@
+//imports
 import React, { useState, useEffect } from "react";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
-import { useSelector } from "react-redux";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+
+//material-ui
 import {
   CircularProgress,
   Card,
@@ -13,7 +11,20 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
+
+//hooks
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
+//react tabs
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import "react-tabs/style/react-tabs.css";
 
 function AllAdsPreview() {
   const user = useSelector((state) => state.authentication.user);
@@ -21,12 +32,11 @@ function AllAdsPreview() {
   const [adsData, setAdsData] = useState([]);
   const [BikeAdsData, setBikeAdsData] = useState([]);
 
-  const [sortBy, setSortBy] = useState("latest"); // Default: Sort by latest
+  const [sortBy, setSortBy] = useState("latest");
 
   useEffect(() => {
-    // Load ads when the component mounts
     getAllAds();
-  }, []); // Empty dependency array to run the effect once on mount
+  }, []);
 
   const getAllAds = async () => {
     setIsLoading(true);
@@ -60,7 +70,6 @@ function AllAdsPreview() {
     }
   };
 
-  // Function to sort ads based on timestamp
   const sortAdsByTimestamp = (ads, sortOrder) => {
     return ads.slice().sort((a, b) => {
       if (sortOrder === "latest") {
@@ -72,7 +81,6 @@ function AllAdsPreview() {
     });
   };
 
-  // Sort the ads based on the selected sorting option
   const sortAds = (ads, sortOrder) => {
     return sortAdsByTimestamp(ads, sortOrder);
   };
@@ -145,18 +153,18 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {Object.keys(adsData).length === 0 && (
+                  {adsData.length === 0 && BikeAdsData.length === 0 && (
                     <div>
                       <p
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
-                          padding: "40px", // Center the image vertically
+                          padding: "40px",
                         }}
                       >
                         You haven't posted any ad
@@ -165,13 +173,12 @@ function AllAdsPreview() {
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
                         }}
-                        // href="/sell-vehicle/post-ad"
                         onClick={navigateToPostAd}
                       >
                         Post Ad
@@ -187,7 +194,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -204,14 +210,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -221,12 +226,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -248,7 +253,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Car Details</Typography>
 
@@ -286,7 +290,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           {ad.isApproved === null ? (
                             <span
@@ -347,7 +350,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -364,14 +366,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -381,12 +382,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -408,7 +409,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Bike Details</Typography>
 
@@ -444,7 +444,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           {ad.isApproved === null ? (
                             <span
@@ -506,7 +505,7 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {Object.keys(adsData).length === 0 && (
+                  {adsData.length === 0 && BikeAdsData.length === 0 && (
                     <div>
                       <p
                         style={{
@@ -526,13 +525,12 @@ function AllAdsPreview() {
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
                         }}
-                        // href="/sell-vehicle/post-ad"
                         onClick={navigateToPostAd}
                       >
                         Post Ad
@@ -548,7 +546,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -565,14 +562,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -582,12 +578,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -609,7 +605,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Car Details</Typography>
 
@@ -647,7 +642,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{
@@ -675,7 +669,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -692,14 +685,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -709,12 +701,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -736,7 +728,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Bike Details</Typography>
 
@@ -772,7 +763,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{
@@ -801,18 +791,18 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {Object.keys(adsData).length === 0 && (
+                  {adsData.length === 0 && BikeAdsData.length === 0 && (
                     <div>
                       <p
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
-                          padding: "40px", // Center the image vertically
+                          padding: "40px",
                         }}
                       >
                         You haven't posted any ad
@@ -821,13 +811,12 @@ function AllAdsPreview() {
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
                         }}
-                        // href="/sell-vehicle/post-ad"
                         onClick={navigateToPostAd}
                       >
                         Post Ad
@@ -843,7 +832,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -860,14 +848,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -877,12 +864,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -904,7 +891,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Car Details</Typography>
 
@@ -942,7 +928,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{
@@ -971,7 +956,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -988,14 +972,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -1005,12 +988,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -1032,7 +1015,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Bike Details</Typography>
 
@@ -1068,7 +1050,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{
@@ -1098,18 +1079,18 @@ function AllAdsPreview() {
                 </div>
               ) : (
                 <div>
-                  {Object.keys(adsData).length === 0 && (
+                  {adsData.length === 0 && BikeAdsData.length === 0 && (
                     <div>
                       <p
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
-                          padding: "40px", // Center the image vertically
+                          padding: "40px",
                         }}
                       >
                         You haven't posted any ad
@@ -1118,13 +1099,12 @@ function AllAdsPreview() {
                         style={{
                           marginRight: "10px",
                           borderRadius: "5px",
-                          flex: "1", // Make each image div grow to fill the available space
-                          marginBottom: "10px", // Add some spacing between images
-                          display: "flex", // Center the image horizontally
-                          justifyContent: "center", // Center the image horizontally
+                          flex: "1",
+                          marginBottom: "10px",
+                          display: "flex",
+                          justifyContent: "center",
                           alignItems: "center",
                         }}
-                        // href="/sell-vehicle/post-ad"
                         onClick={navigateToPostAd}
                       >
                         Post Ad
@@ -1140,7 +1120,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -1157,14 +1136,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -1174,12 +1152,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -1201,7 +1179,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Car Details</Typography>
 
@@ -1239,7 +1216,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{
@@ -1268,7 +1244,6 @@ function AllAdsPreview() {
                           padding: "0px 20px",
                         }}
                       >
-                        {/* 1st top left part */}
                         <div style={{ padding: "20px" }}>
                           <Typography
                             variant="h4"
@@ -1285,14 +1260,13 @@ function AllAdsPreview() {
                           </Typography>
                         </div>
 
-                        {/* 2nd top right part */}
                         <div
                           style={{
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             padding: "0px 20px",
-                            flexWrap: "wrap", // Allow images to wrap to the next line on smaller screens
+                            flexWrap: "wrap",
                           }}
                         >
                           {ad.images.map((image, imageIndex) => (
@@ -1302,12 +1276,12 @@ function AllAdsPreview() {
                                 marginRight: "10px",
                                 border: "1px solid #ccc",
                                 borderRadius: "5px",
-                                flex: "1", // Make each image div grow to fill the available space
-                                marginBottom: "10px", // Add some spacing between images
-                                maxWidth: "calc(33.33% - 10px)", // Limit the image width on smaller screens
-                                display: "flex", // Center the image horizontally
-                                justifyContent: "center", // Center the image horizontally
-                                alignItems: "center", // Center the image vertically
+                                flex: "1",
+                                marginBottom: "10px",
+                                maxWidth: "calc(33.33% - 10px)",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
                               }}
                             >
                               <CardMedia
@@ -1329,7 +1303,6 @@ function AllAdsPreview() {
                       </div>
 
                       <CardContent>
-                        {/* 3rd bottom left part */}
                         <div style={{ padding: "0px 20px" }}>
                           <Typography variant="h6">Bike Details</Typography>
 
@@ -1365,7 +1338,6 @@ function AllAdsPreview() {
                           )}
                         </div>
 
-                        {/* 4th bottom right part */}
                         <div style={{ textAlign: "right" }}>
                           <span
                             style={{

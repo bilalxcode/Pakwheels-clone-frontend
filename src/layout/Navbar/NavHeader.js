@@ -1,13 +1,21 @@
+//imports
 import "./Navbar.css";
 import NavbarModal from "./NavbarModal";
-import { useState } from "react";
 import HomeWidgetModal from "../Homewidget/HomeWidgetModal";
-import { useDispatch, useSelector } from "react-redux";
 import NavbarDropdown from "./NavbarDropdown";
-import axios from "axios";
+
+//hooks
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+//store
 import { logout } from "../../store/authenticationSlice";
 import { Activate, Deactivate } from "../../store/navbarSlice";
+
+//axios
+import axios from "axios";
+
 function NavHeader() {
   const [downloadModalIsOpen, setDownloadModalIsOpen] = useState(false);
   const [signupSigninModalIsOpen, setSignupSigninModalIsOpen] = useState(false);
@@ -52,35 +60,13 @@ function NavHeader() {
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token from Redux in the headers
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
 
       if (response.status === 200) {
-        // Clear Google sign-in cookies
-        // const googleCookiesToClear = [
-        //   "__Secure-3PSID",
-        //   "__Secure-1PSID",
-        //   "__Secure-3PSIDTS",
-        //   "__Secure-1PSIDTS",
-        //   "__Secure-3PAPISID",
-        //   "__Secure-1PAPISID",
-        //   "SID",
-        //   "SSID",
-        //   "APISID",
-        //   "SAPISID",
-        //   "__Secure-3PSIDCC",
-        //   "__Secure-1PSIDCC",
-        //   "SIDCC",
-        // ];
-
-        // googleCookiesToClear.forEach((cookieName) => {
-        //   document.cookie = `${cookieName}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-        // });
-
-        // Clear your JWT token cookie and perform other actions
         document.cookie =
           "jwtToken=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         window.gapi.auth2.getAuthInstance().signOut();
@@ -90,26 +76,17 @@ function NavHeader() {
         dispatch(Activate({ user: null }));
         localStorage.removeItem("ActiveTab");
 
-        const msg = response.data.message;
-
         navigate("/");
-        console.log(msg);
-        console.log(user);
-        // Additional actions or redirection after successful logout
       } else {
         console.error("Logout error: ");
-        // Handle error messages from the server
       }
     } catch (error) {
       console.error("Logout error: " + error);
-      // Handle network or other errors here
     }
   };
 
   const profileOpener = (e) => {
     e.preventDefault();
-    console.log(user._id);
-
     navigate(`/profile/${user._id}`);
   };
 
@@ -152,20 +129,6 @@ function NavHeader() {
           </a>
         </div>
         <form className="form-inline">
-          {/* <div style={{ padding: "5px", color: "slategrey" }}>
-            <a
-              href="#"
-              style={{
-                color: "#7B2529",
-                fontWeight: "bold",
-                textDecoration: "none",
-                marginRight: "7px",
-              }}
-            >
-              اردو
-            </a>
-            |
-          </div> */}
           {user ? (
             <>
               <div
@@ -190,24 +153,40 @@ function NavHeader() {
                     class="dropdown-menu"
                     aria-labelledby="dropdownMenuButton"
                   >
-                    <a onClick={profileOpener} class="dropdown-item" href="#">
+                    <a
+                      onClick={profileOpener}
+                      class="dropdown-item"
+                      style={{ cursor: "pointer" }}
+                    >
                       Profile
                     </a>
 
-                    <a class="dropdown-item" href="#" onClick={navigateToMyAds}>
+                    <a
+                      class="dropdown-item"
+                      onClick={navigateToMyAds}
+                      style={{ cursor: "pointer" }}
+                    >
                       My Ads
                     </a>
                     <a
                       class="dropdown-item"
-                      href="#"
                       onClick={navigateToMyOrders}
+                      style={{ cursor: "pointer" }}
                     >
                       My Orders
                     </a>
-                    <a class="dropdown-item" href="" onClick={navigateToMyCart}>
+                    <a
+                      class="dropdown-item"
+                      onClick={navigateToMyCart}
+                      style={{ cursor: "pointer" }}
+                    >
                       My Cart
                     </a>
-                    <a onClick={logoutHandler} class="dropdown-item" href="#">
+                    <a
+                      onClick={logoutHandler}
+                      class="dropdown-item"
+                      style={{ cursor: "pointer" }}
+                    >
                       Sign Out
                     </a>
                   </div>
@@ -222,11 +201,11 @@ function NavHeader() {
               }}
             >
               <a
-                href="#"
                 style={{
                   color: "#fff",
                   textDecoration: "none",
                   marginRight: "7px",
+                  cursor: "pointer",
                 }}
                 onClick={openSignupSigninModal}
               >
@@ -234,24 +213,6 @@ function NavHeader() {
               </a>
             </div>
           )}
-          {/* <div
-            style={{
-              padding: "5px",
-              color: "slategrey",
-            }}
-          >
-            <a
-              href="#"
-              style={{
-                color: "#fff",
-                textDecoration: "none",
-                marginRight: "7px",
-              }}
-              onClick={openSignupSigninModal}
-            >
-              Sign In
-            </a>
-          </div> */}
         </form>
         <HomeWidgetModal
           isOpen={signupSigninModalIsOpen}

@@ -1,8 +1,19 @@
+//imports
 import React, { useState, useEffect } from "react";
 import DashboardContent from "./DashboardContent";
+import clsx from "clsx";
+import BikesView from "./BikesView";
+import OrdersView from "./OrdersView";
+import UsersView from "./UsersView";
+import VehicleView from "./VehicleView";
+import AddProductForm from "./AddProductForm";
+import ProductsView from "./ProductsView";
+import VideosView from "./VideosView";
+
+//store
 import { AdminLoggedIn, AdminLoggedOut } from "../../store/adminSlice";
 
-import clsx from "clsx";
+//material-ui
 import {
   AppBar,
   CssBaseline,
@@ -32,18 +43,12 @@ import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import StoreIcon from "@mui/icons-material/Store";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import LocalGroceryStoreIcon from "@mui/icons-material/LocalGroceryStore";
-import BookIcon from "@mui/icons-material/Book";
 import PostAddIcon from "@mui/icons-material/PostAdd";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
-import UsersView from "./UsersView";
-import VehicleView from "./VehicleView";
-import AddProductForm from "./AddProductForm";
-import ProductsView from "./ProductsView";
-import VideosView from "./VideosView";
+
+//hooks
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import BikesView from "./BikesView";
-import OrdersView from "./OrdersView";
 
 const drawerWidth = 300;
 
@@ -58,36 +63,6 @@ const AdminHome = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const isUserLoggedIn = () => {
-  //   // Get the value from localStorage and convert it to a boolean
-  //   return adminLoggedIn;
-  // };
-  // useEffect(() => {
-  //   console.log("admin login 212", adminLoggedIn);
-  //   if (!isUserLoggedIn()) {
-  //     dispatch(AdminLoggedOut());
-  //     navigate("/admin");
-  //   }
-  // // }, []);
-  // useEffect(() => {
-  //   const isAdminLoggedIn = localStorage.getItem("AdminLoggedIn") === "true";
-  //   console.log("checking admin ", isAdminLoggedIn);
-
-  //   if (isAdminLoggedIn) {
-  //     const token = localStorage.getItem("jwtToken");
-
-  //     if (token) {
-  //       dispatch(AdminLoggedIn({ token: token }));
-  //     } else {
-  //       dispatch(AdminLoggedOut());
-  //       navigate("/admin");
-  //     }
-  //   } else {
-  //     dispatch(AdminLoggedOut());
-  //     navigate("/admin");
-  //   }
-  // }, []);
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -99,7 +74,6 @@ const AdminHome = () => {
     setSelectedMenuItem(text);
     localStorage.setItem("selectedMenuItem", text);
 
-    // Navigate to the corresponding route based on the selected menu item
     switch (text) {
       case "Dashboard":
         navigate("/admin/home");
@@ -144,8 +118,6 @@ const AdminHome = () => {
     };
   }, [open]);
 
-  // const navigate = useNavigate();
-  // const dispatch = useDispatch();
   const LogOutHandler = () => {
     console.log("logout");
     localStorage.removeItem("jwtToken");
@@ -154,10 +126,8 @@ const AdminHome = () => {
     document.cookie =
       "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
-    // Dispatch action to log out
     dispatch(AdminLoggedOut());
 
-    // Navigate to the login page
     navigate("/admin");
   };
   return (

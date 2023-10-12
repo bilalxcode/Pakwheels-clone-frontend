@@ -1,4 +1,6 @@
+//imports
 import React from "react";
+//material-ui
 import { Grid, Card, CardContent, Typography } from "@mui/material";
 
 function ExploreProducts() {
@@ -22,7 +24,7 @@ function ExploreProducts() {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  justifyContent: "center", // Center content vertically
+                  justifyContent: "center",
                   border: "2px solid black",
                   width: "100%",
                   boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",

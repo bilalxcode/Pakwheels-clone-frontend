@@ -1,3 +1,4 @@
+//imports
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import ValidationBox from "./ValidationBox";

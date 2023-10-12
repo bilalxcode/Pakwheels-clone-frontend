@@ -1,4 +1,9 @@
+//imports
 import React, { useState, useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
+import SearchFilters from "./SearchFilter";
+
+//material-ui
 import {
   Card,
   CardContent,
@@ -11,16 +16,22 @@ import {
   DialogActions,
   IconButton,
   Pagination,
-  CircularProgress, // Import CircularProgress
+  CircularProgress,
 } from "@mui/material";
+import ImageIcon from "@mui/icons-material/Image";
+
+//hooks
 import { useNavigate, useLocation } from "react-router-dom";
+
+//axios
 import axios from "axios";
+
+//toastify
 import { toast } from "react-toastify";
-import Navbar from "../Navbar/Navbar";
-import SearchFilters from "./SearchFilter";
+
+//carousel
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import ImageIcon from "@mui/icons-material/Image";
 
 function AllUsedBikes() {
   const navigate = useNavigate();
@@ -30,15 +41,15 @@ function AllUsedBikes() {
   const [filterOptions, setFilterOptions] = useState({
     city: "",
     province: "",
-    engineCapacity: "", // Add engineCapacity filter
-    transmission: "", // Add transmission filter
-    color: "", // Add color filter
+    engineCapacity: "",
+    transmission: "",
+    color: "",
   });
 
   const [selectedAd, setSelectedAd] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Current page of ads to display
-  const adsPerPage = 3; // Number of ads to display per page
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [currentPage, setCurrentPage] = useState(1);
+  const adsPerPage = 3;
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDialog = (ad) => {
     setSelectedAd(ad);
@@ -61,10 +72,8 @@ function AllUsedBikes() {
       if (response.status === 200) {
         const ads = response.data.bikes;
 
-        // Filter ads where isApproved is true
         const approvedAds = ads.filter((ad) => ad.isApproved);
 
-        // Sort approved ads by a date field (e.g., createdAt) in descending order
         approvedAds.sort((ad1, ad2) => {
           return new Date(ad2.createdAt) - new Date(ad1.createdAt);
         });
@@ -78,7 +87,6 @@ function AllUsedBikes() {
       console.error("Loading ads error: " + error);
       toast.error("Failed to load ads: " + error.toString());
     } finally {
-      // Hide the loading indicator after 1 second
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
@@ -141,15 +149,12 @@ function AllUsedBikes() {
   }
 
   const renderAds = () => {
-    // Calculate the starting and ending indexes for the ads to display on the current page
     const startIndex = (currentPage - 1) * adsPerPage;
     const endIndex = startIndex + adsPerPage;
 
-    // Get the ads to display on the current page
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
 
     if (adsToDisplay.length === 0) {
-      // Display a message when no ads are found
       return (
         <div
           style={{
@@ -217,7 +222,7 @@ function AllUsedBikes() {
                         height: "auto",
                         cursor: "pointer",
                         maxHeight: "200px",
-                        borderRadius: "0.5em", // Reduce the image size
+                        borderRadius: "0.5em",
                       }}
                       onClick={() => handleOpenDialog(ad)}
                     />
@@ -292,11 +297,7 @@ function AllUsedBikes() {
     }
 
     return (
-      <Dialog
-        open={!!selectedAd}
-        onClose={handleCloseDialog}
-        maxWidth="lg" // Set the maxWidth to "lg" to increase the width
-      >
+      <Dialog open={!!selectedAd} onClose={handleCloseDialog} maxWidth="lg">
         <DialogTitle>Car Details</DialogTitle>
         <DialogContent>
           <Carousel showArrows={true}>
@@ -377,7 +378,7 @@ function AllUsedBikes() {
             setFilterOptions={setFilterOptions}
           />
         </div>
-        {isLoading ? ( // Show CircularProgress while loading
+        {isLoading ? (
           <CircularProgress style={{ margin: "auto" }} />
         ) : (
           <div>{renderAds()}</div>

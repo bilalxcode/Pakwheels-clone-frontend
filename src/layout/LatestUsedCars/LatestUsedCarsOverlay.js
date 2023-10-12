@@ -1,5 +1,5 @@
+//imports
 import LatestUsedCars from "./LatestUsedCars";
-import ManagedByPakwheels from "./LatestUsedCars";
 
 function LatestUsedCarsOverlay() {
   return (

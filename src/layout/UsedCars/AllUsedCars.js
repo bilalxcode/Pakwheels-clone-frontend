@@ -1,5 +1,9 @@
+//imports
 import React, { useState, useEffect } from "react";
+import Navbar from "../Navbar/Navbar";
+import SearchFilters from "./SearchFilters";
 
+//material-ui
 import {
   Card,
   CardContent,
@@ -12,16 +16,22 @@ import {
   DialogActions,
   IconButton,
   Pagination,
-  CircularProgress, // Import CircularProgress
+  CircularProgress,
 } from "@mui/material";
+import ImageIcon from "@mui/icons-material/Image";
+
+//hooks
 import { useNavigate, useLocation } from "react-router-dom";
+
+//axios
 import axios from "axios";
+
+//toastify
 import { toast } from "react-toastify";
-import Navbar from "../Navbar/Navbar";
-import SearchFilters from "./SearchFilters";
+
+//carousel
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import ImageIcon from "@mui/icons-material/Image";
 
 function AllUsedCars() {
   const navigate = useNavigate();
@@ -29,29 +39,24 @@ function AllUsedCars() {
   const [adsData, setAdsData] = useState([]);
   const [filteredAds, setFilteredAds] = useState([]);
   const queryParams = new URLSearchParams(location.search);
-  console.log(location.search);
 
-  console.log(queryParams);
   const city = queryParams.get("city");
   const price = queryParams.get("price");
   const engineCapacity = queryParams.get("engineCapacity");
 
-  console.log("City:", city);
-  console.log("Price:", price);
-  console.log("Engine Capacity:", engineCapacity);
   const [filterOptions, setFilterOptions] = useState({
     city: queryParams.get("city") || "",
     province: "",
     engineCapacity: queryParams.get("engineCapacity") || "",
-    transmission: "", // Add transmission filter
-    color: "", // Add color filter
+    transmission: "",
+    color: "",
     price: queryParams.get("price") || "",
   });
 
   const [selectedAd, setSelectedAd] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Current page of ads to display
-  const adsPerPage = 3; // Number of ads to display per page
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [currentPage, setCurrentPage] = useState(1);
+  const adsPerPage = 3;
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDialog = (ad) => {
     setSelectedAd(ad);
@@ -74,10 +79,8 @@ function AllUsedCars() {
       if (response.status === 200) {
         const ads = response.data.cars;
 
-        // Filter ads where isApproved is true
         const approvedAds = ads.filter((ad) => ad.isApproved);
 
-        // Sort approved ads by a date field (e.g., createdAt) in descending order
         approvedAds.sort((ad1, ad2) => {
           return new Date(ad2.createdAt) - new Date(ad1.createdAt);
         });
@@ -91,7 +94,6 @@ function AllUsedCars() {
       console.error("Loading ads error: " + error);
       toast.error("Failed to load ads: " + error.toString());
     } finally {
-      // Hide the loading indicator after 1 second
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
@@ -136,7 +138,6 @@ function AllUsedCars() {
       const [minPrice, maxPrice] = filterOptions.price.split("-");
 
       filteredData = filteredData.filter((ad) => {
-        // Ensure that ad.price is treated as a string
         const adPrice = ad.price.toString();
 
         return (
@@ -147,11 +148,9 @@ function AllUsedCars() {
       });
     }
 
-    // Update the filteredAds state with the filtered data
     setFilteredAds(filteredData);
   };
   useEffect(() => {
-    // Check if the ads data has been loaded
     if (adsData.length > 0) {
       applyFilters();
     }
@@ -173,22 +172,19 @@ function AllUsedCars() {
   }
 
   const renderAds = () => {
-    // Calculate the starting and ending indexes for the ads to display on the current page
     const startIndex = (currentPage - 1) * adsPerPage;
     const endIndex = startIndex + adsPerPage;
 
-    // Get the ads to display on the current page
     const adsToDisplay = filteredAds.slice(startIndex, endIndex);
 
     if (adsToDisplay.length === 0) {
-      // Display a message when no ads are found
       return (
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding:"5em 20em"
+            padding: "5em 20em",
           }}
         >
           <Card
@@ -329,11 +325,7 @@ function AllUsedCars() {
     }
 
     return (
-      <Dialog
-        open={!!selectedAd}
-        onClose={handleCloseDialog}
-        maxWidth="lg" // Set the maxWidth to "lg" to increase the width
-      >
+      <Dialog open={!!selectedAd} onClose={handleCloseDialog} maxWidth="lg">
         <DialogTitle>Car Details</DialogTitle>
         <DialogContent>
           <Carousel showArrows={true}>
@@ -419,7 +411,7 @@ function AllUsedCars() {
             setFilterOptions={setFilterOptions}
           />
         </div>
-        {isLoading ? ( // Show CircularProgress while loading
+        {isLoading ? (
           <CircularProgress style={{ margin: "auto" }} />
         ) : (
           <div>{renderAds()}</div>

@@ -1,7 +1,12 @@
+//imports
 import React, { useState } from "react";
+import Navbar from "../Navbar/Navbar";
+import StripeContainer from "./StripeContainer";
+
+//material-ui
 import {
   Button,
-  TextField, // Import TextField
+  TextField,
   Typography,
   CardContent,
   Card,
@@ -9,16 +14,21 @@ import {
   Alert,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import Navbar from "../Navbar/Navbar";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { clearCart } from "../../store/cartSlice";
-import StripeContainer from "./StripeContainer";
 import DescriptionIcon from "@mui/icons-material/Description";
+
+//hooks
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+
+//store
+import { clearCart } from "../../store/cartSlice";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
 
 const buttonStyles = {
   marginTop: "3em",
@@ -43,7 +53,7 @@ function CheckoutPage() {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("stripe");
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberValid, setPhoneNumberValid] = useState(true); // State for phone number validation
+  const [phoneNumberValid, setPhoneNumberValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -64,28 +74,23 @@ function CheckoutPage() {
   const handleFinishOrder = async () => {
     setIsProcessing(true);
 
-    // Phone number validation (should start with "03", have 11 digits, and contain no special characters)
     const phonePattern = /^03\d{9}$/;
     const isPhoneValid = phonePattern.test(phoneNumber);
     const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(phoneNumber);
 
     if (address === "") {
-      // If address is empty, show an alert
       alert("Invalid Address");
       setIsProcessing(false);
     } else if (!isPhoneValid) {
-      // If phone number is not valid, set the phoneNumberValid state to false
       setPhoneNumberValid(false);
       setIsProcessing(false);
     } else if (hasSpecialCharacters) {
-      // If phone number contains special characters, show an alert
       alert("Invalid Phone Number. It should not contain special characters.");
       setIsProcessing(false);
     } else {
       try {
         console.log(orders);
 
-        // Make a POST request to the backend to create the COD order
         const response = await axios.post(
           "http://localhost:8080/admin/userCODOrder",
           {
@@ -103,7 +108,7 @@ function CheckoutPage() {
 
         if (response.status === 201) {
           toast.success("Order Placed");
-          dispatch(clearCart()); // Dispatch the clearCart action
+          dispatch(clearCart());
 
           setIsOrderPlaced(true);
           setPhoneNumberValid(true);
@@ -125,7 +130,6 @@ function CheckoutPage() {
   }, 0);
   const renderPaymentContent = () => {
     if (selectedPaymentMethod === "stripe") {
-      // Render Stripe payment content here
       return (
         <div>
           <StripeContainer setPaymentSuccess={setPaymentSuccess} />
@@ -145,7 +149,7 @@ function CheckoutPage() {
             >
               {orders.map((order, index) => {
                 const { name, price, quantity } = order;
-                const parsedPrice = parseFloat(price); // Parse the price as a float
+                const parsedPrice = parseFloat(price);
                 const productTotal = parsedPrice * quantity;
                 return (
                   <div key={order._id} style={{ marginTop: "0.5em" }}>
@@ -170,7 +174,6 @@ function CheckoutPage() {
           )}
           {!isOrderPlaced && (
             <div>
-              {/* Address and Phone Number TextFields */}
               <ToastContainer />
               <TextField
                 label="Address"
@@ -189,7 +192,7 @@ function CheckoutPage() {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 margin="normal"
                 required
-                error={!phoneNumberValid} // Apply error styling if phoneNumberValid is false
+                error={!phoneNumberValid}
                 helperText={!phoneNumberValid ? "Invalid Phone Number" : ""}
               />
             </div>
@@ -201,34 +204,7 @@ function CheckoutPage() {
             </div>
           )}
 
-          {orders.length > 0 && !isOrderPlaced && (
-            <div>
-              {/* Order details */}
-              {/* <Typography variant="h6">Order Details</Typography> */}
-              {/* {orders.map((order, index) => {
-                const { name, price, quantity } = order;
-                const parsedPrice = parseFloat(price); // Parse the price as a float
-                const productTotal = parsedPrice * quantity;
-                return (
-                  <div key={order._id} style={{ marginTop: "0.5em" }}>
-                    <Typography variant="subtitle1">
-                      ✔ {name} {parsedPrice} PKR
-                    </Typography>
-                  </div>
-                );
-              })} */}
-              {/* 
-              <Typography variant="body1" style={{ marginTop: "0.5em" }}>
-                Shipping: 150 PKR
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                style={{ fontWeight: "bold", marginTop: "0.5em" }}
-              >
-                Total: {totalAmount} PKR
-              </Typography> */}
-            </div>
-          )}
+          {orders.length > 0 && !isOrderPlaced && <div></div>}
         </>
       );
     }
@@ -251,11 +227,6 @@ function CheckoutPage() {
         </Button>
       );
     } else {
-      // return (
-      //   <Button variant="contained" color="primary" onClick={handleFinishOrder}>
-      //     Finish Order
-      //   </Button>
-      // );
       return;
     }
   };

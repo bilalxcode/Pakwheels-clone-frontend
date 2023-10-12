@@ -1,4 +1,7 @@
+//imports
 import React, { useEffect, useState } from "react";
+
+//material ui
 import {
   Typography,
   TextField,
@@ -13,32 +16,37 @@ import {
   Card,
   CardMedia,
 } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
-import axios from "axios";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
 const AddProductForm = () => {
+  //states
   const [formData, setFormData] = useState({
     title: "",
     category: "",
     price: "",
     quantity: "",
     description: "",
-    images: [], // Store multiple images in an array
-    imagePreviews: [], // Store image previews in an array
+    images: [],
+    imagePreviews: [],
   });
-
   const [categories, setCategoriesData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
 
+  //useEffect
   useEffect(() => {
-    // Load ads when the component mounts
     getAllCategories();
-  }, []); // Empty dependency array to run the effect once on mount
+  }, []);
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -46,8 +54,8 @@ const AddProductForm = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+
   const AddNewCategory = async () => {
-    console.log(newCategoryName); // Check if newCategoryName has a value here
     try {
       const response = await axios.post(
         "http://localhost:8080/admin/AddNewCategory",
@@ -99,6 +107,7 @@ const AddProductForm = () => {
       closeModal();
     }
   };
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -106,52 +115,6 @@ const AddProductForm = () => {
       [name]: value,
     });
   };
-
-  //   const handleImageChange = (event) => {
-  //     const imageFiles = event.target.files;
-  //     const newImages = Array.from(imageFiles);
-  //     const newPreviews = newImages.map((file) => URL.createObjectURL(file));
-
-  //     setFormData((prevState) => ({
-  //       ...prevState,
-  //       images: [...prevState.images, ...newImages], // Append new images to the existing array
-  //       imagePreviews: [...prevState.imagePreviews, ...newPreviews], // Append new previews to the existing array
-  //     }));
-  //   };
-  //   const handleSubmit = async (event) => {
-  //     event.preventDefault();
-
-  //     try {
-  //       const form = new FormData();
-  //       form.append("title", formData.title);
-  //       form.append("category", formData.category);
-  //       form.append("price", formData.price);
-  //       form.append("quantity", formData.quantity);
-  //       form.append("description", formData.description);
-
-  //       formData.images.forEach((image, index) => {
-  //         form.append("images[]", image); // Use "images[]" to indicate an array of images
-  //       });
-  //       console.log(formData);
-  //       const response = await axios.post(
-  //         "http://localhost:8080/admin/addProduct",
-  //         formData,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //           },
-  //         }
-  //       );
-
-  //       if (response.status === 200) {
-  //         toast.success("Product Added");
-  //       } else {
-  //         toast.error(response.data.message);
-  //       }
-  //     } catch (error) {
-  //       toast.error(error.toString());
-  //     }
-  //   };
 
   const handleImageChange = (event) => {
     const imageFiles = event.target.files;
@@ -177,7 +140,7 @@ const AddProductForm = () => {
       form.append("description", formData.description);
 
       formData.images.forEach((image, index) => {
-        form.append("images[]", image); // Use "images[]" to indicate an array of images
+        form.append("images[]", image);
       });
 
       if (formData.images.length < 1) {
@@ -188,7 +151,7 @@ const AddProductForm = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/admin/addProduct", // New endpoint for image upload
+        "http://localhost:8080/admin/addProduct",
         form,
         {
           headers: {
@@ -204,8 +167,8 @@ const AddProductForm = () => {
           price: "",
           quantity: "",
           description: "",
-          images: [], // Store multiple images in an array
-          imagePreviews: [], // Store image previews in an array
+          images: [],
+          imagePreviews: [],
         });
 
         toast.success("Product Added");
@@ -216,6 +179,7 @@ const AddProductForm = () => {
       toast.error(error.toString());
     }
   };
+
   return (
     <>
       <Grid container spacing={3} style={{ padding: "5em" }}>
@@ -296,7 +260,6 @@ const AddProductForm = () => {
           </Paper>
         </Grid>
 
-        {/* Right side - Image preview */}
         <Grid item xs={6}>
           <Paper
             elevation={3}
@@ -307,7 +270,7 @@ const AddProductForm = () => {
               style={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: "10px", // Add some gap between images
+                gap: "10px",
               }}
             >
               {formData.imagePreviews &&
@@ -315,7 +278,7 @@ const AddProductForm = () => {
                   <div
                     key={index}
                     style={{
-                      width: "calc(50% - 5px)", // Set a fixed width for each image container
+                      width: "calc(50% - 5px)",
                       marginBottom: "10px",
                       border: "2px solid lightgrey",
                       justifyContent: "center",
@@ -339,7 +302,7 @@ const AddProductForm = () => {
               multiple
               type="file"
               accept="image/*"
-              name="images" // Add the name attribute here
+              name="images"
               onChange={handleImageChange}
               style={{ marginTop: "20px" }}
             />

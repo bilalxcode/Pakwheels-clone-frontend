@@ -1,3 +1,7 @@
+//imports
+import React, { useEffect, useState } from "react";
+
+//material-ui
 import {
   CircularProgress,
   Paper,
@@ -12,18 +16,22 @@ import {
   Button,
   Avatar,
 } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+
+//toastify
+import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
 function VehicleView() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(4);
   const [carsAdsData, setCarsAdsData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [sortAscending, setSortAscending] = useState(true); // Track sorting order
-  const [buttonText, setButtonText] = useState("Sort By Latest"); // Track sorting order
-  const [isLoading, setIsLoading] = useState(false); // Track sorting order
+  const [sortAscending, setSortAscending] = useState(false);
+  const [buttonText, setButtonText] = useState("Sort By Earliest");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -36,7 +44,7 @@ function VehicleView() {
 
   useEffect(() => {
     getAdsData();
-  }, [sortAscending]); // Add sortAscending to the dependency array
+  }, [sortAscending]);
 
   const toggleSortOrder = () => {
     setSortAscending(!sortAscending);
@@ -52,7 +60,6 @@ function VehicleView() {
       if (response.status === 200) {
         let cars = response.data.cars;
 
-        // Sort the data by createdAt field based on sorting order
         cars = cars.sort((a, b) => {
           const dateA = new Date(a.createdAt);
           const dateB = new Date(b.createdAt);
@@ -71,8 +78,6 @@ function VehicleView() {
   };
 
   const handleApproveAdClick = async (carId) => {
-    // Implement your logic for approving the ad here using the carId
-    console.log("Approve Ad clicked for car ID:", carId);
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -95,18 +100,16 @@ function VehicleView() {
         }, 2000);
       } else {
         toast.error("Failed to Approve Ad: " + response.data.message);
-        setIsLoading(false); // Handle error by setting isLoading to false
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Approving error: " + error);
       toast.error("Failed to Approve Ad User: " + error.toString());
-      setIsLoading(false); // Handle error by setting isLoading to false
+      setIsLoading(false);
     }
   };
 
   const handleDisApproveAdClick = async (carId) => {
-    // Implement your logic for approving the ad here using the carId
-    console.log("Approve Ad clicked for car ID:", carId);
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -129,18 +132,16 @@ function VehicleView() {
         }, 2000);
       } else {
         toast.error("Failed to DisApproved Ad: " + response.data.message);
-        setIsLoading(false); // Handle error by setting isLoading to false
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("DisApproved error: " + error);
       toast.error("Failed to DisApproved Ad User: " + error.toString());
-      setIsLoading(false); // Handle error by setting isLoading to false
+      setIsLoading(false);
     }
   };
 
   const handleDeleteClick = async (carId) => {
-    // Implement your logic for deleting the ad here using the carId
-    console.log("Delete clicked for car ID:", carId);
     setIsLoading(true);
     try {
       const response = await axios.post(
@@ -163,12 +164,12 @@ function VehicleView() {
         }, 2000);
       } else {
         toast.error("Failed to Delete Ad: " + response.data.message);
-        setIsLoading(false); // Handle error by setting isLoading to false
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Deleting error: " + error);
       toast.error("Failed to Delete Ad User: " + error.toString());
-      setIsLoading(false); // Handle error by setting isLoading to false
+      setIsLoading(false);
     }
   };
 

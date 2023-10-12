@@ -1,12 +1,23 @@
+//imports
 import React, { useEffect, useState } from "react";
 import Navbar from "../layout/Navbar/Navbar";
 import Footer from "../layout/Footer/Footer";
 import MyOrdersPofile from "../layout/MyOrders/MyOrdersPofile";
+
+//axios
 import axios from "axios";
+
+//hooks
 import { useDispatch, useSelector } from "react-redux";
+
+//store
 import { Activate } from "../store/navbarSlice";
+
+//toastify
 import { toast } from "react-toastify";
-import { Card, Typography } from "@mui/material";
+
+//material-ui
+import { Typography } from "@mui/material";
 
 function Myorders() {
   const dispatch = useDispatch();
@@ -40,7 +51,6 @@ function Myorders() {
     getOrdersForUser();
   }, []);
 
-  // Function to group orders into rows of three cards
   const groupOrdersIntoRows = (orders) => {
     const rows = [];
     for (let i = 0; i < orders.length; i += 3) {
@@ -49,8 +59,6 @@ function Myorders() {
     return rows;
   };
 
-  // Function to calculate the total price of items in an order
-  // Function to calculate the total price of items in an order
   const calculateTotalPrice = (order) => {
     return order.products.reduce((total, product) => {
       return total + parseFloat(product.price) + 150;
@@ -79,8 +87,8 @@ function Myorders() {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center", // Center content horizontally
-            justifyContent: "center", // Center content vertically
+            alignItems: "center",
+            justifyContent: "center",
             margin: "20px 0",
           }}
         >
@@ -99,7 +107,7 @@ function Myorders() {
                   style={{
                     border: "1px solid #ccc",
                     padding: "10px",
-                    width: "20em", // Adjust the width as needed
+                    width: "20em",
                     backgroundColor: "white",
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
                     borderRadius: "8px",
@@ -129,7 +137,7 @@ function Myorders() {
           ))}
         </div>
       </div>
-      {orders.length == 0 && (
+      {orders.length === 0 && (
         <div
           style={{
             display: "flex",

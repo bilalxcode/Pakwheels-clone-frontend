@@ -1,29 +1,37 @@
+//imports
 import React, { useState, useEffect } from "react";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/splide/dist/css/themes/splide-default.min.css";
+
+//material-ui
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import axios from "axios"; // Import axios
+import { Card, CardContent, CardMedia, CardActionArea } from "@mui/material";
 
-import { Activate } from "../../store/navbarSlice";
+//hooks
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Card, CardContent, CardMedia, CardActionArea } from "@mui/material"; // Import Card components
+//store
+import { Activate } from "../../store/navbarSlice";
+
+//axios
+import axios from "axios";
+
+//splide
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/dist/css/themes/splide-default.min.css";
 
 function AutoStoreElements() {
   const [activeTab, setActiveTab] = useState("category");
   const [dropdownVisible, setDropdownVisible] = useState(true);
-  const [categories, setCategories] = useState([]); // State variable for categories
+  const [categories, setCategories] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible); // Toggle the dropdown visibility
+    setDropdownVisible(!dropdownVisible);
   };
 
   useEffect(() => {
-    // Fetch categories when the component mounts
     getAllCategories();
   }, []);
 
@@ -54,18 +62,18 @@ function AutoStoreElements() {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center", // Center vertically
+    justifyContent: "center",
     textAlign: "center",
-    padding: "10px 20px", // Increased padding
+    padding: "10px 20px",
     border: "1px solid #ccc",
     borderRadius: "5px",
     marginBottom: "20px",
-    height: "250px", // Increased height
-    width: "95%", // Increased width
+    height: "250px",
+    width: "95%",
   };
 
   const imageContainerStyle = {
-    background: "linear-gradient(to bottom, #E7232D, #012D62)", // Replace with your desired colors
+    background: "linear-gradient(to bottom, #E7232D, #012D62)",
     width: "100%",
     height: "100%",
     display: "flex",
@@ -100,7 +108,6 @@ function AutoStoreElements() {
                     onClick={AutoStoreNavigate}
                     title={`Category: ${category.name}`}
                   >
-                    {/* Use Card and CardMedia components to display a card with card media */}
                     <Card>
                       <CardActionArea>
                         <CardMedia

@@ -1,4 +1,7 @@
+//imports
 import React from "react";
+
+//material-ui
 import { Container, Grid, Typography, Link } from "@mui/material"; // Import Material-UI components
 
 function GetPakwheels() {
@@ -67,7 +70,6 @@ function GetPakwheels() {
                   />
                 </Link>
               </Grid>
-             
             </Grid>
           </Grid>
         </Grid>

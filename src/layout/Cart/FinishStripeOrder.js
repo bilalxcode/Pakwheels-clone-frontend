@@ -1,16 +1,28 @@
-import { Button, TextField } from "@mui/material";
+//imports
 import React from "react";
-import { clearCart } from "../../store/cartSlice";
+
+//material-ui
+import { Button, TextField } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+//hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import axios from "axios";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
+//store
+import { clearCart } from "../../store/cartSlice";
+
+//toastify
 import { ToastContainer, toast } from "react-toastify";
+
+//axios
+import axios from "axios";
+
 function FinishStripeOrder() {
   const dispatch = useDispatch();
   const [address, setAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneNumberValid, setPhoneNumberValid] = useState(true); // State for phone number validation
+  const [phoneNumberValid, setPhoneNumberValid] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOrderPlaced, setIsOrderPlaced] = useState(false);
 
@@ -20,28 +32,23 @@ function FinishStripeOrder() {
   const handleFinishOrder = async () => {
     setIsProcessing(true);
 
-    // Phone number validation (should start with "03", have 11 digits, and contain no special characters)
     const phonePattern = /^03\d{9}$/;
     const isPhoneValid = phonePattern.test(phoneNumber);
     const hasSpecialCharacters = /[!@#$%^&*(),.?":{}|<>]/.test(phoneNumber);
 
     if (address === "") {
-      // If address is empty, show an alert
       return alert("Invalid Address");
       setIsProcessing(false);
     } else if (!isPhoneValid) {
-      // If phone number is not valid, set the phoneNumberValid state to false
       return setPhoneNumberValid(false);
       setIsProcessing(false);
     } else if (hasSpecialCharacters) {
-      // If phone number contains special characters, show an alert
       return alert(
         "Invalid Phone Number. It should not contain special characters."
       );
       setIsProcessing(false);
     } else {
       try {
-        // Make a POST request to the backend to create the COD order
         const response = await axios.post(
           "http://localhost:8080/admin/updateStripeOrder",
           {
@@ -94,10 +101,10 @@ function FinishStripeOrder() {
               onChange={(e) => setPhoneNumber(e.target.value)}
               margin="normal"
               required
-              error={!phoneNumberValid} // Apply error styling if phoneNumberValid is false
+              error={!phoneNumberValid}
               helperText={!phoneNumberValid ? "Invalid Phone Number" : ""}
             />
-            <ToastContainer/>
+            <ToastContainer />
             <Button
               variant="contained"
               style={{ outline: "none" }}
