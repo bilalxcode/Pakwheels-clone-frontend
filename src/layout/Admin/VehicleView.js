@@ -48,7 +48,7 @@ function VehicleView() {
 
   const toggleSortOrder = () => {
     setSortAscending(!sortAscending);
-    setButtonText(sortAscending ? "Sort by Earliest" : "Sort by Latest");
+    setButtonText(sortAscending ? "Sort by Latest" : "Sort by Earliest");
   };
 
   const getAdsData = async () => {
@@ -328,21 +328,34 @@ function VehicleView() {
                                   color="primary"
                                   onClick={() => handleApproveAdClick(car._id)}
                                   style={{
-                                    fontSize: "11px",
-                                    marginBottom: "1em",
+                                    border: "2px solid green",
+                                    borderRadius: "3em",
+                                    background: "green",
+                                    color: "white",
+                                    width: "6px",
+                                    height: "25px",
+                                    fontSize: "12px",
                                   }}
                                 >
-                                  Approve Ad
+                                  Approve
                                 </Button>
                                 <Button
                                   variant="outlined"
                                   color="secondary"
-                                  style={{ fontSize: "11px" }}
+                                  style={{
+                                    border: "2px solid red",
+                                    borderRadius: "3em",
+                                    background: "red",
+                                    color: "white",
+                                    height: "25px",
+                                    fontSize: "12px",
+                                    marginTop:"1em"
+                                  }}
                                   onClick={() =>
                                     handleDisApproveAdClick(car._id)
                                   }
                                 >
-                                  Disapprove Ad
+                                  Disapprove
                                 </Button>
                               </div>
                             </TableCell>
@@ -355,8 +368,13 @@ function VehicleView() {
                                   onClick={() => handleDeleteClick(car._id)}
                                   disabled
                                   style={{
-                                    background: "#E7232D",
-                                    color: "#fff",
+                                    border: "2px solid yellow",
+                                    borderRadius: "3em",
+                                    background: "yellow",
+                                    color: "black",
+                                    width: "8px",
+                                    height: "25px",
+                                    fontSize: "11px",
                                   }}
                                 >
                                   Removed
@@ -370,6 +388,15 @@ function VehicleView() {
                                   variant="outlined"
                                   color="secondary"
                                   onClick={() => handleDeleteClick(car._id)}
+                                  style={{
+                                    border: "2px solid red",
+                                    borderRadius: "3em",
+                                    background: "red",
+                                    color: "white",
+                                    width: "5px",
+                                    height: "25px",
+                                    fontSize: "12px",
+                                  }}
                                 >
                                   Delete
                                 </Button>
